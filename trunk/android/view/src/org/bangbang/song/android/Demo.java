@@ -1,5 +1,7 @@
 package org.bangbang.song.android;
 
+import org.bangbang.song.android.common.debug.Log;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -31,5 +33,6 @@ public class Demo extends Activity {
 		 mListV.setAdapter(mAdapter );
 		 
 		 mListV.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		 Log.d(TAG, "setChoiceMode to: " + mListV.getChoiceMode());		 
 	}
 }
