@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, Demo. android common utils by bangbang.song@gmail.com\n\n
-    source:\n
-          http://code.google.com/p/qlibrary/
-     </string>
+    <string name="hello">
+"Hello World!
+android common utils by 
+    bangbang.song@gmail.com
+  source:
+     http://code.google.com/p/qlibrary/
+     
+     
+     Good luck@@
+</string>
     <string name="app_name">Android Common Utils Demo</string>
 </resources>
