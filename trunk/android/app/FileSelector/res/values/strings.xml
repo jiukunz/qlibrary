@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, FileSelector!</string>
+    <string name="app_name">FileApplication</string>
+    
+    <string name="activity_title_file_selector">File selector</string>
+</resources>
