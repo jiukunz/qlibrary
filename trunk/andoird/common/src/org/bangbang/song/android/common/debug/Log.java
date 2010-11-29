@@ -49,9 +49,9 @@ public class Log {
 		_d(tag, message);
 	}
 
-	private static void _d(String tag, String m) {
-		android.util.Log.d(mLogTag, tag + " : " + m);
-		mLogger.fine(tag + " : " + m + "\n");
+	private static void _d(String tag, String message) {
+		android.util.Log.d(mLogTag, tag + " : " + message);
+		mLogger.fine(tag + " (D): " + message + "\n");
 	}
 	 
 	static class AndroidFormatter extends Formatter{
@@ -66,4 +66,12 @@ public class Log {
 		}
 		
 	}
+
+	public static void w(String tag, String message) {
+		_w(tag, message);
+	}
+
+	private static void _w(String tag, String message) {
+		android.util.Log.w(mLogTag, tag + " : " + message);
+		mLogger.fine(tag + " (W): " + message + "\n");	}
 }
