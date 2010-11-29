@@ -9,6 +9,10 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Environment;
 
+/**
+ * @author bangbang.song@gmail.com 2010-11-29
+ *
+ */
 public class FileManApplication extends Application {
 	private static final String TAG = FileManApplication.class.getSimpleName();
 	public static final boolean DBG = true;
@@ -25,8 +29,17 @@ public class FileManApplication extends Application {
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
-		firstInit();
+		firstInit(); // must follow super.onCreate().
+		Log.d(TAG, "hi, bangbang.song@gmail.com");
+		
 		createFileHierachyIfNecessary();
+	}
+	
+	@Override
+	public void onTerminate() {
+		// TODO Auto-generated method stub
+		super.onTerminate();
+		Log.d(TAG, "bye, bangbang.song@gmail.com");
 	}
 
 	private void firstInit() {
