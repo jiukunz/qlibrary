@@ -14,24 +14,39 @@ public class NavigateHistory implements INavigateHistory {
 	private static final String TAG = NavigateHistory.class.getSimpleName();
 	private static final boolean DBG = FileManApplication.DBG && true;
 	
-	private List<Uri> mHistoryList;
-	private Uri mCurrentUri;
+	private List<CountedUri> mHistoryList;
+	private CountedUri mCurrentUri;
 	
 	
 	public NavigateHistory() {
 		// TODO Auto-generated constructor stub
-		mHistoryList = new LinkedList<Uri>();
+		mHistoryList = new LinkedList<CountedUri>();
+		mCurrentUri = new CountedUri(Uri.parse("ooxx://ooxx"));
 	}
 	
 	@Override
 	public Uri getCurrentUri(){
-		return mCurrentUri;
+		return mCurrentUri.mUri;
 	}
 
 	@Override
-	public void addHistory(Uri uri){
-		mHistoryList.add(uri);
-		mCurrentUri = uri;
+	public void newHistory(Uri uri){
+		if (uri.equals(mCurrentUri.mUri)){
+			// we have been there now.
+			return;
+		}
+		// do a backward instead.
+//		if (canBackward()){
+//			CountedUri countedUri = mHistoryList.get(mHistoryList.indexOf(mCurrentUri) - 1);
+//			if (countedUri.mUri.equals(uri)){
+//				backward();
+//				return;
+//			}
+//		}
+		
+		CountedUri countedUri = new CountedUri(uri);
+		mHistoryList.add(countedUri);
+		mCurrentUri = countedUri;
 		
 		if (DBG){
 			Log.d(TAG, dump());
@@ -42,7 +57,7 @@ public class NavigateHistory implements INavigateHistory {
 	public void backward() {
 		// TODO Auto-generated method stub
 		if (!canBackward()){
-			Log.e(TAG, "can not bachward.");
+			Log.e(TAG, "can not backward.");
 			return;
 		}
 		
@@ -105,8 +120,8 @@ public class NavigateHistory implements INavigateHistory {
 		}
 		File file = new File(URI.create(mCurrentUri.toString())).getParentFile();
 		int index = mHistoryList.indexOf(mCurrentUri);
-		mCurrentUri = Uri.fromFile(file);
-		mHistoryList.add(index + 1, Uri.fromFile(file));
+		mCurrentUri = new CountedUri(Uri.fromFile(file));
+		mHistoryList.add(index + 1, mCurrentUri);
 		
 		if (DBG){
 			Log.d(TAG, dump());
@@ -118,8 +133,33 @@ public class NavigateHistory implements INavigateHistory {
 		String dump = "";
 		int index = mHistoryList.indexOf(mCurrentUri);
 		for (int N = mHistoryList.size(), i = N - 1; i >= 0 ; i --){
-			dump += "\n:" + i + "\t " + mHistoryList.get(i).toString() + (i == index ? " (*)" : "");
+			dump += "\n:" + i + "\t " 
+					+ mHistoryList.get(i).toString()  + "@" + mHistoryList.get(i).hashCode() 
+					+ (i == index ? " (*)" : "");
 		}
 		return dump;
 	}
+	
+	class CountedUri {
+		Uri mUri;
+		int sCount;
+		
+		public CountedUri(Uri uri){
+			mUri = uri;
+			sCount ++;
+		}
+		
+		@Override
+		public String toString() {
+			// TODO Auto-generated method stub
+			return mUri.toString();
+		}
+		
+		@Override
+		public int hashCode() {
+			// TODO Auto-generated method stub
+			return mUri.hashCode();
+		}
+	}
+	
 }
