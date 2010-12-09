@@ -54,24 +54,34 @@ public class Log {
 		mLogger.fine(tag + " (D): " + message + "\n");
 	}
 	 
-	static class AndroidFormatter extends Formatter{
-		private static final String sFormat = "yyyy MM dd hh:mmaa";
-		public AndroidFormatter() {
-			// TODO Auto-generated constructor stub
-		}
-
-		@Override
-		public String format(LogRecord r) {
-			return DateFormat.format(sFormat, r.getMillis()) + " : " + r.getMessage();
-		}
-		
-	}
-
 	public static void w(String tag, String message) {
 		_w(tag, message);
 	}
 
 	private static void _w(String tag, String message) {
 		android.util.Log.w(mLogTag, tag + " : " + message);
-		mLogger.fine(tag + " (W): " + message + "\n");	}
+		mLogger.fine(tag + " (W): " + message + "\n");	
+	}
+	
+	public static void e(String tag, String message) {
+		_e(tag, message);
+	}
+
+	private static void _e(String tag, String message) {
+		android.util.Log.e(mLogTag, tag + " : " + message);
+		mLogger.fine(tag + " (E): " + message + "\n");
+	}
+
+	static class AndroidFormatter extends Formatter{
+		private static final String sFormat = "yyyy MM dd hh:mmaa";
+		public AndroidFormatter() {
+			// TODO Auto-generated constructor stub
+		}
+	
+		@Override
+		public String format(LogRecord r) {
+			return DateFormat.format(sFormat, r.getMillis()) + " : " + r.getMessage();
+		}
+		
+	}
 }
