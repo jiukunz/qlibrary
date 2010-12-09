@@ -11,7 +11,10 @@
 	FimeMan a file navigator and selector,
 by bangbang.song@gmail.com.
 more see:
-	http://code.google.com/p/qlibrary/
+	http://code.google.com/p/qlibrary/.
+	
+	codeVersion:%1$d
+	codeName:%2$s
 "</string>
 	<string name="menu_about">About</string>
 	<string name="activity_title_about">About FileMan</string>
