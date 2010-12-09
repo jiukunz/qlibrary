@@ -6,6 +6,7 @@ import java.util.List;
 import org.bangbang.song.android.common.debug.Log;
 import org.bangbang.song.android.fileman.FileManApplication;
 import org.bangbang.song.android.fileman.R;
+import org.bangbang.song.android.fileman.util.Ext2Mime;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -42,7 +43,10 @@ public class FileExplorer extends FileActivity {
 			changeRootFile(clickFile);
 		} else {
 			Intent intent = new Intent(Intent.ACTION_VIEW);
-			intent.setData(Uri.fromFile(clickFile));
+			String extention = clickFile.getName().substring(clickFile.getName().lastIndexOf('.') + 1);
+			String mimeType = determinMimeType(extention);
+			Log.d(TAG, "mime type: " + mimeType);
+			intent.setDataAndType(Uri.fromFile(clickFile), mimeType);
 			if (DBG){
 				Log.d(TAG, "sart activity: " + intent.toString());
 			}
@@ -52,6 +56,16 @@ public class FileExplorer extends FileActivity {
 				Toast.makeText(getApplicationContext(), R.string.no_application_associated_with_this_type_file, Toast.LENGTH_SHORT).show();
 			}
 		}
+	}
+
+	private String determinMimeType(String extention) {
+		String mimeType = "";
+		mimeType = Ext2Mime.sUsrExt2MimeMaps.get(extention);
+		if (mimeType != null && mimeType.length() > 0){
+			return mimeType;
+		}
+		Ext2Mime.sSysExt2MimeMaps.get(extention);
+		return mimeType;
 	}
 
 	private boolean canOpenWith(String mimeType) {

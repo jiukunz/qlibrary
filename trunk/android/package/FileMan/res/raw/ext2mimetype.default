@@ -1,0 +1,28 @@
+# line beginning with '#' is a comment preceding blank char will be ignore;
+# default file extention to mime type map table.
+# by bangbang.song@gmail.com
+# 2010 12/09
+# more see http://www.iana.org/
+
+# extention(. is trimmed)   mimetype
+# mp3 audio/mp3
+
+##application
+
+##audio
+
+##vedio
+
+##image
+
+##text
+txt text/plain
+ini text/plain
+log text/plain
+
+##example
+
+##message
+
+###multipart
+
