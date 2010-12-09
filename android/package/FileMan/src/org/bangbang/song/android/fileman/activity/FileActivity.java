@@ -7,13 +7,17 @@ import java.util.List;
 import org.bangbang.song.android.common.debug.Log;
 import org.bangbang.song.android.fileman.FileManApplication;
 import org.bangbang.song.android.fileman.R;
+import org.bangbang.song.android.fileman.activity.adapter.INavigateHistory;
+import org.bangbang.song.android.fileman.activity.adapter.NavigateHistory;
 import org.bangbang.song.android.fileman.activity.adapter.SimplestFileArrayAdapter;
 
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -55,18 +59,22 @@ import android.widget.ListView;
 	private SimplestFileArrayAdapter mAdapter;
 	private Context mContext;
 	
+	private INavigateHistory mNavigateHistory;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		Log.d(TAG, "onCreate().");
 		mContext = getApplicationContext();
+		mNavigateHistory = new NavigateHistory();
 //		regListeners();
 		parsetIntent();
 		initApadter();
 	}
 	
 	public void changeRootFile(File rootFile){
+		mNavigateHistory.addHistory(Uri.fromFile(rootFile));
 		mPrefPath = rootFile.getPath();
 		mAdapter.changeRootFile(rootFile);
 	}
@@ -141,8 +149,29 @@ import android.widget.ListView;
 		}
 	}
 	
-	protected void OnFileClick(File clickFile){};
+	/**
+	 * must call this when you override it.
+	 *
+	 * @param clickFile
+	 */
+	protected void OnFileClick(File clickFile){
+	};
 
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		switch (keyCode){
+		case KeyEvent.KEYCODE_BACK: // fall through
+		case KeyEvent.KEYCODE_CLEAR:
+			if (mNavigateHistory.canBackward()){
+				mNavigateHistory.backward();
+				changeRootFile(new File(mNavigateHistory.getCurrentUri().getPath()));
+				return true;
+			}
+		}
+		return super.onKeyUp(keyCode, event);
+	}
+	
 	private void initApadter() {
 		List<File> initFiles = new ArrayList<File>();
 		mAdapter = new SimplestFileArrayAdapter(mContext, 

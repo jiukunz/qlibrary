@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="activity_title_file_selector">文件选择器</string>
+    <string name="activity_title_file_navigator">文件浏览器</string>
 </resources>

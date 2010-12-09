@@ -27,7 +27,7 @@ public class FileExplorer extends FileActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		test();
+//		test();
 	}
 	
 	@Override
