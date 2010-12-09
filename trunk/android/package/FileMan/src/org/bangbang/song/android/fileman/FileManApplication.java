@@ -6,7 +6,6 @@ import java.io.IOException;
 import org.bangbang.song.android.common.debug.Log;
 
 import android.app.Application;
-import android.content.Context;
 import android.os.Environment;
 
 /**
