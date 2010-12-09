@@ -11,6 +11,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.AboutActivity"
+                  android:label="@string/activity_title_about">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activity.FileSelector"
                   android:label="@string/activity_title_file_selector">
             <intent-filter>

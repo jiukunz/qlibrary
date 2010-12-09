@@ -18,6 +18,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -107,6 +109,29 @@ import android.widget.ListView;
 			Log.d(TAG, "mFilterRegrex: " + mFilterRegrex);
 			Log.d(TAG, "mPrefPath: " + mPrefPath);
 		}
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// TODO Auto-generated method stub
+		getMenuInflater().inflate(R.menu.file_activity_menu, menu);
+		
+		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_about:
+			showAbout();
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	
+	
+	private void showAbout() {
+		Intent intent = new Intent(this, AboutActivity.class);
+		startActivity(intent);
 	}
 
 	private void regListeners() {
