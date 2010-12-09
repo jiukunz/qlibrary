@@ -71,10 +71,11 @@ import android.widget.ListView;
 //		regListeners();
 		parsetIntent();
 		initApadter();
+		mNavigateHistory.newHistory(Uri.fromFile(new File(mPrefPath)));
 	}
 	
 	public void changeRootFile(File rootFile){
-		mNavigateHistory.addHistory(Uri.fromFile(rootFile));
+		mNavigateHistory.newHistory(Uri.fromFile(rootFile));
 		mPrefPath = rootFile.getPath();
 		mAdapter.changeRootFile(rootFile);
 	}

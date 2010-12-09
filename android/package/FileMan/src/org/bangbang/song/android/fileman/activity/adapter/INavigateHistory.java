@@ -11,7 +11,7 @@ public interface INavigateHistory {
 	public void forward();
 	public void backward();
 	
-	public void addHistory(Uri uri);
+	public void newHistory(Uri uri);
 	public Uri getCurrentUri();
 
 }
