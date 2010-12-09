@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="org.bangbang.song.android.fileman"
       android:versionCode="1"
-      android:versionName="1.0" android:sharedUserId="bangbang.song" android:sharedUserLabel="@string/sharedUserLabel">
+      android:versionName="1.0" 
+      android:sharedUserId="bangbang.song" 
+      android:sharedUserLabel="@string/sharedUserLabel">
     <application android:name="FileManApplication" android:icon="@drawable/icon" android:label="@string/app_name">
         <activity android:name=".activity.FileExplorer"
                   android:label="@string/activity_title_file_navigator">
