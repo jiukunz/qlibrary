@@ -7,4 +7,12 @@
     <string name="activity_title_file_selector">File selector</string>
     <string name="activity_title_file_navigator">File Navigator</string>
     <string name="no_application_associated_with_this_type_file">no Application associated with this type file!</string>
+	<string name="about">"
+	FimeMan a file navigator and selector,
+by bangbang.song@gmail.com.
+more see:
+	http://code.google.com/p/qlibrary/
+"</string>
+	<string name="menu_about">About</string>
+	<string name="activity_title_about">About FileMan</string>
 </resources>

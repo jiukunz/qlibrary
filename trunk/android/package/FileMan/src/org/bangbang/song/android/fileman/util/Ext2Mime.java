@@ -48,6 +48,7 @@ public class Ext2Mime {
 				line = line.trim();
 				
 				// do my best
+				//
 				if (!line.startsWith("#")){
 					String[] parts = line.split("\\s+");
 					if (null != parts && parts.length > 1){
