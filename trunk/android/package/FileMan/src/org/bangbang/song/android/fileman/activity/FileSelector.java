@@ -53,6 +53,8 @@ public class FileSelector extends FileActivity {
 
 	@Override
 	protected void OnFileClick(File clickFile) {
+		super.OnFileClick(clickFile);
+		
 		if (null == clickFile){
 			Log.w(TAG, "clicked file is null.");
 			return;
