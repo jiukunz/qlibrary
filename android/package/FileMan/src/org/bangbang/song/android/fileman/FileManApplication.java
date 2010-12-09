@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.bangbang.song.android.common.debug.Log;
+import org.bangbang.song.android.fileman.util.Ext2Mime;
 
 import android.app.Application;
 import android.os.Environment;
@@ -20,7 +21,8 @@ public class FileManApplication extends Application {
 	public static final File APP_EXTERNAL_DIR = new File(Environment.getExternalStorageDirectory(), "FileMan");
 	public static final File APP_EXTERNAL_NO_MEDIA = new File(APP_EXTERNAL_DIR, ".noMedia");	
 	public static final File APP_EXTERNAL_ETC_DIR = new File(APP_EXTERNAL_DIR, "etc");
-	public static final File APP_EXTERNAL_ETC = new File(APP_EXTERNAL_ETC_DIR, "ext2mimetype.map");
+	public static final File APP_EXTERNAL_EXT_2_MIME_MAP_FILE = new File(APP_EXTERNAL_ETC_DIR, "ext2mimetype.map");
+	public static final File APP_EXTERNAL_MAP_DIR = new File(APP_EXTERNAL_ETC_DIR, "ext2mimetype.d");
 	public static final File APP_EXTERNAL_LOG_DIR = new File(APP_EXTERNAL_DIR, "logs");
 	public static final File APP_EXTERNAL_CACHE_DIR = new File(APP_EXTERNAL_DIR, "cache");
 		
@@ -43,6 +45,7 @@ public class FileManApplication extends Application {
 
 	private void firstInit() {
 		Log.init(APP_EXTERNAL_LOG_DIR, "FileMan");
+		Ext2Mime.init(getApplicationContext());
 	}
 
 	private void createFileHierachyIfNecessary() {
@@ -71,12 +74,19 @@ public class FileManApplication extends Application {
 					return;
 				}
 			}
-			if (!APP_EXTERNAL_ETC.exists()){
+			if (!APP_EXTERNAL_MAP_DIR.exists()){
+				ok = APP_EXTERNAL_MAP_DIR.mkdirs();
+				if (!ok) {
+					Log.d(TAG, "can not mkdir: " + APP_EXTERNAL_MAP_DIR.getPath());
+					return;
+				}
+			}
+			if (!APP_EXTERNAL_EXT_2_MIME_MAP_FILE.exists()){
 				try {
-					ok = APP_EXTERNAL_ETC.createNewFile();
+					ok = APP_EXTERNAL_EXT_2_MIME_MAP_FILE.createNewFile();
 				} catch (IOException e) {
 					Log.d(TAG, e.getMessage());
-					Log.d(TAG, "can not create file: " + APP_EXTERNAL_ETC.getPath());
+					Log.d(TAG, "can not create file: " + APP_EXTERNAL_EXT_2_MIME_MAP_FILE.getPath());
 					return;
 				}
 			}
