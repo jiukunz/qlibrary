@@ -18,4 +18,7 @@ more see:
 "</string>
 	<string name="menu_about">About</string>
 	<string name="activity_title_about">About FileMan</string>
+	
+	<string name="activity_title_report_crash">crash report</string>
+	<string name="crash_text">A crash has occurred, please help us to improve software quality by sending report back to us.</string>
 </resources>

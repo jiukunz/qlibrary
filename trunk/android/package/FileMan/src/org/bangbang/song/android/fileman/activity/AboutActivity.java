@@ -1,15 +1,15 @@
 package org.bangbang.song.android.fileman.activity;
 
 import org.bangbang.song.android.fileman.R;
+import org.bangbang.song.android.fileman.compeonent.ACtivity;
 
-import android.app.Activity;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.widget.TextView;
 
-public class AboutActivity extends Activity {
+public class AboutActivity extends ACtivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub

@@ -1,19 +1,22 @@
 package org.bangbang.song.android.fileman;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 
 import org.bangbang.song.android.common.debug.Log;
+import org.bangbang.song.android.fileman.compeonent.APplication;
+import org.bangbang.song.android.fileman.compeonent.ComponentController;
 import org.bangbang.song.android.fileman.util.Ext2Mime;
 
-import android.app.Application;
 import android.os.Environment;
 
 /**
  * @author bangbang.song@gmail.com 2010-11-29
  *
  */
-public class FileManApplication extends Application {
+public class FileManApplication extends APplication {
 	private static final String TAG = FileManApplication.class.getSimpleName();
 	public static final boolean DBG = true;
 	public static final boolean LOG = true;
@@ -25,6 +28,7 @@ public class FileManApplication extends Application {
 	public static final File APP_EXTERNAL_MAP_DIR = new File(APP_EXTERNAL_ETC_DIR, "ext2mimetype.d");
 	public static final File APP_EXTERNAL_LOG_DIR = new File(APP_EXTERNAL_DIR, "logs");
 	public static final File APP_EXTERNAL_CACHE_DIR = new File(APP_EXTERNAL_DIR, "cache");
+	public static final File APP_EXTERNAL_CRASH_DIR = new File(APP_EXTERNAL_DIR, "crash");
 		
 	@Override
 	public void onCreate() {
@@ -32,8 +36,6 @@ public class FileManApplication extends Application {
 		super.onCreate();
 		firstInit(); // must follow super.onCreate().
 		Log.d(TAG, "hi, bangbang.song@gmail.com");
-		
-		createFileHierachyIfNecessary();
 	}
 	
 	@Override
@@ -44,6 +46,7 @@ public class FileManApplication extends Application {
 	}
 
 	private void firstInit() {
+		createFileHierachyIfNecessary();
 		Log.init(APP_EXTERNAL_LOG_DIR, "FileMan");
 		Ext2Mime.init(getApplicationContext());
 	}
@@ -104,10 +107,14 @@ public class FileManApplication extends Application {
 					return;
 				}
 			}
-			
-			
+			if (!APP_EXTERNAL_CRASH_DIR.exists()){
+				ok = APP_EXTERNAL_CRASH_DIR.mkdirs();
+				if (!ok) {
+					Log.d(TAG, "can not mkdir: " + APP_EXTERNAL_CRASH_DIR.getPath());
+					return;
+				}
+			}			
 		}
-
 	}
-
 }
+

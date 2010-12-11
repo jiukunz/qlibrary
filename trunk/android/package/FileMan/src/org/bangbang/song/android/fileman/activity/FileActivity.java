@@ -10,8 +10,8 @@ import org.bangbang.song.android.fileman.R;
 import org.bangbang.song.android.fileman.activity.adapter.INavigateHistory;
 import org.bangbang.song.android.fileman.activity.adapter.NavigateHistory;
 import org.bangbang.song.android.fileman.activity.adapter.SimplestFileArrayAdapter;
+import org.bangbang.song.android.fileman.compeonent.LIstActivity;
 
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -32,7 +32,7 @@ import android.widget.ListView;
  * do what they want to do.
  *
  */
- public class FileActivity extends ListActivity {
+ public class FileActivity extends LIstActivity {
 	private static final String TAG = FileActivity.class.getSimpleName();
 	private final static boolean DBG = FileManApplication.DBG && true;	
 	private static final boolean LOG = FileManApplication.DBG && true;

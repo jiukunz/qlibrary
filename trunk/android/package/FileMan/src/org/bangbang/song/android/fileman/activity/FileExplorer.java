@@ -64,7 +64,7 @@ public class FileExplorer extends FileActivity {
 		if (mimeType != null && mimeType.length() > 0){
 			return mimeType;
 		}
-		Ext2Mime.sSysExt2MimeMaps.get(extention);
+		mimeType = Ext2Mime.sSysExt2MimeMaps.get(extention);
 		return mimeType;
 	}
 
