@@ -76,8 +76,10 @@ public class ReportCrashActivity extends ACtivity
 
 	private void report() {
 		// TODO Auto-generated method stub
-		Intent mailto = new Intent(Intent.ACTION_SENDTO);
+		Intent mailto = new Intent(Intent.ACTION_SEND_MULTIPLE);
 		mailto.setData(Uri.parse("mailto:jober_song@126.com"));
+		mailto.putExtra(Intent.EXTRA_TEXT, collectExceptionInfo() + "\n\n" + collectEnvInfo());
+		mailto.putExtra(Intent.EXTRA_SUBJECT, "bug report");
 		startActivity(mailto);		
 	}
 }
