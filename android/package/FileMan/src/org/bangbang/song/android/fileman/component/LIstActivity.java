@@ -1,4 +1,4 @@
-package org.bangbang.song.android.fileman.compeonent;
+package org.bangbang.song.android.fileman.component;
 
 import org.apache.http.ReasonPhraseCatalog;
 import org.bangbang.song.android.fileman.activity.ReportCrashActivity;

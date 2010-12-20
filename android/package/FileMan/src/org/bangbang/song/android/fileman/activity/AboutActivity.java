@@ -1,7 +1,7 @@
 package org.bangbang.song.android.fileman.activity;
 
 import org.bangbang.song.android.fileman.R;
-import org.bangbang.song.android.fileman.compeonent.ACtivity;
+import org.bangbang.song.android.fileman.component.ACtivity;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
