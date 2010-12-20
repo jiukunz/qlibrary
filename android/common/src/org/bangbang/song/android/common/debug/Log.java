@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 import android.text.format.DateFormat;
 
 /**
- * TODO wrap a log util.
+ * TODO wrap a log android.util.Log.X() .
  * <p>
  * <b>call</b> {@link #init(String)} to initiate configuration.
  * 
