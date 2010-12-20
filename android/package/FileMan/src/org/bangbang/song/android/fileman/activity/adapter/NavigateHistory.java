@@ -45,8 +45,9 @@ public class NavigateHistory implements INavigateHistory {
 //		}
 		
 		CountedUri countedUri = new CountedUri(uri);
-		mHistoryList.add(countedUri);
+		int index = mHistoryList.indexOf(mCurrentUri);
 		mCurrentUri = countedUri;
+		mHistoryList.add(index < 0 ? 0 : index + 1, countedUri);
 		
 		if (DBG){
 			Log.d(TAG, dump());
