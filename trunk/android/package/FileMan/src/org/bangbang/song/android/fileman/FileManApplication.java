@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import org.bangbang.song.android.common.debug.Log;
-import org.bangbang.song.android.fileman.compeonent.APplication;
-import org.bangbang.song.android.fileman.compeonent.ComponentController;
+import org.bangbang.song.android.fileman.component.APplication;
+import org.bangbang.song.android.fileman.component.ComponentController;
 import org.bangbang.song.android.fileman.util.Ext2Mime;
 
 import android.os.Environment;

@@ -9,8 +9,8 @@ import java.io.IOException;
 import org.bangbang.song.android.common.debug.Log;
 import org.bangbang.song.android.fileman.FileManApplication;
 import org.bangbang.song.android.fileman.R;
-import org.bangbang.song.android.fileman.compeonent.ACtivity;
-import org.bangbang.song.android.fileman.compeonent.ComponentController;
+import org.bangbang.song.android.fileman.component.ACtivity;
+import org.bangbang.song.android.fileman.component.ComponentController;
 
 import android.content.Intent;
 import android.net.Uri;

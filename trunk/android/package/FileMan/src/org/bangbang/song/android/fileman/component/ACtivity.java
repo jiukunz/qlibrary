@@ -1,4 +1,4 @@
-package org.bangbang.song.android.fileman.compeonent;
+package org.bangbang.song.android.fileman.component;
 
 import android.app.Activity;
 import android.content.ComponentCallbacks;

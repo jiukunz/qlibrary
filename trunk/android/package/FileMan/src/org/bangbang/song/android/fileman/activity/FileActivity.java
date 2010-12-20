@@ -10,7 +10,7 @@ import org.bangbang.song.android.fileman.R;
 import org.bangbang.song.android.fileman.activity.adapter.INavigateHistory;
 import org.bangbang.song.android.fileman.activity.adapter.NavigateHistory;
 import org.bangbang.song.android.fileman.activity.adapter.SimplestFileArrayAdapter;
-import org.bangbang.song.android.fileman.compeonent.LIstActivity;
+import org.bangbang.song.android.fileman.component.LIstActivity;
 
 import android.content.Context;
 import android.content.Intent;
