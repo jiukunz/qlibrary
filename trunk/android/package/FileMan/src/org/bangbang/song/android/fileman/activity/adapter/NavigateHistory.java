@@ -5,7 +5,7 @@ import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.bangbang.song.android.common.debug.Log;
+import org.bangbang.song.andorid.common.debug.Log;
 import org.bangbang.song.android.fileman.FileManApplication;
 
 import android.net.Uri;

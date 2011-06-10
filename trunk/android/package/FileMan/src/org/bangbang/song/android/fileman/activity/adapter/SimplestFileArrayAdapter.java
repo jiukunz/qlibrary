@@ -3,14 +3,13 @@ package org.bangbang.song.android.fileman.activity.adapter;
 import java.io.File;
 import java.util.List;
 
-import org.bangbang.song.android.common.debug.Log;
+import org.bangbang.song.andorid.common.debug.Log;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 /**
  * @author bangbang.song@gmail.com 2010-11-29

@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Hashtable;
 
-import org.bangbang.song.android.common.debug.Log;
+import org.bangbang.song.andorid.common.debug.Log;
 import org.bangbang.song.android.fileman.FileManApplication;
 import org.bangbang.song.android.fileman.R;
 

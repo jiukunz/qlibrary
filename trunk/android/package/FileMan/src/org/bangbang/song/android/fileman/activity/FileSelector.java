@@ -2,22 +2,14 @@ package org.bangbang.song.android.fileman.activity;
 
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.bangbang.song.android.common.debug.Log;
+import org.bangbang.song.andorid.common.debug.Log;
 import org.bangbang.song.android.fileman.FileManApplication;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Adapter;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
 
 /**
  * @author bangbang.song@gmail.com 2010-11-29

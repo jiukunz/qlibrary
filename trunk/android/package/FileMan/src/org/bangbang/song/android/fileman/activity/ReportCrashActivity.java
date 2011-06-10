@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.bangbang.song.android.common.debug.Log;
+import org.bangbang.song.andorid.common.debug.Log;
 import org.bangbang.song.android.fileman.FileManApplication;
 import org.bangbang.song.android.fileman.R;
 import org.bangbang.song.android.fileman.component.ACtivity;
