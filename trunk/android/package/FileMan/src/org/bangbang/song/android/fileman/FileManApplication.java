@@ -21,6 +21,7 @@ public class FileManApplication extends APplication {
 	public static final boolean DBG = true;
 	public static final boolean LOG = true;
 	
+	
 	public static final File APP_EXTERNAL_DIR = new File(Environment.getExternalStorageDirectory(), "FileMan");
 	public static final File APP_EXTERNAL_NO_MEDIA = new File(APP_EXTERNAL_DIR, ".noMedia");	
 	public static final File APP_EXTERNAL_ETC_DIR = new File(APP_EXTERNAL_DIR, "etc");
