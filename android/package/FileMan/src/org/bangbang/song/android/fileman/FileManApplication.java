@@ -1,13 +1,10 @@
 package org.bangbang.song.android.fileman;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
 
-import org.bangbang.song.android.common.debug.Log;
+import org.bangbang.song.andorid.common.debug.Log;
 import org.bangbang.song.android.fileman.component.APplication;
-import org.bangbang.song.android.fileman.component.ComponentController;
 import org.bangbang.song.android.fileman.util.Ext2Mime;
 
 import android.os.Environment;

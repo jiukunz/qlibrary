@@ -3,7 +3,7 @@ package org.bangbang.song.android.fileman.activity;
 import java.io.File;
 import java.util.List;
 
-import org.bangbang.song.android.common.debug.Log;
+import org.bangbang.song.andorid.common.debug.Log;
 import org.bangbang.song.android.fileman.FileManApplication;
 import org.bangbang.song.android.fileman.R;
 import org.bangbang.song.android.fileman.util.Ext2Mime;
