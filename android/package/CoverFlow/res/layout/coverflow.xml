@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<org.bangbang.song.andorid.widget.coverflow.PseudoCoverFlow
+		android:background="#555555"
+		android:id="@+id/gallery"
+		android:padding="20dp"
+		android:layout_width="fill_parent" android:layout_height="400dp"
+		android:layout_marginTop="5dip" />
+</LinearLayout>
