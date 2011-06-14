@@ -1,3 +1,4 @@
+
 package org.bangbang.song.android.fileman.activity;
 
 import java.io.BufferedReader;
@@ -18,68 +19,68 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-public class ReportCrashActivity extends ACtivity 
-	implements OnClickListener
-{
-	private static final String TAG = ReportCrashActivity.class.getSimpleName();
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.report_crash);
-		findViewById(R.id.confirm).setOnClickListener(this);
-		findViewById(R.id.cancel).setOnClickListener(this);
-	}
-	
-	String collectExceptionInfo(){
-		String info = "";
-		File exFile = new File(FileManApplication.APP_EXTERNAL_CRASH_DIR.getPath() + "/exception.txt");
-		if (exFile.exists()){
-			try {
-				BufferedReader reader = new BufferedReader(new FileReader(exFile));
-				String line = "";
-				try {
-					while ((line = reader.readLine()) != null){
-						info += line;
-					}
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					Log.d(TAG, e.getMessage());
-				}
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				Log.d(TAG, e.getMessage());
-			}
-		}
-		return info;
-	}
-	
-	String collectEnvInfo(){
-		String envInfo = "";
-		
-		return envInfo;
-	}
+public class ReportCrashActivity extends ACtivity
+        implements OnClickListener {
+    private static final String TAG = ReportCrashActivity.class.getSimpleName();
 
-	@Override
-	public void onClick(View v) {
-		// TODO Auto-generated method stub
-		switch (v.getId()){
-		case R.id.confirm:
-			report();
-//			break;     // fall through
-		case R.id.cancel:
-			ComponentController.getInstance().performUserFinish();
-			break;
-		}
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.report_crash);
+        findViewById(R.id.confirm).setOnClickListener(this);
+        findViewById(R.id.cancel).setOnClickListener(this);
+    }
 
-	private void report() {
-		// TODO Auto-generated method stub
-		Intent mailto = new Intent(Intent.ACTION_SEND_MULTIPLE);
-		mailto.setData(Uri.parse("mailto:jober_song@126.com"));
-		mailto.putExtra(Intent.EXTRA_TEXT, collectExceptionInfo() + "\n\n" + collectEnvInfo());
-		mailto.putExtra(Intent.EXTRA_SUBJECT, "bug report");
-		startActivity(mailto);		
-	}
+    String collectExceptionInfo() {
+        String info = "";
+        File exFile = new File(FileManApplication.APP_EXTERNAL_CRASH_DIR.getPath()
+                + "/exception.txt");
+        if (exFile.exists()) {
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(exFile));
+                String line = "";
+                try {
+                    while ((line = reader.readLine()) != null) {
+                        info += line;
+                    }
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    Log.d(TAG, e.getMessage());
+                }
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                Log.d(TAG, e.getMessage());
+            }
+        }
+        return info;
+    }
+
+    String collectEnvInfo() {
+        String envInfo = "";
+
+        return envInfo;
+    }
+
+    @Override
+    public void onClick(View v) {
+        // TODO Auto-generated method stub
+        switch (v.getId()) {
+            case R.id.confirm:
+                report();
+                // break; // fall through
+            case R.id.cancel:
+                ComponentController.getInstance().performUserFinish();
+                break;
+        }
+    }
+
+    private void report() {
+        // TODO Auto-generated method stub
+        Intent mailto = new Intent(Intent.ACTION_SEND_MULTIPLE);
+        mailto.setData(Uri.parse("mailto:jober_song@126.com"));
+        mailto.putExtra(Intent.EXTRA_TEXT, collectExceptionInfo() + "\n\n" + collectEnvInfo());
+        mailto.putExtra(Intent.EXTRA_SUBJECT, "bug report");
+        startActivity(mailto);
+    }
 }
