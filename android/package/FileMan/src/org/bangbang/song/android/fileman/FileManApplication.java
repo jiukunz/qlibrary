@@ -46,7 +46,10 @@ public class FileManApplication extends APplication {
 
     private void firstInit() {
         createFileHierachyIfNecessary();
-        Log.init(APP_EXTERNAL_LOG_DIR, "FileMan");
+        Log.init(APP_EXTERNAL_LOG_DIR, "log");
+        Log.setRootTag("FileMan");
+        Log.setLog(true);
+        Log.setLog2File(true);
         Ext2Mime.init(getApplicationContext());
     }
 
