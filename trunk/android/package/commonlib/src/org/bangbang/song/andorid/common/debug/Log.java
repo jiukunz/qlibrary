@@ -118,6 +118,10 @@ public class Log {
             _if(ROOT_TAG + TAG_DELIMITER + tag, message);
         }
     }
+    
+    public static void init(File appExternalLogDir){
+        init(appExternalLogDir, "log");
+    }
 
     public static void init(File appExternalLogDir, String logFileName) {
         if (!appExternalLogDir.exists()) {
