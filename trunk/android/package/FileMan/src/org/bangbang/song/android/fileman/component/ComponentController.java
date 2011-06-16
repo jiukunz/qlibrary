@@ -64,6 +64,7 @@ public class ComponentController {
     private void onUncaughtException(Thread thread, Throwable ex) {
         // TODO Auto-generated method stub
         try {
+            ex.printStackTrace();
             File exFile = new File(FileManApplication.APP_EXTERNAL_CRASH_DIR.getPath()
                     + "/exception.txt");
             if (exFile.exists()) {
