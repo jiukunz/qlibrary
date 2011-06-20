@@ -1,6 +1,10 @@
 
 package org.bangbang.song.andorid.common.debug;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 
 public class Debug {
@@ -10,7 +14,7 @@ public class Debug {
 
     public static final String buildInfo() {
         String buildInfo = "BuildInfo:";
-        
+
         String className = "android.os.Build";
         String[] fields = new String[] {
                 "BOARD", "BOOTLOADER", "BRAND", "CPU_ABI", "CPU_ABI2",
@@ -20,9 +24,11 @@ public class Debug {
         };
 
         buildInfo += extractPublicFields(className, fields);
-        
+
         className = "android.os.Build$VERSION";
-        fields = new String[]{"CODENAME", "INCREMENTAL", "RELEASE", "SDK", "SDK_INT"};
+        fields = new String[] {
+                "CODENAME", "INCREMENTAL", "RELEASE", "SDK", "SDK_INT"
+        };
         buildInfo += extractPublicFields(className, fields);
 
         return buildInfo;
@@ -30,7 +36,7 @@ public class Debug {
 
     private static String extractPublicFields(final String className,
             final String[] fields) {
-        String buildInfo = "\n    "/*4 spaces*/ + className;
+        String buildInfo = "\n    "/* 4 spaces */+ className;
         for (String field : fields) {
             if (!filter(field)) {
                 try {
@@ -38,7 +44,7 @@ public class Debug {
                     Field f;
 
                     f = clazz.getField(field);
-                    buildInfo += "\n        "/* 8 spaces*/ + field + ": " + f.get(clazz);
+                    buildInfo += "\n        "/* 8 spaces */+ field + ": " + f.get(clazz);
 
                 } catch (ClassNotFoundException e) {
                     // TODO Auto-generated catch block
@@ -56,7 +62,7 @@ public class Debug {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-                
+
                 // going on
             }
         }
@@ -69,8 +75,32 @@ public class Debug {
     }
 
     public static final String collectSystemLog() {
-        String log = "";
+        String log = "System Log:";
 
+        String command = "/system/bin/dmesg";
+        log += extractCommandOutput(command);
+
+        return log;
+    }
+
+    private static String extractCommandOutput(String logCommand) {
+        String log = "logCommand";
+        try {
+            Process p = new ProcessBuilder()
+            .command(logCommand)
+            .redirectErrorStream(true)
+            .start();
+            
+            InputStream in = p.getInputStream();
+            BufferedReader buffReader = new BufferedReader(new InputStreamReader(in));
+            String line = "";
+            while ((line = buffReader.readLine()) != null) {
+                log += "\n    "/* 4 spaces */ + line;
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         return log;
     }
 }
