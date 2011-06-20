@@ -1,7 +1,13 @@
 package com.tudou.android.CoverFlowTest;
 
+import java.io.File;
+
+import org.bangbang.song.andorid.common.debug.Debug;
+import org.bangbang.song.andorid.common.debug.Log;
+
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Environment;
 import android.widget.AdapterView;
 
 public class Demo extends Activity {
@@ -17,8 +23,12 @@ public class Demo extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.coverflow);
 
+		Log.init(new File(Environment.getExternalStorageDirectory(), "coverflow/logs"), "log");
+		Log.setLog(true);
+		Log.setLog2File(true);
 		
-		
+		Log.d(TAG, "hi! world");
+		Log.d(TAG, Debug.debugInfo());
 		mAdapter = new ImageAdapter(this);
 		mSpinner = (AdapterView) findViewById(R.id.gallery);
 		mSpinner.setAdapter(mAdapter);
