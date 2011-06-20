@@ -19,7 +19,7 @@ import android.os.Environment;
  * @author bangbang.song@gmail.com
  */
 public class Log {
-    private static String ROOT_TAG = "ooxx";
+    private static String mRootTag = "ooxx";
     private static final String TAG_DELIMITER = "/";
     private static boolean mLog = false;
 
@@ -29,6 +29,9 @@ public class Log {
     private static int COUNT = 5;
     private static int LIMIT = 1 * 1024 * 1024;
 
+    public static void setRootTag(String rootTag) {
+        mRootTag = rootTag;
+    }
     public static void setLog(boolean log) {
         Log.mLog = log;
     }
@@ -91,31 +94,31 @@ public class Log {
 
     public static void d(String tag, String message) {
         if (mLog) {
-            _d(ROOT_TAG + TAG_DELIMITER + tag, message);
+            _d(mRootTag + TAG_DELIMITER + tag, message);
         }
 
         if (mLog2File) {
-            _df(ROOT_TAG + TAG_DELIMITER + tag, message);
+            _df(mRootTag + TAG_DELIMITER + tag, message);
         }
     }
 
     public static void e(String tag, String message) {
         if (mLog) {
-            _e(ROOT_TAG + TAG_DELIMITER + tag, message);
+            _e(mRootTag + TAG_DELIMITER + tag, message);
         }
 
         if (mLog2File) {
-            _ef(ROOT_TAG + TAG_DELIMITER + tag, message);
+            _ef(mRootTag + TAG_DELIMITER + tag, message);
         }
     }
 
     public static void i(String tag, String message) {
         if (mLog) {
-            _i(ROOT_TAG + TAG_DELIMITER + tag, message);
+            _i(mRootTag + TAG_DELIMITER + tag, message);
         }
 
         if (mLog2File) {
-            _if(ROOT_TAG + TAG_DELIMITER + tag, message);
+            _if(mRootTag + TAG_DELIMITER + tag, message);
         }
     }
     
@@ -139,7 +142,8 @@ public class Log {
                     final Date d = new Date(r.getMillis());
                     return "[" + (d.getYear() + 1900) + "/" + d.getMonth() + "/" + d.getDate()
                             + " " + d.getHours()
-                            + ":" + d.getMinutes() + ":" + d.getSeconds() + "]" + r.getMessage();
+                            + ":" + d.getMinutes() + ":" + d.getSeconds() + "]" + r.getMessage()
+                            + "\n";
                 }
 
             });
@@ -155,21 +159,21 @@ public class Log {
 
     public static void v(String tag, String message) {
         if (mLog) {
-            _v(ROOT_TAG + TAG_DELIMITER + tag, message);
+            _v(mRootTag + TAG_DELIMITER + tag, message);
         }
 
         if (mLog2File) {
-            _vf(ROOT_TAG + TAG_DELIMITER + tag, message);
+            _vf(mRootTag + TAG_DELIMITER + tag, message);
         }
     }
 
     public static void w(String tag, String message) {
         if (mLog) {
-            _w(ROOT_TAG + TAG_DELIMITER + tag, message);
+            _w(mRootTag + TAG_DELIMITER + tag, message);
         }
 
         if (mLog2File) {
-            _wf(ROOT_TAG + TAG_DELIMITER + tag, message);
+            _wf(mRootTag + TAG_DELIMITER + tag, message);
         }
     }
 }
