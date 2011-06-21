@@ -32,6 +32,7 @@ public class Log {
     public static void setRootTag(String rootTag) {
         mRootTag = rootTag;
     }
+    
     public static void setLog(boolean log) {
         Log.mLog = log;
     }
@@ -127,9 +128,14 @@ public class Log {
     }
 
     public static void init(File appExternalLogDir, String logFileName) {
+        mLogger = Logger.getAnonymousLogger();
+        mLogger.setLevel(Level.ALL);
+        
         if (!appExternalLogDir.exists()) {
             final boolean success = appExternalLogDir.mkdirs();
             System.out.print(success);
+            mLog2File = false;
+            return;
         }
 
         try {
@@ -152,8 +158,6 @@ public class Log {
             e.printStackTrace();
         }
 
-        mLogger = Logger.getAnonymousLogger();
-        mLogger.setLevel(Level.ALL);
         mLogger.addHandler(mFileHandler);
     }
 
