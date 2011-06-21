@@ -19,11 +19,11 @@ import android.os.Environment;
  * @author bangbang.song@gmail.com
  */
 public class Log {
-    private static String mRootTag = "ooxx";
+    private static String mRootTag = "OOXX Changed by Log.setRootTag(String). ";
     private static final String TAG_DELIMITER = "/";
-    private static boolean mLog = false;
+    private static boolean mLog = true;
 
-    private static boolean mLog2File = false;
+    private static boolean mLog2File = true;
     private static Logger mLogger = null;
     private static Handler mFileHandler;
     private static int COUNT = 5;
