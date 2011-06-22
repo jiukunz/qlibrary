@@ -21,9 +21,9 @@ import android.os.Environment;
 public class Log {
     private static String mRootTag = "OOXX Changed by Log.setRootTag(String). ";
     private static final String TAG_DELIMITER = "/";
-    private static boolean mLog = true;
+    private static boolean mLog2STDOUT = true;
 
-    private static boolean mLog2File = true;
+    private static boolean mLog2File = false;
     private static Logger mLogger = null;
     private static Handler mFileHandler;
     private static int COUNT = 5;
@@ -32,9 +32,9 @@ public class Log {
     public static void setRootTag(String rootTag) {
         mRootTag = rootTag;
     }
-    
+
     public static void setLog(boolean log) {
-        Log.mLog = log;
+        Log.mLog2STDOUT = log;
     }
 
     public static void setLog2File(boolean log2file) {
@@ -94,7 +94,7 @@ public class Log {
     }
 
     public static void d(String tag, String message) {
-        if (mLog) {
+        if (mLog2STDOUT) {
             _d(mRootTag + TAG_DELIMITER + tag, message);
         }
 
@@ -103,8 +103,20 @@ public class Log {
         }
     }
 
+    public static void d(String tag, String message, Throwable t) {
+        if (mLog2STDOUT) {
+            _d(mRootTag + TAG_DELIMITER + tag,
+                    message + "\n" + android.util.Log.getStackTraceString(t));
+        }
+
+        if (mLog2File) {
+            _df(mRootTag + TAG_DELIMITER + tag,
+                    message + "\n" + android.util.Log.getStackTraceString(t));
+        }
+    }
+
     public static void e(String tag, String message) {
-        if (mLog) {
+        if (mLog2STDOUT) {
             _e(mRootTag + TAG_DELIMITER + tag, message);
         }
 
@@ -113,8 +125,20 @@ public class Log {
         }
     }
 
+    public static void e(String tag, String message, Throwable t) {
+        if (mLog2STDOUT) {
+            _e(mRootTag + TAG_DELIMITER + tag,
+                    message + "\n" + android.util.Log.getStackTraceString(t));
+        }
+
+        if (mLog2File) {
+            _ef(mRootTag + TAG_DELIMITER + tag,
+                    message + "\n" + android.util.Log.getStackTraceString(t));
+        }
+    }
+
     public static void i(String tag, String message) {
-        if (mLog) {
+        if (mLog2STDOUT) {
             _i(mRootTag + TAG_DELIMITER + tag, message);
         }
 
@@ -122,15 +146,71 @@ public class Log {
             _if(mRootTag + TAG_DELIMITER + tag, message);
         }
     }
-    
-    public static void init(File appExternalLogDir){
+
+    public static void i(String tag, String message, Throwable t) {
+        if (mLog2STDOUT) {
+            _i(mRootTag + TAG_DELIMITER + tag,
+                    message + "\n" + android.util.Log.getStackTraceString(t));
+        }
+
+        if (mLog2File) {
+            _if(mRootTag + TAG_DELIMITER + tag,
+                    message + "\n" + android.util.Log.getStackTraceString(t));
+        }
+    }
+
+    public static void v(String tag, String message) {
+        if (mLog2STDOUT) {
+            _v(mRootTag + TAG_DELIMITER + tag, message);
+        }
+
+        if (mLog2File) {
+            _vf(mRootTag + TAG_DELIMITER + tag, message);
+        }
+    }
+
+    public static void v(String tag, String message, Throwable t) {
+        if (mLog2STDOUT) {
+            _v(mRootTag + TAG_DELIMITER + tag,
+                    message + "\n" + android.util.Log.getStackTraceString(t));
+        }
+
+        if (mLog2File) {
+            _vf(mRootTag + TAG_DELIMITER + tag,
+                    message + "\n" + android.util.Log.getStackTraceString(t));
+        }
+    }
+
+    public static void w(String tag, String message) {
+        if (mLog2STDOUT) {
+            _w(mRootTag + TAG_DELIMITER + tag, message);
+        }
+
+        if (mLog2File) {
+            _wf(mRootTag + TAG_DELIMITER + tag, message);
+        }
+    }
+
+    public static void w(String tag, String message, Throwable t) {
+        if (mLog2STDOUT) {
+            _w(mRootTag + TAG_DELIMITER + tag,
+                    message + "\n" + android.util.Log.getStackTraceString(t));
+        }
+
+        if (mLog2File) {
+            _wf(mRootTag + TAG_DELIMITER + tag,
+                    message + "\n" + android.util.Log.getStackTraceString(t));
+        }
+    }
+
+    public static void init(File appExternalLogDir) {
         init(appExternalLogDir, "log");
     }
 
     public static void init(File appExternalLogDir, String logFileName) {
         mLogger = Logger.getAnonymousLogger();
         mLogger.setLevel(Level.ALL);
-        
+
         if (!appExternalLogDir.exists()) {
             final boolean success = appExternalLogDir.mkdirs();
             System.out.print(success);
@@ -159,25 +239,5 @@ public class Log {
         }
 
         mLogger.addHandler(mFileHandler);
-    }
-
-    public static void v(String tag, String message) {
-        if (mLog) {
-            _v(mRootTag + TAG_DELIMITER + tag, message);
-        }
-
-        if (mLog2File) {
-            _vf(mRootTag + TAG_DELIMITER + tag, message);
-        }
-    }
-
-    public static void w(String tag, String message) {
-        if (mLog) {
-            _w(mRootTag + TAG_DELIMITER + tag, message);
-        }
-
-        if (mLog2File) {
-            _wf(mRootTag + TAG_DELIMITER + tag, message);
-        }
     }
 }
