@@ -43,53 +43,46 @@ public class Log {
     }
 
     private static boolean assureCanLog2File() {
-        // TODO Auto-generated method stub
         return Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED);
     }
 
     private static void _d(String tag, String message) {
-        // TODO Auto-generated method stub
         android.util.Log.d(tag, message);
     }
 
-    private static void _df(String tag, String message) {
-        // TODO Auto-generated method stub
+    private static void _d2logger(String tag, String message) {
         mLogger.log(Level.FINE, tag + TAG_DELIMITER + message);
     }
 
     private static void _e(String tag, String message) {
-        // TODO Auto-generated method stub
         android.util.Log.d(tag, message);
     }
 
-    private static void _ef(String tag, String message) {
+    private static void _e2logger(String tag, String message) {
         mLogger.log(Level.SEVERE, tag + TAG_DELIMITER + message);
     }
 
     private static void _i(String tag, String message) {
-        // TODO Auto-generated method stub
         android.util.Log.i(tag, message);
     }
 
-    private static void _if(String tag, String message) {
+    private static void _i2logger(String tag, String message) {
         mLogger.log(Level.INFO, tag + TAG_DELIMITER + message);
     }
 
     private static void _v(String tag, String message) {
-        // TODO Auto-generated method stub
         android.util.Log.v(tag, message);
     }
 
-    private static void _vf(String tag, String message) {
+    private static void _v2logger(String tag, String message) {
         mLogger.log(Level.FINEST, tag + TAG_DELIMITER + message);
     }
 
     private static void _w(String tag, String message) {
-        // TODO Auto-generated method stub
         android.util.Log.w(tag, message);
     }
 
-    private static void _wf(String tag, String message) {
+    private static void _w2logger(String tag, String message) {
         mLogger.log(Level.WARNING, tag + TAG_DELIMITER + message);
     }
 
@@ -99,7 +92,7 @@ public class Log {
         }
 
         if (mLog2File) {
-            _df(mRootTag + TAG_DELIMITER + tag, message);
+            _d2logger(mRootTag + TAG_DELIMITER + tag, message);
         }
     }
 
@@ -110,7 +103,7 @@ public class Log {
         }
 
         if (mLog2File) {
-            _df(mRootTag + TAG_DELIMITER + tag,
+            _d2logger(mRootTag + TAG_DELIMITER + tag,
                     message + "\n" + android.util.Log.getStackTraceString(t));
         }
     }
@@ -121,7 +114,7 @@ public class Log {
         }
 
         if (mLog2File) {
-            _ef(mRootTag + TAG_DELIMITER + tag, message);
+            _e2logger(mRootTag + TAG_DELIMITER + tag, message);
         }
     }
 
@@ -132,7 +125,7 @@ public class Log {
         }
 
         if (mLog2File) {
-            _ef(mRootTag + TAG_DELIMITER + tag,
+            _e2logger(mRootTag + TAG_DELIMITER + tag,
                     message + "\n" + android.util.Log.getStackTraceString(t));
         }
     }
@@ -143,7 +136,7 @@ public class Log {
         }
 
         if (mLog2File) {
-            _if(mRootTag + TAG_DELIMITER + tag, message);
+            _i2logger(mRootTag + TAG_DELIMITER + tag, message);
         }
     }
 
@@ -154,7 +147,7 @@ public class Log {
         }
 
         if (mLog2File) {
-            _if(mRootTag + TAG_DELIMITER + tag,
+            _i2logger(mRootTag + TAG_DELIMITER + tag,
                     message + "\n" + android.util.Log.getStackTraceString(t));
         }
     }
@@ -165,7 +158,7 @@ public class Log {
         }
 
         if (mLog2File) {
-            _vf(mRootTag + TAG_DELIMITER + tag, message);
+            _v2logger(mRootTag + TAG_DELIMITER + tag, message);
         }
     }
 
@@ -176,7 +169,7 @@ public class Log {
         }
 
         if (mLog2File) {
-            _vf(mRootTag + TAG_DELIMITER + tag,
+            _v2logger(mRootTag + TAG_DELIMITER + tag,
                     message + "\n" + android.util.Log.getStackTraceString(t));
         }
     }
@@ -187,7 +180,7 @@ public class Log {
         }
 
         if (mLog2File) {
-            _wf(mRootTag + TAG_DELIMITER + tag, message);
+            _w2logger(mRootTag + TAG_DELIMITER + tag, message);
         }
     }
 
@@ -198,7 +191,7 @@ public class Log {
         }
 
         if (mLog2File) {
-            _wf(mRootTag + TAG_DELIMITER + tag,
+            _w2logger(mRootTag + TAG_DELIMITER + tag,
                     message + "\n" + android.util.Log.getStackTraceString(t));
         }
     }
@@ -234,7 +227,6 @@ public class Log {
 
             });
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
