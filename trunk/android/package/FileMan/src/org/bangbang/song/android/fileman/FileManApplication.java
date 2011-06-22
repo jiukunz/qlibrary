@@ -1,8 +1,11 @@
 
 package org.bangbang.song.android.fileman;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import org.bangbang.song.andorid.common.debug.Log;
 import org.bangbang.song.android.fileman.component.APplication;
@@ -33,8 +36,26 @@ public class FileManApplication extends APplication {
     public void onCreate() {
         // TODO Auto-generated method stub
         super.onCreate();
+        
         firstInit(); // must follow super.onCreate().
-        Log.d(TAG, "hi, bangbang.song@gmail.com");
+        String logo = genLogoLiteral();
+        Log.i(TAG, "Hi, world ...\n" + logo);
+    }
+
+    private String genLogoLiteral() {
+        String logo = "";
+        InputStream in = getResources().openRawResource(R.raw.aboutme);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        String line = null;
+        try {
+            while ((line = reader.readLine()) != null){
+                logo += line + "\n";
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return logo;
     }
 
     @Override
