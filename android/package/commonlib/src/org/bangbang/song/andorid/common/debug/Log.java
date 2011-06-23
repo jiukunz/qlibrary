@@ -204,7 +204,7 @@ public class Log {
         mLogger = Logger.getAnonymousLogger();
         mLogger.setLevel(Level.ALL);
 
-        if (!appExternalLogDir.exists()) {
+        if (!appExternalLogDir.exists() && !appExternalLogDir.mkdirs()) {
             final boolean success = appExternalLogDir.mkdirs();
             System.out.print(success);
             mLog2File = false;
