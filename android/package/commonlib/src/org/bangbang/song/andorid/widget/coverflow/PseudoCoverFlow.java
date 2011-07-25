@@ -31,9 +31,10 @@ import android.widget.Gallery;
  * @author bysong@tudou.com
  */
 public class PseudoCoverFlow extends Gallery {
-    private static final int DEFAULT_SPACING = -160;
+    private static final int DEFAULT_SPACING = -240;// (WINDTH / 2) - 1
     private static final String TAG = PseudoCoverFlow.class.getSimpleName();
     private static final boolean LOG = false;
+    private static final boolean DEBUG_LOCATE = true;
 
     private int[] mDrawOrder = new int[] {};
 
@@ -91,7 +92,85 @@ public class PseudoCoverFlow extends Gallery {
         ;
     }
 
-    protected void onDraw(Canvas canvas) {
+    @Override
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+			float distanceY) {
+		// TODO Auto-generated method stub
+    	if (DEBUG_LOCATE) {
+    		Log.d(TAG, "onScroll(). e1: + " + e1 + "\te2: + " + e2 
+    						+ "distanceX: " + distanceX
+    						+ "distanceY: " + distanceY);
+    		logPosition();
+    	}
+		return super.onScroll(e1, e2, distanceX, distanceY);
+	}
+
+    private void logPosition() {
+		// TODO Auto-generated method stub
+		int center = (getWidth() - getLeftPaddingOffset() - getRightPaddingOffset()) / 2 + getLeftPaddingOffset();
+		final int COUNT = getChildCount();
+		View child = null;
+		int childLeft = -1;
+		int childRight = -1;
+		int cloestIndex = -1;
+		int cloestDistance = Integer.MAX_VALUE;
+		
+		Log.d(TAG, "         center: " + center);
+		for (int i = COUNT - 1; i >= 0; i --) {
+			child = getChildAt(i);
+			childLeft = child.getLeft();
+			childRight = child.getRight();
+			int minDistance = Math.min(Math.abs(center - childLeft), Math.abs(center - childLeft));
+			if (minDistance < cloestDistance){
+				cloestDistance = minDistance;
+				cloestIndex = i;
+			}
+			
+			Log.d(TAG, i + " left: " + childLeft
+						+ "\tright: " + childRight
+						+ "\tcloestDistance: " + cloestDistance
+						);
+		}
+		Log.d(TAG, "cloestDistance index: " + cloestIndex);
+	}
+
+	@Override
+	public void onShowPress(MotionEvent e) {
+		// TODO Auto-generated method stub
+    	if (DEBUG_LOCATE) {
+    		Log.d(TAG, "onShowPress(). e: " + e);
+    	}
+		super.onShowPress(e);
+	}
+
+	@Override
+	public boolean onDown(MotionEvent e) {
+		// TODO Auto-generated method stub
+		if (DEBUG_LOCATE) {
+			Log.d(TAG, "onDown(). e: " + e);
+		}
+		return super.onDown(e);
+	}
+
+	@Override
+	public void onLongPress(MotionEvent e) {
+		// TODO Auto-generated method stub
+		if (DEBUG_LOCATE) {
+			Log.d(TAG, "onLongPress(). e: " + e);
+		}
+		super.onLongPress(e);
+	}
+
+	@Override
+	public boolean onSingleTapUp(MotionEvent e) {
+		// TODO Auto-generated method stub
+    	if (DEBUG_LOCATE) {
+    		Log.d(TAG, "onSingleTapup(). e: " + e);
+    	}
+		return super.onSingleTapUp(e);
+	}
+
+	protected void onDraw(Canvas canvas) {
         // TODO Auto-generated method stub
         super.onDraw(canvas);
 
