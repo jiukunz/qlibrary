@@ -23,10 +23,6 @@ public class Demo extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.coverflow);
 
-		Log.init(new File(Environment.getExternalStorageDirectory(), "coverflow/logs"), "log");
-		Log.setLog(true);
-		Log.setLog2File(true);
-		
 		Log.d(TAG, "hi! world");
 		Log.d(TAG, Debug.debugInfo());
 		mAdapter = new ImageAdapter(this);
