@@ -29,7 +29,7 @@ extends BaseAdapter
 	}
 	
 	public int getSuggestIniSelectPosition(){
-		return mCycleAccount % mCount / 2 * mCount;
+		return mCycleAccount / mCount / 2 * mCount;
 	}
 	
 	@Override
