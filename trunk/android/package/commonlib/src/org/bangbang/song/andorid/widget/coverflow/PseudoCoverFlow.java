@@ -31,7 +31,14 @@ import android.widget.Gallery;
  * @author bysong@tudou.com
  */
 public class PseudoCoverFlow extends Gallery {
-    private static final int DEFAULT_SPACING = -240;// (WINDTH / 2) - 1
+	/* 
+	 *  XXX 
+	 *  according Gallery's setSelectionToCenterChild() logic,
+	 *  be sure that: spacing > - ( WIDTH / 2) 
+	 *  
+	 *  bysong@tudou.com
+	 */
+    private static final int DEFAULT_SPACING = -105;
     private static final String TAG = PseudoCoverFlow.class.getSimpleName();
     private static final boolean LOG = false;
     private static final boolean DEBUG_LOCATE = true;
@@ -265,8 +272,8 @@ public class PseudoCoverFlow extends Gallery {
 
         final int position = indexOfChild + getFirstVisiblePosition();
 
-        ((CoverFlowAdapter) getAdapter()).computeTransfomtion((CoverFlowItemView) child, t,
-                position, xDelt, (xDelt >= 0 ? 1 : -1) * centerOfCoverFlow, indexDelt);
+//        ((CoverFlowAdapter) getAdapter()).computeTransfomtion((CoverFlowItemView) child, t,
+//                position, xDelt, (xDelt >= 0 ? 1 : -1) * centerOfCoverFlow, indexDelt);
         return true;
     }
 
