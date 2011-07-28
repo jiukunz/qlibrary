@@ -23,18 +23,18 @@ public class Debug {
                 "PRODUCT", "RADIO", "SERIAL", "TAGS", "TIME", "TYPE", "USER"
         };
 
-        buildInfo += extractPublicFields(className, fields);
+        buildInfo += extractFields(className, fields);
 
         className = "android.os.Build$VERSION";
         fields = new String[] {
                 "CODENAME", "INCREMENTAL", "RELEASE", "SDK", "SDK_INT"
         };
-        buildInfo += extractPublicFields(className, fields);
+        buildInfo += extractFields(className, fields);
 
         return buildInfo;
     }
 
-    private static String extractPublicFields(final String className,
+    private static String extractFields(final String className,
             final String[] fields) {
         String buildInfo = "\n    "/* 4 spaces */+ className;
         for (String field : fields) {
@@ -84,7 +84,7 @@ public class Debug {
     }
 
     private static String extractCommandOutput(String logCommand) {
-        String log = "logCommand";
+        String log = "logCommand: " + logCommand;
         try {
             Process p = new ProcessBuilder()
             .command(logCommand)
