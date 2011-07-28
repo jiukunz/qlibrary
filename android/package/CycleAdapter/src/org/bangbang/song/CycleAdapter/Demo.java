@@ -28,7 +28,8 @@ public class Demo extends Activity {
         }
         mAdapter = new ArrayAdapter(this, R.layout.item, R.id.text, mDataSet.toArray());
         mAdapter = new CycleAdapter(mAdapter);
-//        mListV = ((ListView)findViewById(R.id.list));
-//        mListV.setAdapter(mAdapter);
+        mListV = ((ListView)findViewById(R.id.list));
+        mListV.setAdapter(mAdapter);
+        mListV.setSelection(((CycleAdapter)mAdapter).getSuggestIniSelectPosition());
     }
 }
