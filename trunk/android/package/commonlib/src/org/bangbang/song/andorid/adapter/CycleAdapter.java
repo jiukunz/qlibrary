@@ -10,6 +10,7 @@ import android.widget.SpinnerAdapter;
 /**
  * a cycle adapter, is a decorator pattern.
  * 
+ * @see #getSuggestIniSelectPosition()
  * @author bangbang.song@gamil.com
  *
  */
