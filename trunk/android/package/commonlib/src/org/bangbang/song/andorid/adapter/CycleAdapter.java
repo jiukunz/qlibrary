@@ -27,6 +27,10 @@ extends BaseAdapter
 		mCycleAccount = Integer.MAX_VALUE;
 	}
 	
+	public int getSuggestIniSelectPosition(){
+		return mCycleAccount % mCount / 2 * mCount;
+	}
+	
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
