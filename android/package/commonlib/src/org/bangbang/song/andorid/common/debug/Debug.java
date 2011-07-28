@@ -77,10 +77,20 @@ public class Debug {
     public static final String collectSystemLog() {
         String log = "System Log:";
 
-        String command = "/system/bin/dmesg";
-        log += extractCommandOutput(command);
+        String[] commands = {"netcfg", "dmesg", "netstat"};
+        log = extractCommandOutput(commands);
 
         return log;
+    }
+    
+    private static String extractCommandOutput(String[] logCommands){
+    	String log = "";
+    	if (null != logCommands && logCommands.length > 0) {
+    		for ( String cmd : logCommands ) {
+    			log += extractCommandOutput(cmd) + "\n";
+    		}
+    	}
+    	return log;
     }
 
     private static String extractCommandOutput(String logCommand) {
