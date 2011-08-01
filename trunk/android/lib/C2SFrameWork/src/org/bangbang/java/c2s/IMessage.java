@@ -6,9 +6,7 @@ package org.bangbang.java.c2s;
  */
 public interface IMessage {
 	public static final int TYPE_SERVER2CLIENT = 1;
-	public static final int TYPE_CLIENT2SERVER = 2;
-	public int getId();
-	
+	public static final int TYPE_CLIENT2SERVER = 2;	
 	/**
 	 * @return traffic type
 	 * 
@@ -16,6 +14,9 @@ public interface IMessage {
 	 * @see TYPE_SERVER2CLIENT
 	 */
 	public int getTrafficType();
+	
+	public int getType();
+	public int getId();
 	public byte[] getData();
 	public String getScript();
 	public long getUTCTimeStamp();

@@ -1,4 +1,4 @@
-package org.bangbang.java.c2s.impl;
+package org.bangbang.java.c2s.impl.mock;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingDeque;

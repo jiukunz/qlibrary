@@ -1,4 +1,4 @@
-package org.bangbang.java.c2s.impl;
+package org.bangbang.java.c2s.impl.mock;
 
 import org.bangbang.java.c2s.IAmbassador;
 import org.bangbang.java.c2s.IRequest;
@@ -16,7 +16,13 @@ public class HelloWorldRequest extends Request {
 	@Override
 	protected void doRequest() {
 		// TODO Auto-generated method stub
-		
+		try {
+			Thread.sleep(5 * 1000);
+			mCallback.onResponse(null);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -21,6 +21,11 @@ abstract public class Request implements IRequest, Runnable, Cancelable{
 		// TODO Auto-generated method stub
 		return mTarget.getTrafficType();
 	}
+	
+	@Override
+	public int getType(){
+		return mTarget.getType();
+	}
 
 	@Override
 	public byte[] getData() {
@@ -48,7 +53,7 @@ abstract public class Request implements IRequest, Runnable, Cancelable{
 	}
 
 	@Override
-	public void run() {
+	final public void run() {
 		// TODO Auto-generated method stub
 		if (!mCanceld){
 			doRequest();
