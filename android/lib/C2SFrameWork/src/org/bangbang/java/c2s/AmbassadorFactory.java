@@ -1,6 +1,6 @@
 package org.bangbang.java.c2s;
 
-import org.bangbang.java.c2s.impl.Ambassador;
+import org.bangbang.java.c2s.impl.mock.Ambassador;
 
 public class AmbassadorFactory {
 	private static AmbassadorFactory sInstance;
