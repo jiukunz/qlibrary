@@ -18,7 +18,7 @@ public class HelloWorldRequest extends Request {
 		// TODO Auto-generated method stub
 		try {
 			Thread.sleep(5 * 1000);
-			mCallback.onResponse(null);
+			mCallback.onResponse(new HelloWorldResponse());
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

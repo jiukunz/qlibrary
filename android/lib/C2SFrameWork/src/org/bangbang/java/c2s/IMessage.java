@@ -5,6 +5,7 @@ package org.bangbang.java.c2s;
  *
  */
 public interface IMessage {
+	public static final int TYPE_UNKOWN = -1;
 	public static final int TYPE_SERVER2CLIENT = 1;
 	public static final int TYPE_CLIENT2SERVER = 2;	
 	/**
