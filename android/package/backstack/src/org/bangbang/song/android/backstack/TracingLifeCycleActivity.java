@@ -3,6 +3,7 @@ package org.bangbang.song.android.backstack;
 import org.bangbang.song.andorid.common.debug.Log;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 abstract public class TracingLifeCycleActivity extends Activity {
@@ -16,7 +17,15 @@ abstract public class TracingLifeCycleActivity extends Activity {
         Log.d(getTag(), "onCreate()");
     }
     
-    protected abstract String getTag();
+    protected abstract String getTag();        
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		// TODO Auto-generated method stub
+		super.onNewIntent(intent);
+		
+        Log.d(getTag(), "onNewIntent(). intent: " + intent);
+	}
 
 	@Override
 	protected void onDestroy() {
