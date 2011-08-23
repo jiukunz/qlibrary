@@ -1,10 +1,13 @@
-package org.bangbang.java.c2s;
+package org.bangbang.java.c2s.impl.mock;
 
-abstract public class Request implements IRequest, Runnable, Cancelable {
+import org.bangbang.java.c2s.IRequest;
+import org.bangbang.java.c2s.IResponse;
+
+abstract public class Response implements IResponse{
 	protected boolean mCanceld;
 	protected long mUTCTimeStamp;
 	protected String mScript;
-	protected byte[] mData;
+	protected Object mData;
 	protected int mType;
 	protected int mTrafficType;
 	protected int mId;
@@ -14,13 +17,23 @@ abstract public class Request implements IRequest, Runnable, Cancelable {
 	 * 
 	 * @param target
 	 */
-	public Request(IRequest target) {
+	public Response(IRequest target) {
 		mUTCTimeStamp = target.getUTCTimeStamp();
 		mScript = target.getScript();
 		mData = target.getData();
 		mTrafficType = target.getTrafficType();
 		mType = target.getType();
 		mId = target.getId();
+		mCanceld = false;
+	}
+	
+	public Response(){
+		mUTCTimeStamp = -1;
+		mScript = "";
+		mData = null;
+		mTrafficType = TYPE_SERVER2CLIENT;
+		mType = TYPE_UNKOWN;
+		mId = TYPE_UNKOWN;
 		mCanceld = false;
 	}
 
@@ -70,7 +83,7 @@ abstract public class Request implements IRequest, Runnable, Cancelable {
 	}
 
 	@Override
-	public byte[] getData() {
+	public Object getData() {
 		// TODO Auto-generated method stub
 		return mData;
 	}
@@ -86,21 +99,4 @@ abstract public class Request implements IRequest, Runnable, Cancelable {
 		// TODO Auto-generated method stub
 		return mUTCTimeStamp;
 	}
-
-	@Override
-	public void cancel() {
-		// TODO Auto-generated method stub
-		mCanceld = true;
-	}
-
-	@Override
-	final public void run() {
-		// TODO Auto-generated method stub
-		if (!mCanceld) {
-			doRequest();
-		}
-	}
-
-	abstract protected void doRequest();
-
 }

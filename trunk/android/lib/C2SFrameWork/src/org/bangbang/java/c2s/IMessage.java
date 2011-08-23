@@ -18,7 +18,7 @@ public interface IMessage {
 	
 	public int getType();
 	public int getId();
-	public byte[] getData();
+	public Object getData();
 	public String getScript();
 	public long getUTCTimeStamp();
 }

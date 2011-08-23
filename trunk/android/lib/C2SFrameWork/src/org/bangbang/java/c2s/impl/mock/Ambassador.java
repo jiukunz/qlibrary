@@ -9,6 +9,7 @@ import org.bangbang.java.c2s.IAmbassador;
 import org.bangbang.java.c2s.IRequest;
 
 public class Ambassador implements IAmbassador {
+	private static int sId;
 	private Executor mExecutor;
 	
 	public Ambassador(){
@@ -16,15 +17,15 @@ public class Ambassador implements IAmbassador {
 	}
 
 	@Override
-	public void scheduleRequest(IRequest req, Callback callback) {
+	public long scheduleRequest(IRequest req, Callback callback) {
 		// TODO Auto-generated method stub
-		mExecutor.execute(new HelloWorldRequest(req, callback));
+		
+		mExecutor.execute(new HelloWorldRequest(callback));
+		return sId++;
 	}
 
 	@Override
-	public void unScheduleRequest(IRequest req) {
+	public void unScheduleRequest(long requestId) {
 		// TODO Auto-generated method stub
-
 	}
-
 }
