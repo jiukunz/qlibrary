@@ -16,6 +16,11 @@ import android.os.Environment;
 /**
  * JUST a wrapper for android.util.Log
  * 
+ * <p>
+ * Firstly, you must toggle log on by {@link #setLog(boolean)}.
+ * Secondly, you can toggle log-to-file by {@link #setLog2File(boolean)} and 
+ * initiate with by {@link #init(File)} or {@link #init(File, String)}.
+ * 
  * @author bangbang.song@gmail.com
  */
 public class Log {
@@ -37,8 +42,14 @@ public class Log {
         Log.mLog2STDOUT = log;
     }
 
+    /**
+     * @param log2file
+     * 
+     * @see #init(File)
+     * @see #init(File, String)
+     */
     public static void setLog2File(boolean log2file) {
-        log2file = assureCanLog2File();
+        log2file = log2file && assureCanLog2File();
         Log.mLog2File = log2file;
     }
 
@@ -88,118 +99,131 @@ public class Log {
 
     public static void d(String tag, String message) {
         if (mLog2STDOUT) {
-            _d(mRootTag + TAG_DELIMITER + tag, message);
+            _d(mRootTag, TAG_DELIMITER + tag + ":" + message);
         }
 
         if (mLog2File) {
-            _d2logger(mRootTag + TAG_DELIMITER + tag, message);
+            _d2logger(mRootTag, TAG_DELIMITER + tag + ":" +  message);
         }
     }
 
     public static void d(String tag, String message, Throwable t) {
         if (mLog2STDOUT) {
-            _d(mRootTag + TAG_DELIMITER + tag,
+            _d(mRootTag, TAG_DELIMITER + tag + ":" +
                     message + "\n" + android.util.Log.getStackTraceString(t));
         }
 
         if (mLog2File) {
-            _d2logger(mRootTag + TAG_DELIMITER + tag,
+            _d2logger(mRootTag, TAG_DELIMITER + tag + ":" +
                     message + "\n" + android.util.Log.getStackTraceString(t));
         }
     }
 
     public static void e(String tag, String message) {
         if (mLog2STDOUT) {
-            _e(mRootTag + TAG_DELIMITER + tag, message);
+            _e(mRootTag, TAG_DELIMITER + tag + ":" + message);
         }
 
         if (mLog2File) {
-            _e2logger(mRootTag + TAG_DELIMITER + tag, message);
+            _e2logger(mRootTag, TAG_DELIMITER + tag + ":" +  message);
         }
     }
 
     public static void e(String tag, String message, Throwable t) {
         if (mLog2STDOUT) {
-            _e(mRootTag + TAG_DELIMITER + tag,
+            _e(mRootTag, TAG_DELIMITER + tag + ":" +
                     message + "\n" + android.util.Log.getStackTraceString(t));
         }
 
         if (mLog2File) {
-            _e2logger(mRootTag + TAG_DELIMITER + tag,
+            _e2logger(mRootTag, TAG_DELIMITER + tag + ":" +
                     message + "\n" + android.util.Log.getStackTraceString(t));
         }
     }
 
     public static void i(String tag, String message) {
         if (mLog2STDOUT) {
-            _i(mRootTag + TAG_DELIMITER + tag, message);
+            _i(mRootTag, TAG_DELIMITER + tag + ":" +  message);
         }
 
         if (mLog2File) {
-            _i2logger(mRootTag + TAG_DELIMITER + tag, message);
+            _i2logger(mRootTag, TAG_DELIMITER + tag + ":" +  message);
         }
     }
 
     public static void i(String tag, String message, Throwable t) {
         if (mLog2STDOUT) {
-            _i(mRootTag + TAG_DELIMITER + tag,
+            _i(mRootTag, TAG_DELIMITER + tag + ":" +
                     message + "\n" + android.util.Log.getStackTraceString(t));
         }
 
         if (mLog2File) {
-            _i2logger(mRootTag + TAG_DELIMITER + tag,
+            _i2logger(mRootTag,  TAG_DELIMITER + tag + ":" +
                     message + "\n" + android.util.Log.getStackTraceString(t));
         }
     }
 
     public static void v(String tag, String message) {
         if (mLog2STDOUT) {
-            _v(mRootTag + TAG_DELIMITER + tag, message);
+            _v(mRootTag, TAG_DELIMITER + tag +  message);
         }
 
         if (mLog2File) {
-            _v2logger(mRootTag + TAG_DELIMITER + tag, message);
+            _v2logger(mRootTag, TAG_DELIMITER + tag +  message);
         }
     }
 
     public static void v(String tag, String message, Throwable t) {
         if (mLog2STDOUT) {
-            _v(mRootTag + TAG_DELIMITER + tag,
+            _v(mRootTag, TAG_DELIMITER + tag + ":" +
                     message + "\n" + android.util.Log.getStackTraceString(t));
         }
 
         if (mLog2File) {
-            _v2logger(mRootTag + TAG_DELIMITER + tag,
+            _v2logger(mRootTag, TAG_DELIMITER + tag + ":" +
                     message + "\n" + android.util.Log.getStackTraceString(t));
         }
     }
 
     public static void w(String tag, String message) {
         if (mLog2STDOUT) {
-            _w(mRootTag + TAG_DELIMITER + tag, message);
+            _w(mRootTag, TAG_DELIMITER + tag + ":" +  message);
         }
 
         if (mLog2File) {
-            _w2logger(mRootTag + TAG_DELIMITER + tag, message);
+            _w2logger(mRootTag, TAG_DELIMITER + tag + ":" +  message);
         }
     }
 
     public static void w(String tag, String message, Throwable t) {
         if (mLog2STDOUT) {
-            _w(mRootTag + TAG_DELIMITER + tag,
+            _w(mRootTag,  TAG_DELIMITER + tag + ":" +
                     message + "\n" + android.util.Log.getStackTraceString(t));
         }
 
         if (mLog2File) {
-            _w2logger(mRootTag + TAG_DELIMITER + tag,
+            _w2logger(mRootTag, TAG_DELIMITER + tag + ":" +
                     message + "\n" + android.util.Log.getStackTraceString(t));
         }
     }
 
+    /**
+     * init log dir & file which default to {@code appExternalLogDir}/log.
+     * 
+     * @param appExternalLogDir
+     */
     public static void init(File appExternalLogDir) {
         init(appExternalLogDir, "log");
     }
 
+    /**
+     * init log dir & file.
+     * 
+     * @param appExternalLogDir
+     * @param logFileName
+     * 
+     * @see #setLog2File(boolean)
+     */
     public static void init(File appExternalLogDir, String logFileName) {
         mLogger = Logger.getAnonymousLogger();
         mLogger.setLevel(Level.ALL);
