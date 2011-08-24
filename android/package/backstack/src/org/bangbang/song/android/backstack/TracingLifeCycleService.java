@@ -14,7 +14,7 @@ abstract public class TracingLifeCycleService extends Service {
 
 	/* 
 	 * return null.
-	 * XXX how 2 java doc in Override function.
+	 * TODO how 2 java doc in Override function.
 	 * 
 	 * @see android.app.Service#onBind(android.content.Intent)
 	 */
