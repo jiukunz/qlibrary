@@ -20,4 +20,12 @@ public class Demo6 extends TracingLifeCycleActivity {
 		// TODO Auto-generated method stub
 		return TAG;
 	}
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		
+		Service.start(getApplicationContext());
+	}
 }

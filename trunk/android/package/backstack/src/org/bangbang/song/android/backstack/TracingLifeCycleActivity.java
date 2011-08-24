@@ -14,7 +14,7 @@ abstract public class TracingLifeCycleActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        Log.d(getTag(), "onCreate()");
+        Log.d(getTag(), "onCreate(). savedInstanceState: " + savedInstanceState);
     }
     
     protected abstract String getTag();        
@@ -25,6 +25,46 @@ abstract public class TracingLifeCycleActivity extends Activity {
 		super.onNewIntent(intent);
 		
         Log.d(getTag(), "onNewIntent(). intent: " + intent);
+	}
+
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onPostCreate(savedInstanceState);
+		
+        Log.d(getTag(), "onPostCreate(). savedInstanceState: " + savedInstanceState);
+	}
+
+	@Override
+	protected void onPostResume() {
+		// TODO Auto-generated method stub
+		super.onPostResume();
+		
+        Log.d(getTag(), "onPostResume()");
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onRestoreInstanceState(savedInstanceState);
+		
+        Log.d(getTag(), "onRestoreInstanceState(). savedInstanceState: " + savedInstanceState);
+	}
+
+	@Override
+	public Object onRetainNonConfigurationInstance() {
+		// TODO Auto-generated method stub		
+        Log.d(getTag(), "onRetainNonConfigurationInstance()");
+        
+		return super.onRetainNonConfigurationInstance();
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+		
+        Log.d(getTag(), "onSaveInstanceState(). outState: " + outState);
 	}
 
 	@Override

@@ -4,8 +4,8 @@
 	android:versionName="1.0">
 
 
-	<application 
-		android:name="org.bangbang.song.android.backstack.Application" android:icon="@drawable/icon" android:label="@string/app_name">
+	<application android:name="org.bangbang.song.android.backstack.Application"
+		android:icon="@drawable/icon" android:label="@string/app_name">
 		<activity android:name=".Demo" android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -30,6 +30,11 @@
 		<activity android:name=".Demo6" android:label="@string/app_name">
 
 		</activity>
+		<service android:name=".Service">
+			<intent-filter>
+				<action android:name="org.bangbang.song.android.ACTION_START_SERVICE"/>
+			</intent-filter>
+		</service>
 
 	</application>
 </manifest>
