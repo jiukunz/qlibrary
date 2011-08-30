@@ -12,8 +12,11 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
+import android.media.MediaPlayer.OnInfoListener;
+import android.media.MediaPlayer.OnSeekCompleteListener;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -25,12 +28,20 @@ import android.view.View;
 import android.widget.MediaController;
 import android.widget.MediaController.MediaPlayerControl;
 
+
 /**
- * Displays a video file.  The VideoView class
- * can load images from various sources (such as resources or content
- * providers), takes care of computing its measurement from the video so that
- * it can be used in any layout manager, and provides various display options
- * such as scaling and tinting.
+ * @author bangbang.song@gmail.com
+ * 
+ * 
+ * a copy-of android's VideoView.
+ * 
+ * <pre>
+ * advanced:
+ *  add listerners for 
+ *  {@link #MediaPlayer.OnInfoListener()},
+ *  {@link #MediaPlayer.OnSeekCompleteListener()}, 
+ *  {@link #MediaPlayer.OnBufferingUpdateListener()}. 
+ *
  */
 public class VideoView extends SurfaceView implements MediaPlayerControl {
     private String TAG = "VideoView";
@@ -61,11 +72,20 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
 
     // All the stuff we need for playing and showing a video
     private SurfaceHolder mSurfaceHolder = null;
+    
+    // bangbang.song@gmail.com
     private CompatibilityMediaPlayer mMediaPlayer = null;
+    
     private int         mVideoWidth;
     private int         mVideoHeight;
     private int         mSurfaceWidth;
     private int         mSurfaceHeight;
+    
+    // add by bangbang.song@gmail.com
+    private OnBufferingUpdateListener mOnBufferingUpdateListener;
+    private OnInfoListener mOnInfoListener;
+    private OnSeekCompleteListener mOnSeekCompleteListener;
+    
     private MediaController mMediaController;
     private OnCompletionListener mOnCompletionListener;
     private MediaPlayer.OnPreparedListener mOnPreparedListener;
@@ -214,6 +234,9 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             mMediaPlayer.setOnCompletionListener(mCompletionListener);
             mMediaPlayer.setOnErrorListener(mErrorListener);
             mMediaPlayer.setOnBufferingUpdateListener(mBufferingUpdateListener);
+            mMediaPlayer.setOnCompletionListener(mOnCompletionListener);
+            mMediaPlayer.setOnInfoListener(mOnInfoListener);
+            mMediaPlayer.setOnSeekCompleteListener(mOnSeekCompleteListener);
             mCurrentBufferPercentage = 0;
             
             // add by bangbang.song@gmail.com
@@ -291,6 +314,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
 //            } else {
 //                mCanPause = mCanSeekBack = mCanSeekForward = true;
 //            }
+//            mCanPause = mCanSeekBack = mCanSeekForward = true;
 
             if (mOnPreparedListener != null) {
                 mOnPreparedListener.onPrepared(mMediaPlayer);
@@ -406,8 +430,36 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         new MediaPlayer.OnBufferingUpdateListener() {
         public void onBufferingUpdate(MediaPlayer mp, int percent) {
             mCurrentBufferPercentage = percent;
+            
+            if (null != mOnBufferingUpdateListener){
+                mOnBufferingUpdateListener.onBufferingUpdate(mp, percent);
+            }
         }
     };
+    
+    /**
+     * register a callback to be invoked when the media file buffer state updated.     * 
+     * 
+     * @param l
+     * @see MediaPlayer.OnBufferingUpdateListener()
+     */
+    public void setOnBufferingUpdateListener(MediaPlayer.OnBufferingUpdateListener l) {
+        mOnBufferingUpdateListener = l;
+    }
+    
+    /**
+     * 
+     * @param l
+     * 
+     * @see MediaPlayer.OnInfoListener().
+     */
+    public void setOnInfoListener(MediaPlayer.OnInfoListener l) {
+        mOnInfoListener = l;
+    }
+    
+    public void setOnSeekCompleteListener(MediaPlayer.OnSeekCompleteListener l){
+        mOnSeekCompleteListener = l;
+    }
 
     /**
      * Register a callback to be invoked when the media file
