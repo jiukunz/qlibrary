@@ -35,12 +35,12 @@ import android.widget.MediaController.MediaPlayerControl;
  * 
  * a copy-of android's VideoView.
  * 
- * <pre>
- * advanced:
- *  add listerners for 
- *  {@link #MediaPlayer.OnInfoListener()},
- *  {@link #MediaPlayer.OnSeekCompleteListener()}, 
- *  {@link #MediaPlayer.OnBufferingUpdateListener()}. 
+ * advanced:  add listerners for 
+ * <ul>
+ * <li> {@link #MediaPlayer.OnInfoListener()},
+ * <li> {@link #MediaPlayer.OnSeekCompleteListener()}, 
+ * <li> {@link #MediaPlayer.OnBufferingUpdateListener()}. 
+ * <ul>
  *
  */
 public class VideoView extends SurfaceView implements MediaPlayerControl {
