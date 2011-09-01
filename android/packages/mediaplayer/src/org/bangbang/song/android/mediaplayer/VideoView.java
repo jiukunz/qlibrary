@@ -3,6 +3,7 @@ package org.bangbang.song.android.mediaplayer;
 import java.io.IOException;
 import java.util.Map;
 
+import org.bangbang.song.android.mediaplayer.MediaController.MediaPlayerControl;
 import org.bangbang.song.android.mediaplayer.compatibility.CompatibilityMediaPlayer;
 
 import android.app.AlertDialog;
@@ -25,22 +26,26 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.MediaController;
-import android.widget.MediaController.MediaPlayerControl;
+//import android.widget.MediaController;
+//import android.widget.MediaController.MediaPlayerControl;
 
 
 /**
- * @author bangbang.song@gmail.com
- * 
- * 
+ *  
  * a copy-of android's VideoView.
  * 
- * advanced:  add listerners for 
+ * <p>
+ * <b> * advanced: </b> 
+ *      add listerners for 
  * <ul>
  * <li> {@link #MediaPlayer.OnInfoListener()},
  * <li> {@link #MediaPlayer.OnSeekCompleteListener()}, 
  * <li> {@link #MediaPlayer.OnBufferingUpdateListener()}. 
  * <ul>
+ * 
+ * @author bangbang.song@gmail.com
+ * 
+ * @see {@link android.widget.VideoView}
  *
  */
 public class VideoView extends SurfaceView implements MediaPlayerControl {
