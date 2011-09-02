@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, Demo!</string>
+    <string name="app_name">account</string>
+    <string name="label">account test</string>
+    <string name="title_fmt">title_fmt</string>
+    <string name="key1_action">key1_action</string>
+    <string name="key1_summary">string/key1_summary</string>
+</resources>
