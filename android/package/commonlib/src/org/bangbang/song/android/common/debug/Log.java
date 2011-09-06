@@ -225,6 +225,7 @@ public class Log {
      * @see #setLog2File(boolean)
      */
     public static void init(File appExternalLogDir, String logFileName) {
+        boolean error = false;
         mLogger = Logger.getAnonymousLogger();
         mLogger.setLevel(Level.ALL);
 
@@ -252,8 +253,11 @@ public class Log {
             });
         } catch (IOException e) {
             e.printStackTrace();
+            error = true;
         }
 
-        mLogger.addHandler(mFileHandler);
+        if (!error) {
+            mLogger.addHandler(mFileHandler);
+        }
     }
 }
