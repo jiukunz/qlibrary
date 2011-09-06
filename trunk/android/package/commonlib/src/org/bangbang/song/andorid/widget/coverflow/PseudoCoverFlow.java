@@ -1,7 +1,7 @@
 
 package org.bangbang.song.andorid.widget.coverflow;
 
-import org.bangbang.song.andorid.common.debug.Log;
+import org.bangbang.song.android.common.debug.Log;
 
 import android.content.Context;
 import android.graphics.Canvas;

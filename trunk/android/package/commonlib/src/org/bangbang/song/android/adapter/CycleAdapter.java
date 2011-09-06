@@ -1,11 +1,9 @@
-package org.bangbang.song.andorid.adapter;
+package org.bangbang.song.android.adapter;
 
 import android.database.DataSetObserver;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ListAdapter;
-import android.widget.SpinnerAdapter;
 
 /**
  * a cycle adapter, is a decorator pattern.

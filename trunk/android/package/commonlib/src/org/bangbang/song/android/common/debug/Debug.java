@@ -1,5 +1,5 @@
 
-package org.bangbang.song.andorid.common.debug;
+package org.bangbang.song.android.common.debug;
 
 import java.io.BufferedReader;
 import java.io.IOException;
