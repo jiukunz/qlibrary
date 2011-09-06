@@ -4,7 +4,7 @@ package org.bangbang.song.andorid.widget.coverflow;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bangbang.song.andorid.common.debug.Log;
+import org.bangbang.song.android.common.debug.Log;
 
 import android.content.Context;
 import android.graphics.Bitmap;

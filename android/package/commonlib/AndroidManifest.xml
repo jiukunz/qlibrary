@@ -6,7 +6,9 @@
 
 
     <application android:icon="@drawable/icon" android:label="@string/app_name">
-
+	<service android:icon="@drawable/icon" android:label="@string/app_name" android:name="app">
+		<meta-data android:name="lib" android:resource="@layout/lib"/>
+	</service>
 
     </application>
 </manifest>
