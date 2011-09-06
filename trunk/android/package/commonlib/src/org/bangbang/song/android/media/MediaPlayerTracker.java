@@ -17,6 +17,8 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
         android.media.MediaPlayer.OnVideoSizeChangedListener {
 
     private VideoPlayerEventTracker mTracker;
+    private int mDuration;
+    private int mCurrentPosition;
 
     private OnBufferingUpdateListener mSelfBufferingUpdateListerer;
     private OnCompletionListener mSelfOnCompletionListener;
@@ -144,7 +146,9 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
 
     @Override
     public void onPrepared(MediaPlayer mp) {
+        mDuration = getDuration();
         mTracker.track(VideoPlayerEventTracker.EVENT_ON_PREPARED, null);
+        mTracker.track(VideoPlayerEventTracker.EVENT_ON_GET_DURATION, new int[]{mDuration});
         if (null != mSelfOnPreparedListener) {
             mSelfOnPreparedListener.onPrepared(mp);
         }
@@ -167,11 +171,17 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
             mTracker.track(VideoPlayerEventTracker.EVENT_ON_BUFFERING_COMPLETE, null);
         } else {
             mTracker.track(VideoPlayerEventTracker.EVENT_ON_BUFFERING_PROGRESS, new int[]{percent});
+            mTracker.track(VideoPlayerEventTracker.EVENT_ON_PLAY_GROGRESS, new int[]{playProgress()});
         }
         
         if (null != mSelfBufferingUpdateListerer) {
             mSelfBufferingUpdateListerer.onBufferingUpdate(mp, percent);
         }
+    }
+
+    private int playProgress() {
+        // TODO Auto-generated method stub
+        return (int) (((float) getCurrentPosition()) / mDuration * 100 % 100);
     }
 
     @Override
@@ -184,6 +194,8 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
         }
         return false;
     }
+    
+    
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
@@ -194,6 +206,26 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
             return mSelfOnErrorListener.onError(mp, what, extra);
         }
         return false;
+    }
+    
+    public static String playProgress2Desc(Object eventParam) {
+        if (null == eventParam) {
+            return null;
+        }
+        
+        String desc = "unparsed playProgress progress.";
+        desc = ((int[]) eventParam)[0] + "";
+        return desc; 
+    }
+    
+    static String duration2Desc(Object eventParam) {
+        if (null == eventParam) {
+            return null;
+        }
+        
+        String desc = "unparsed duration progress.";
+        desc = ((int[]) eventParam)[0] + "";
+        return desc; 
     }
     
     static String buffer2Desc(Object eventParam){
@@ -283,6 +315,8 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
         public static final int EVENT_ON_PREPARE_SYNC = 100;
         public static final int EVENT_ON_PREPARE = 110;
         public static final int EVENT_ON_VIDEO_SIZE_CHANGED = 120;
+        public static final int EVENT_ON_GET_DURATION = 130;
+        public static final int EVENT_ON_PLAY_GROGRESS = 140;
 
         public static final String TAG = "tracker";
 
@@ -313,6 +347,12 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
                 case EVENT_ON_BUFFERING_PROGRESS:
                     desc = MediaPlayerTracker.buffer2Desc(eventParam);
                     break;
+                case EVENT_ON_GET_DURATION:
+                    desc = MediaPlayerTracker.duration2Desc(eventParam);
+                    break;
+                case EVENT_ON_PLAY_GROGRESS:
+                    desc = MediaPlayerTracker.playProgress2Desc(eventParam);
+                    break;
                 default:
                     // empty
             }
@@ -321,7 +361,7 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
         }
 
         String event2Desc(int eventId) {
-            String desc = "unknow action id.";
+            String desc = "unpased event id.";
             switch (eventId) {
                 case EVENT_ON_ERR:
                     desc = "EVENT_ON_ERR";
@@ -367,6 +407,12 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
                     break;
                 case EVENT_ON_VIDEO_SIZE_CHANGED:
                     desc = "EVENT_ON_VIDEO_SIZE_CHANGED";
+                    break;
+                case EVENT_ON_GET_DURATION:
+                    desc = "EVENT_ON_GET_DURATION";
+                    break;
+                case EVENT_ON_PLAY_GROGRESS:
+                    desc = "EVENT_ON_PLAY_GROGRESS";
                     break;
                 default:
                     // empty
