@@ -26,8 +26,6 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-//import android.widget.MediaController;
-//import android.widget.MediaController.MediaPlayerControl;
 
 
 /**
