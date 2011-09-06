@@ -148,7 +148,9 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
     public void onPrepared(MediaPlayer mp) {
         mDuration = getDuration();
         mTracker.track(VideoPlayerEventTracker.EVENT_ON_PREPARED, null);
-        mTracker.track(VideoPlayerEventTracker.EVENT_ON_GET_DURATION, new int[]{mDuration});
+        mTracker.track(VideoPlayerEventTracker.EVENT_ON_GET_DURATION, new int[] {
+                mDuration
+        });
         if (null != mSelfOnPreparedListener) {
             mSelfOnPreparedListener.onPrepared(mp);
         }
@@ -170,10 +172,14 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
         } else if (100 == percent) {
             mTracker.track(VideoPlayerEventTracker.EVENT_ON_BUFFERING_COMPLETE, null);
         } else {
-            mTracker.track(VideoPlayerEventTracker.EVENT_ON_BUFFERING_PROGRESS, new int[]{percent});
-            mTracker.track(VideoPlayerEventTracker.EVENT_ON_PLAY_GROGRESS, new int[]{playProgress()});
+            mTracker.track(VideoPlayerEventTracker.EVENT_ON_BUFFERING_PROGRESS, new int[] {
+                    percent
+            });
+            mTracker.track(VideoPlayerEventTracker.EVENT_ON_PLAY_GROGRESS, new int[] {
+                    playProgress()
+            });
         }
-        
+
         if (null != mSelfBufferingUpdateListerer) {
             mSelfBufferingUpdateListerer.onBufferingUpdate(mp, percent);
         }
@@ -194,8 +200,6 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
         }
         return false;
     }
-    
-    
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
@@ -207,35 +211,35 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
         }
         return false;
     }
-    
+
     public static String playProgress2Desc(Object eventParam) {
         if (null == eventParam) {
             return null;
         }
-        
+
         String desc = "unparsed playProgress progress.";
         desc = ((int[]) eventParam)[0] + "";
-        return desc; 
+        return "playprogress: " + desc;
     }
-    
+
     static String duration2Desc(Object eventParam) {
         if (null == eventParam) {
             return null;
         }
-        
+
         String desc = "unparsed duration progress.";
         desc = ((int[]) eventParam)[0] + "";
-        return desc; 
+        return "duration: " + desc;
     }
-    
-    static String buffer2Desc(Object eventParam){
-       if (null == eventParam) {
-           return null;
-       }
-       
-       String desc = "unparsed buffer progress.";
-       desc = ((int[]) eventParam)[0] + "";
-       return desc;
+
+    static String buffer2Desc(Object eventParam) {
+        if (null == eventParam) {
+            return null;
+        }
+
+        String desc = "unparsed buffer progress.";
+        desc = ((int[]) eventParam)[0] + "";
+        return "buffer: " + desc;
     }
 
     static String info2Desc(Object eventParam) {
@@ -249,8 +253,8 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
                 desc = "MEDIA_INFO_BAD_INTERLEAVING";
                 break;
             case MediaPlayer.MEDIA_INFO_METADATA_UPDATE:
-             desc = "MEDIA_INFO_METADATA_UPDATE";
-             break;
+                desc = "MEDIA_INFO_METADATA_UPDATE";
+                break;
             case MediaPlayer.MEDIA_INFO_NOT_SEEKABLE:
                 desc = "MEDIA_INFO_NOT_SEEKABLE";
                 break;
@@ -264,16 +268,16 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
                 // empty
         }
 
-        return desc;
+        return "info: " + desc;
     }
-    
-    static String seek2Desc(Object eventParam){
+
+    static String seek2Desc(Object eventParam) {
         String desc = "unparsed seek into.";
-        if (null == eventParam){
+        if (null == eventParam) {
             return null;
         }
-        desc = ((int[])eventParam)[0] + "";
-        
+        desc = "seek: " + ((int[]) eventParam)[0];
+
         return desc;
     }
 
@@ -282,10 +286,10 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
         if (null == eventParam) {
             return null;
         }
-        int error = ((int[]) eventParam )[0];
+        int error = ((int[]) eventParam)[0];
         switch (error) {
             case MediaPlayer.MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK:
-                desc = "MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK";
+                desc = " MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK";
                 break;
             case MediaPlayer.MEDIA_ERROR_SERVER_DIED:
                 desc = "MEDIA_ERROR_SERVER_DIED";
@@ -296,9 +300,9 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
             default:
                 // empty
         }
-        return desc;
+        return "error: " + desc;
     }
-    
+
     public static class VideoPlayerEventTracker {
         public static final int EVENT_ON_ERR = -10;
         public static final int EVENT_ON_PREPARED = 0;
@@ -321,25 +325,32 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
         public static final String TAG = "tracker";
 
         public static final boolean LOG = true;
+        private boolean mHasComplete = false;
 
         public void track(int eventId, Object eventParam) {
             long UTCTime = System.currentTimeMillis();
-            if (LOG) {
+
+            if (LOG
+                    && (EVENT_ON_BUFFERING_COMPLETE != eventId || (EVENT_ON_BUFFERING_COMPLETE == eventId && !mHasComplete))) {
                 Log.d(TAG, "enentId: " + eventId + "\tdesc: " + event2Desc(eventId) + "\tUTCTime: "
                         + UTCTime + "\teventParam: "
                         + genParamDesc(eventId, eventParam));
+            }
+
+            if (!mHasComplete && EVENT_ON_BUFFERING_COMPLETE == eventId) {
+                mHasComplete = true;
             }
         }
 
         private String genParamDesc(int eventId, Object eventParam) {
             // TODO Auto-generated method stub
-            String desc = ( (eventParam == null) ? null : "unparsed eventParam.");
+            String desc = ((eventParam == null) ? null : "unparsed eventParam.");
             switch (eventId) {
                 case EVENT_ON_ERR:
                     desc = MediaPlayerTracker.error2Desc(eventParam);
                     break;
                 case EVENT_ON_INFO:
-                    desc =  MediaPlayerTracker.info2Desc(eventParam);
+                    desc = MediaPlayerTracker.info2Desc(eventParam);
                     break;
                 case EVENT_ON_SEEK_REQUEST:
                     desc = MediaPlayerTracker.seek2Desc(eventParam);
@@ -356,7 +367,7 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
                 default:
                     // empty
             }
-            
+
             return desc;
         }
 
@@ -376,7 +387,7 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
                     desc = "EVENT_ON_BUFFERING_START";
                     break;
                 case EVENT_ON_BUFFERING_PROGRESS:
-                    desc = "EVENT_ONBUFFERING_PROGRESS";
+                    desc = "EVENT_ON_BUFFERING_PROGRESS";
                     break;
                 case EVENT_ON_BUFFERING_COMPLETE:
                     desc = "EVENT_ON_BUFFERING_COMPLETE";
@@ -433,5 +444,3 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
         }
     }
 }
-
-
