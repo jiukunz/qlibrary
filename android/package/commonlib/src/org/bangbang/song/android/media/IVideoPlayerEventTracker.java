@@ -20,6 +20,12 @@ public interface IVideoPlayerEventTracker {
     public static final int EVENT_ON_GET_DURATION = 130;
     public static final int EVENT_ON_PLAY_GROGRESS = 140;
 
-    public abstract void track(int eventId, Object eventParam);
+    /**
+     * a interesting event has occurred, track it now.
+     * 
+     * @param eventId
+     * @param eventParam related to {@code eventId}
+     */
+    public abstract void onTrackEvent(int eventId, Object eventParam);
 
 }
