@@ -6,6 +6,12 @@ import java.io.IOException;
 import android.media.MediaPlayer;
 import android.util.Log;
 
+/**
+ * track event related to {@link android.media.MediaPlayer MediaPlayer} such as play/pause/start/buffering and so on.
+ * 
+ * @author bangbang.song@gmail.com
+ *
+ */
 public class MediaPlayerTracker extends android.media.MediaPlayer
         implements
         android.media.MediaPlayer.OnErrorListener,
@@ -16,7 +22,7 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
         android.media.MediaPlayer.OnSeekCompleteListener,
         android.media.MediaPlayer.OnVideoSizeChangedListener {
 
-    private VideoPlayerEventTracker mTracker;
+    private IVideoPlayerEventTracker mTracker;
     private int mDuration;
     private int mCurrentPosition;
 
@@ -28,12 +34,14 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
     private OnSeekCompleteListener mSelfOnSeekCompleteListener;
     private OnVideoSizeChangedListener mSelfOnVideoSizeChangedListener;
 
-    public MediaPlayerTracker(VideoPlayerEventTracker tracker) {
+    public MediaPlayerTracker(IVideoPlayerEventTracker policy) {
         super();
-        if (null == tracker) {
+        
+        if (null == policy) {
             throw new IllegalArgumentException("tracker is null.");
         }
-        mTracker = tracker;
+        
+        mTracker = policy;
         registerSuperListeners();
     }
 
@@ -49,28 +57,28 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
 
     @Override
     public void pause() throws IllegalStateException {
-        mTracker.track(VideoPlayerEventTracker.EVENT_ON_PAUSE, null);
+        mTracker.track(IVideoPlayerEventTracker.EVENT_ON_PAUSE, null);
 
         super.pause();
     }
 
     @Override
     public void start() throws IllegalStateException {
-        mTracker.track(VideoPlayerEventTracker.EVENT_ON_START, null);
+        mTracker.track(IVideoPlayerEventTracker.EVENT_ON_START, null);
 
         super.start();
     }
 
     @Override
     public void stop() throws IllegalStateException {
-        mTracker.track(VideoPlayerEventTracker.EVENT_ON_STOP, null);
+        mTracker.track(IVideoPlayerEventTracker.EVENT_ON_STOP, null);
 
         super.stop();
     }
 
     @Override
     public void seekTo(int msec) throws IllegalStateException {
-        mTracker.track(VideoPlayerEventTracker.EVENT_ON_SEEK_REQUEST, new int[] {
+        mTracker.track(IVideoPlayerEventTracker.EVENT_ON_SEEK_REQUEST, new int[] {
                 msec
         });
 
@@ -79,14 +87,14 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
 
     @Override
     public void prepare() throws IOException, IllegalStateException {
-        mTracker.track(VideoPlayerEventTracker.EVENT_ON_PREPARE, null);
+        mTracker.track(IVideoPlayerEventTracker.EVENT_ON_PREPARE, null);
 
         super.prepare();
     }
 
     @Override
     public void prepareAsync() throws IllegalStateException {
-        mTracker.track(VideoPlayerEventTracker.EVENT_ON_PREPARE_SYNC, null);
+        mTracker.track(IVideoPlayerEventTracker.EVENT_ON_PREPARE_SYNC, null);
 
         super.prepareAsync();
     }
@@ -128,7 +136,7 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
 
     @Override
     public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
-        mTracker.track(VideoPlayerEventTracker.EVENT_ON_VIDEO_SIZE_CHANGED, new int[] {
+        mTracker.track(IVideoPlayerEventTracker.EVENT_ON_VIDEO_SIZE_CHANGED, new int[] {
                 width, height
         });
         if (null != mSelfOnVideoSizeChangedListener) {
@@ -138,7 +146,7 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
 
     @Override
     public void onSeekComplete(MediaPlayer mp) {
-        mTracker.track(VideoPlayerEventTracker.EVENT_ON_SEEK_COMPLETE, null);
+        mTracker.track(IVideoPlayerEventTracker.EVENT_ON_SEEK_COMPLETE, null);
         if (mSelfOnSeekCompleteListener != null) {
             mSelfOnSeekCompleteListener.onSeekComplete(mp);
         }
@@ -147,8 +155,8 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
     @Override
     public void onPrepared(MediaPlayer mp) {
         mDuration = getDuration();
-        mTracker.track(VideoPlayerEventTracker.EVENT_ON_PREPARED, null);
-        mTracker.track(VideoPlayerEventTracker.EVENT_ON_GET_DURATION, new int[] {
+        mTracker.track(IVideoPlayerEventTracker.EVENT_ON_PREPARED, null);
+        mTracker.track(IVideoPlayerEventTracker.EVENT_ON_GET_DURATION, new int[] {
                 mDuration
         });
         if (null != mSelfOnPreparedListener) {
@@ -158,7 +166,7 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        mTracker.track(VideoPlayerEventTracker.EVENT_ON_COMPLETE, null);
+        mTracker.track(IVideoPlayerEventTracker.EVENT_ON_COMPLETE, null);
         if (null != mSelfOnCompletionListener) {
             mSelfOnCompletionListener.onCompletion(mp);
         }
@@ -168,14 +176,14 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
     public void onBufferingUpdate(MediaPlayer mp, int percent) {
         if (0 == percent // FIXME
         ) {
-            mTracker.track(VideoPlayerEventTracker.EVENT_ON_BUFFERING_START, null);
+            mTracker.track(IVideoPlayerEventTracker.EVENT_ON_BUFFERING_START, null);
         } else if (100 == percent) {
-            mTracker.track(VideoPlayerEventTracker.EVENT_ON_BUFFERING_COMPLETE, null);
+            mTracker.track(IVideoPlayerEventTracker.EVENT_ON_BUFFERING_COMPLETE, null);
         } else {
-            mTracker.track(VideoPlayerEventTracker.EVENT_ON_BUFFERING_PROGRESS, new int[] {
+            mTracker.track(IVideoPlayerEventTracker.EVENT_ON_BUFFERING_PROGRESS, new int[] {
                     percent
             });
-            mTracker.track(VideoPlayerEventTracker.EVENT_ON_PLAY_GROGRESS, new int[] {
+            mTracker.track(IVideoPlayerEventTracker.EVENT_ON_PLAY_GROGRESS, new int[] {
                     playProgress()
             });
         }
@@ -192,7 +200,7 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
 
     @Override
     public boolean onInfo(MediaPlayer mp, int what, int extra) {
-        mTracker.track(VideoPlayerEventTracker.EVENT_ON_INFO, new int[] {
+        mTracker.track(IVideoPlayerEventTracker.EVENT_ON_INFO, new int[] {
                 what, extra
         });
         if (null != mSelfOnInfoListener) {
@@ -203,7 +211,7 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
-        mTracker.track(VideoPlayerEventTracker.EVENT_ON_ERR, new int[] {
+        mTracker.track(IVideoPlayerEventTracker.EVENT_ON_ERR, new int[] {
                 what, extra
         });
         if (null != mSelfOnErrorListener) {
@@ -212,6 +220,12 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
         return false;
     }
 
+    /**
+     * @param eventParam
+     * @return progress of playing.
+     * 
+     * @see {@link android.media.MediaPlayer#getCurrentPosition()}
+     */
     public static String playProgress2Desc(Object eventParam) {
         if (null == eventParam) {
             return null;
@@ -222,6 +236,12 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
         return "playprogress: " + desc;
     }
 
+    /**
+     * @param eventParam
+     * @return duration
+     * 
+     * @see android.media.MediaPlayer#getDuration()
+     */
     static String duration2Desc(Object eventParam) {
         if (null == eventParam) {
             return null;
@@ -232,6 +252,12 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
         return "duration: " + desc;
     }
 
+    /**
+     * @param eventParam
+     * @return
+     * 
+     * @see android.media.MediaPlayer.OnBufferingUpdateListener
+     */
     static String buffer2Desc(Object eventParam) {
         if (null == eventParam) {
             return null;
@@ -242,6 +268,12 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
         return "buffer: " + desc;
     }
 
+    /**
+     * @param eventParam
+     * @return
+     * 
+     * @see android.media.MediaPlayer.OnInfoListener
+     */
     static String info2Desc(Object eventParam) {
         String desc = "unparsed info.";
         if (null == eventParam) {
@@ -268,9 +300,15 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
                 // empty
         }
 
-        return "info: " + desc;
+        return "info: " + desc + "\t extra: " + ((int[]) eventParam)[1];
     }
 
+    /**
+     * @param eventParam
+     * @return
+     * 
+     * @see android.media.MediaPlayer#seekTo(int)
+     */
     static String seek2Desc(Object eventParam) {
         String desc = "unparsed seek into.";
         if (null == eventParam) {
@@ -281,6 +319,12 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
         return desc;
     }
 
+    /**
+     * @param eventParam
+     * @return
+     * 
+     * @see android.media.MediaPlayer.OnErrorListener
+     */
     static String error2Desc(Object eventParam) {
         String desc = "unparsed error.";
         if (null == eventParam) {
@@ -300,33 +344,27 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
             default:
                 // empty
         }
-        return "error: " + desc;
+        
+        return "error: " + desc + "\textra: " + ((int[]) eventParam)[1];
     }
 
-    public static class VideoPlayerEventTracker {
-        public static final int EVENT_ON_ERR = -10;
-        public static final int EVENT_ON_PREPARED = 0;
-        public static final int EVENT_ON_START = 10;
-        public static final int EVENT_ON_BUFFERING_START = 20;
-        public static final int EVENT_ON_BUFFERING_PROGRESS = 21;
-        public static final int EVENT_ON_BUFFERING_COMPLETE = 30;
-        public static final int EVENT_ON_PAUSE = 40;
-        public static final int EVENT_ON_SEEK_REQUEST = 50;
-        public static final int EVENT_ON_SEEK_COMPLETE = 60;
-        public static final int EVENT_ON_STOP = 70;
-        public static final int EVENT_ON_INFO = 80;
-        public static final int EVENT_ON_COMPLETE = 90;
-        public static final int EVENT_ON_PREPARE_SYNC = 100;
-        public static final int EVENT_ON_PREPARE = 110;
-        public static final int EVENT_ON_VIDEO_SIZE_CHANGED = 120;
-        public static final int EVENT_ON_GET_DURATION = 130;
-        public static final int EVENT_ON_PLAY_GROGRESS = 140;
-
+    /**
+     * just log event only.
+     * 
+     * 
+     * @author bangbang.song@gmail.com
+     *
+     */
+    public static class DefaultLogEventTracker implements IVideoPlayerEventTracker {
         public static final String TAG = "tracker";
 
         public static final boolean LOG = true;
         private boolean mHasComplete = false;
 
+        /* (non-Javadoc)
+         * @see org.bangbang.song.android.media.IVideoPlayerEventTracker#track(int, java.lang.Object)
+         */
+        @Override
         public void track(int eventId, Object eventParam) {
             long UTCTime = System.currentTimeMillis();
 
@@ -428,6 +466,7 @@ public class MediaPlayerTracker extends android.media.MediaPlayer
                 default:
                     // empty
             }
+            
             return desc;
         }
 
