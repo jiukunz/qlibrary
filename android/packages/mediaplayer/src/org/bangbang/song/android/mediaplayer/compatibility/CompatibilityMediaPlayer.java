@@ -3,8 +3,8 @@ package org.bangbang.song.android.mediaplayer.compatibility;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.bangbang.song.android.media.IVideoPlayerEventTracker;
 import org.bangbang.song.android.media.MediaPlayerTracker;
-import org.bangbang.song.android.media.MediaPlayerTracker.VideoPlayerEventTracker;
 
 /**
  * @author bangbang.song@gmail.com to support compatibility suspend() & resume()
@@ -18,10 +18,10 @@ public class CompatibilityMediaPlayer extends
     private static final String METHOD_NAME_RESUME = "resume";
     
     public CompatibilityMediaPlayer(){
-        this(new MediaPlayerTracker.VideoPlayerEventTracker());
+        this(new MediaPlayerTracker.DefaultLogEventTracker());
     }
     
-    public CompatibilityMediaPlayer(VideoPlayerEventTracker tracker) {
+    public CompatibilityMediaPlayer(IVideoPlayerEventTracker tracker) {
         super(tracker);
         // TODO Auto-generated constructor stub
     }

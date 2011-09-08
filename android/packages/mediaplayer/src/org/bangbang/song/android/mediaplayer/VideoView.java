@@ -317,7 +317,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
 //            } else {
 //                mCanPause = mCanSeekBack = mCanSeekForward = true;
 //            }
-//            mCanPause = mCanSeekBack = mCanSeekForward = true;
+            mCanPause = mCanSeekBack = mCanSeekForward = true;
 
             if (mOnPreparedListener != null) {
                 mOnPreparedListener.onPrepared(mMediaPlayer);
@@ -610,6 +610,10 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         return super.onKeyDown(keyCode, event);
     }
 
+
+    /**
+     * @see android.widget.VideoView
+     */
     private void toggleMediaControlsVisiblity() {
         if (mMediaController.isShowing()) {
             mMediaController.hide();
@@ -617,7 +621,11 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             mMediaController.show();
         }
     }
-
+    
+    /**
+     * 
+     * @see android.widget.VideoView#start()
+     */
     public void start() {
         if (isInPlaybackState()) {
             mMediaPlayer.start();
@@ -626,6 +634,9 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         mTargetState = STATE_PLAYING;
     }
 
+    /**
+     * @see android.widget.VideoView#pause()
+     */
     public void pause() {
         if (isInPlaybackState()) {
             if (mMediaPlayer.isPlaying()) {
@@ -669,7 +680,9 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         }
     }
 
-   // cache duration as mDuration for faster access
+    /**
+     * @see android.widget.VideoView#getDuration()
+     */
     public int getDuration() {
         if (isInPlaybackState()) {
             if (mDuration > 0) {
@@ -681,7 +694,10 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         mDuration = -1;
         return mDuration;
     }
-
+    
+    /**
+     * @see android.widget.VideoView#getCurrentPosition()
+     */
     public int getCurrentPosition() {
         if (isInPlaybackState()) {
             return mMediaPlayer.getCurrentPosition();
@@ -689,6 +705,9 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         return 0;
     }
 
+    /**
+     * @see android.widget.VideoView#seekTo(int)
+     */
     public void seekTo(int msec) {
         if (isInPlaybackState()) {
             mMediaPlayer.seekTo(msec);
@@ -698,10 +717,16 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         }
     }
 
+    /**
+     * @see android.widget.VideoView#isPlaying()
+     */
     public boolean isPlaying() {
         return isInPlaybackState() && mMediaPlayer.isPlaying();
     }
 
+    /**
+     * @see android.widget.VideoView#getBufferPercentage()
+     */
     public int getBufferPercentage() {
         if (mMediaPlayer != null) {
             return mCurrentBufferPercentage;
@@ -716,14 +741,23 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
                 mCurrentState != STATE_PREPARING);
     }
 
+    /**
+     * @see android.widget.VideoView#canPause()
+     */
     public boolean canPause() {
         return mCanPause;
     }
 
+    /**
+     * @see android.widget.VideoView#canSeekBackward()
+     */
     public boolean canSeekBackward() {
         return mCanSeekBack;
     }
 
+    /**
+     * @see android.widget.VideoView#canSeekForward()
+     */
     public boolean canSeekForward() {
         return mCanSeekForward;
     }
