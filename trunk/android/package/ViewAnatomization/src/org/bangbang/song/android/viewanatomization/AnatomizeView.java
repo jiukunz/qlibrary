@@ -18,17 +18,21 @@ public class AnatomizeView extends TextView {
 
     public AnatomizeView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        // TODO Auto-generated constructor stub
+        init();
     }
 
     public AnatomizeView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        // TODO Auto-generated constructor stub
+        init();
     }
 
     public AnatomizeView(Context context) {
         super(context);
-        // TODO Auto-generated constructor stub
+        init();
+    }
+
+    private void init() {
+        
     }
 
     /*
@@ -203,7 +207,7 @@ public class AnatomizeView extends TextView {
      */
     @Override
     protected void onWindowVisibilityChanged(int visibility) {
-        Log.d(TAG, "onTouchEvent(). visibility: " + visibility);
+        Log.d(TAG, "onWindowVisibilityChanged(). visibility: " + visibility);
         super.onWindowVisibilityChanged(visibility);
     }
 
