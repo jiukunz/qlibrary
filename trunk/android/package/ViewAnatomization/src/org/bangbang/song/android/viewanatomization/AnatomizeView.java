@@ -10,6 +10,10 @@ import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalFocusChangeListener;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.TextView;
 
 public class AnatomizeView extends TextView {
@@ -32,7 +36,22 @@ public class AnatomizeView extends TextView {
     }
 
     private void init() {
-        
+        final ViewTreeObserver viewTreeObserver = getViewTreeObserver();
+        viewTreeObserver.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+            
+            @Override
+            public void onGlobalLayout() {
+                Log.d(TAG, "onGlobalLayout()");
+                
+            }
+        });
+        viewTreeObserver.addOnGlobalFocusChangeListener(new OnGlobalFocusChangeListener() {
+            
+            @Override
+            public void onGlobalFocusChanged(View oldFocus, View newFocus) {
+                Log.d(TAG, "onGlobalFocusChanged(). oldFocus: " + oldFocus + "\tnewFocus: " + newFocus);
+            }
+        });
     }
 
     /*
