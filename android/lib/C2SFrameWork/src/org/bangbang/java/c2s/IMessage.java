@@ -17,8 +17,19 @@ public interface IMessage {
 	public int getTrafficType();
 	
 	public int getType();
+	
+	/**
+	 * @return
+	 */
 	public int getId();
+
+	/**
+	 * @return opaque data associated with this message.
+	 */
 	public Object getData();
-	public String getScript();
+	/**
+	 * @return human readable description.
+	 */
+	public String getDescription();
 	public long getUTCTimeStamp();
 }
