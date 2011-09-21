@@ -18,7 +18,7 @@ abstract public class Request implements IRequest, Runnable, Cancelable {
 	 */
 	public Request(IRequest target) {
 		mUTCTimeStamp = target.getUTCTimeStamp();
-		mScript = target.getScript();
+		mScript = target.getDescription();
 		mData = target.getData();
 		mTrafficType = target.getTrafficType();
 		mType = target.getType();
@@ -26,7 +26,7 @@ abstract public class Request implements IRequest, Runnable, Cancelable {
 		mCanceld = false;
 	}
 	
-	public Request(){
+	public Request() {
 		mUTCTimeStamp = -1;
 		mScript = "";
 		mData = null;
@@ -88,7 +88,7 @@ abstract public class Request implements IRequest, Runnable, Cancelable {
 	}
 
 	@Override
-	public String getScript() {
+	public String getDescription() {
 		// TODO Auto-generated method stub
 		return mScript;
 	}

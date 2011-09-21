@@ -19,7 +19,7 @@ abstract public class Response implements IResponse{
 	 */
 	public Response(IRequest target) {
 		mUTCTimeStamp = target.getUTCTimeStamp();
-		mScript = target.getScript();
+		mScript = target.getDescription();
 		mData = target.getData();
 		mTrafficType = target.getTrafficType();
 		mType = target.getType();
@@ -89,7 +89,7 @@ abstract public class Response implements IResponse{
 	}
 
 	@Override
-	public String getScript() {
+	public String getDescription() {
 		// TODO Auto-generated method stub
 		return mScript;
 	}

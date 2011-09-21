@@ -10,7 +10,7 @@ public class AmbassadorFactory {
 	}
 	
 	public static AmbassadorFactory getInstance(){
-		if (null == sInstance){
+		if (null == sInstance) {
 			sInstance = new AmbassadorFactory();
 		}
 		
@@ -19,9 +19,5 @@ public class AmbassadorFactory {
 	
 	public IAmbassador createAmbassador(int policy){
 		return new Ambassador();
-	}
-	
-	public Object createOOXX(int noop){
-		return null;
 	}
 }
