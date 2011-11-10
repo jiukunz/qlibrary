@@ -5,6 +5,7 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -34,6 +35,8 @@ public class UserId extends FrameLayout {
     }
 
     private void init() {
+        View child = inflate(getContext(), R.layout.component_user_id, null);
+        addView(child );
         mUserId = ((EditText) findViewById(R.id.user_id));
         mUserId.addTextChangedListener(new TextWatcher() {
 

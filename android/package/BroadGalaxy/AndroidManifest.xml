@@ -30,19 +30,20 @@
         <activity
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
-            android:name="com.broadgalaxy.bluz.activity.ChatAcitvity" >
-            <intent-filter >
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:name="com.broadgalaxy.bluz.activity.ChatActivity" >
         </activity>
         <activity
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/select_device"
             android:name="com.broadgalaxy.bluz.activity.DeviceListActivity"
             android:theme="@android:style/Theme.Dialog" />
-        <activity android:name="UserIdActivitcom.broadgalaxy.bluz.UserIdActivity" >
+        <activity android:name="com.broadgalaxy.bluz.activity.UserIdActivity" >
+            <intent-filter >
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.broadgalaxy.bluz.activity.HomeActivity" >
         </activity>
     </application>
 

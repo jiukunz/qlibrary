@@ -5,10 +5,16 @@
 	<com.broadgalaxy.bluz.component.Navigation
 		android:id="@+id/navigation" android:enabled="false"
 		android:layout_width="fill_parent" android:layout_height="fill_parent" />
-	<Button android:layout_width="wrap_content"
+	<Button 
+	    android:text="@string/locate"
+	    android:layout_width="fill_parent"
 		android:enabled="false"
-		android:layout_height="fill_parent" android:id="@+id/locate" />
-	<Button android:layout_width="wrap_content"
-		android:layout_height="fill_parent" android:id="@+id/connect" />
+		android:layout_height="wrap_content" 
+		android:id="@+id/locate" />
+	<Button 
+	    android:text="@string/connect"
+	    android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+		android:id="@+id/connect" />
 
 </LinearLayout>
