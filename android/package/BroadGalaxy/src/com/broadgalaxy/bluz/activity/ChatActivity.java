@@ -54,15 +54,6 @@ public class ChatActivity extends BluzActivity {
     private ListView mConversationView;
 
     /**
-     * 
-     */
-    protected void handleConnectedMsg() {
-        mTitle.setText(R.string.title_connected_to);
-        mTitle.append(mConnectedDeviceName);
-        mConversationArrayAdapter.clear();
-    }
-
-    /**
      * @param msg
      */
     protected void handlStateChangeMsg(int state) {
