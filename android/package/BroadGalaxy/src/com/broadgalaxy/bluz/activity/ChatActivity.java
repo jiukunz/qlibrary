@@ -67,7 +67,7 @@ public class ChatActivity extends BluzActivity {
      */
     protected void handlStateChangeMsg(int state) {
         if (D)
-            Log.i(TAG, "MESSAGE_STATE_CHANGE: " + state);
+            Log.i(TAG, "MESSAGE_STATE_CHANGE: " + state + " " + BluetoothChatService.toStateDesc(state));
         switch (state) {
             case BluetoothChatService.STATE_CONNECTED:
                 mTitle.setText(R.string.title_connected_to);
@@ -190,7 +190,7 @@ public class ChatActivity extends BluzActivity {
         if (message.length() > 0) {
             // Get the message bytes and tell the BluetoothChatService to write
             byte[] send = message.getBytes();
-
+            write(send);
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);
             mOutEditText.setText(mOutStringBuffer);
