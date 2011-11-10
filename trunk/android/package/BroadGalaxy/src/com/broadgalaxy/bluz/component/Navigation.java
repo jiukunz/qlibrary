@@ -50,6 +50,8 @@ public class Navigation extends ListView {
                         onNavClick(index);
                         break;
                     }
+                    
+                    index++;
                 }
             }});
     }

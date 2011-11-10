@@ -19,6 +19,7 @@ package com.broadgalaxy.bluz;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.util.UUID;
 
 import android.bluetooth.BluetoothAdapter;
@@ -422,11 +423,36 @@ public class BluetoothChatService {
      */
     private synchronized void setState(int state) {
         if (D)
-            Log.d(TAG, "setState() " + mState + " -> " + state);
+            Log.d(TAG, "setState() " + 
+                    mState + " " + toStateDesc(mState) + 
+                    " -> "
+                    + state + " " + toStateDesc(state));
         mState = state;
 
         // Give the new state to the Handler so the UI Activity can update
         mHandler.obtainMessage(BluzActivity.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
+    }
+    
+    public static String toStateDesc(int state) {
+        String desc = "unknown state";
+        Field[] fields = BluetoothChatService.class.getFields();
+        for (Field f : fields) {
+            if (f.getName().startsWith("STATE_")) {
+                try {
+                    if (state == f.getInt(null)) {
+                        desc = f.getName();
+                        break;
+                    }
+                } catch (IllegalArgumentException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }
+        return desc;
     }
 
     /**
