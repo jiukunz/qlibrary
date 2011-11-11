@@ -16,7 +16,7 @@ public class BluzClassUtil {
         String boundStateDesc = ReflecUtil.fieldName(BluetoothDevice.class, "BOND_", boundState);
 
         String message = "name: " + name + "\taddress: " + address + "\tboundState: " + boundState
-                + "\tboundState desc: " + boundStateDesc;
+                + "\tboundStateDesc: " + boundStateDesc;
         BluetoothClass classs = device.getBluetoothClass();
         
         int deviceClass = classs.getDeviceClass();

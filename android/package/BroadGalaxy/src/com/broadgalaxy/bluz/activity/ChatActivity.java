@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.broadgalaxy.bluz.BluetoothChatService;
+import com.broadgalaxy.bluz.IChatService;
 import com.broadgalaxy.bluz.R;
 import com.broadgalaxy.util.Log;
 
@@ -57,20 +58,23 @@ public class ChatActivity extends BluzActivity {
      * @param msg
      */
     protected void handlStateChangeMsg(int state) {
-        if (D)
-            Log.i(TAG, "MESSAGE_STATE_CHANGE: " + state + " " + BluetoothChatService.toStateDesc(state));
-        mSendButton.setEnabled(BluetoothChatService.STATE_CONNECTED == state);
+        if (D) {
+            Log.i(TAG,
+                    "MESSAGE_STATE_CHANGE: " + state + " "
+                            + BluetoothChatService.toStateDesc(state));
+        }
+        mSendButton.setEnabled(IChatService.STATE_CONNECTED == state);
         switch (state) {
-            case BluetoothChatService.STATE_CONNECTED:
+            case IChatService.STATE_CONNECTED:
                 mTitle.setText(R.string.title_connected_to);
                 mTitle.append(mConnectedDeviceName);
                 mConversationArrayAdapter.clear();
                 break;
-            case BluetoothChatService.STATE_CONNECTING:
+            case IChatService.STATE_CONNECTING:
                 mTitle.setText(R.string.title_connecting);
                 break;
-            case BluetoothChatService.STATE_LISTEN:
-            case BluetoothChatService.STATE_NONE:
+            case IChatService.STATE_LISTEN:
+            case IChatService.STATE_NONE:
                 mTitle.setText(R.string.title_not_connected);
                 break;
         }
@@ -174,7 +178,7 @@ public class ChatActivity extends BluzActivity {
      */
     private void sendMessage(String message) {
         // Check that we're actually connected before trying anything
-        if (/*mChatService.*/getState() != BluetoothChatService.STATE_CONNECTED) {
+        if (/* mChatService. */getState() != IChatService.STATE_CONNECTED) {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
             return;
         }

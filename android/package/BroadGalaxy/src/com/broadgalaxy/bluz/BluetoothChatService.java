@@ -41,7 +41,7 @@ import com.broadgalaxy.util.Log;
  * connections, a thread for connecting with a device, and a thread for
  * performing data transmissions when connected.
  */
-public class BluetoothChatService {
+public class BluetoothChatService implements IChatService {
     /**
      * This thread runs while listening for incoming connections. It behaves
      * like a server-side client. It runs until a connection is accepted (or
@@ -52,6 +52,7 @@ public class BluetoothChatService {
         private final BluetoothServerSocket mmServerSocket;
 
         public AcceptThread() {
+            setName("AcceptThread");
             BluetoothServerSocket tmp = null;
 
             // Create a new listening server socket
@@ -73,8 +74,9 @@ public class BluetoothChatService {
         }
 
         public void cancel() {
-            if (D)
+            if (D) {
                 Log.d(TAG, "cancel " + this);
+            }
             try {
                 mmServerSocket.close();
             } catch (IOException e) {
@@ -84,7 +86,7 @@ public class BluetoothChatService {
 
         public void run() {
             if (D) {
-                Log.d(TAG, "BEGIN mAcceptThread" + this);
+                Log.d(TAG, "BEGIN mAcceptThread " + this);
             }
             setName("AcceptThread");
             BluetoothSocket socket = null;
@@ -140,6 +142,7 @@ public class BluetoothChatService {
         private final BluetoothSocket mmSocket;
     
         public ConnectThread(BluetoothDevice device) {
+            setName("ConnectThread");
             mmDevice = device;
             BluetoothSocket tmp = null;
     
@@ -156,6 +159,9 @@ public class BluetoothChatService {
         }
     
         public void cancel() {
+            if (D) {
+                Log.d(TAG, "cancel " + this);
+            }
             try {
                 mmSocket.close();
             } catch (IOException e) {
@@ -216,6 +222,7 @@ public class BluetoothChatService {
 
         public ConnectedThread(BluetoothSocket socket) {
             Log.d(TAG, "create ConnectedThread");
+            setName("ConnectedThread");
             mmSocket = socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
@@ -233,6 +240,9 @@ public class BluetoothChatService {
         }
 
         public void cancel() {
+            if (D) {
+                Log.d(TAG, "cancel " + this);
+            }
             try {
                 mmSocket.close();
             } catch (IOException e) {
@@ -251,11 +261,11 @@ public class BluetoothChatService {
                     // Read from the InputStream
                     bytes = mmInStream.read(buffer);
                     if (DEBUG_MSG) {
-                        Log.e(TAG, "RCV MSG: " + format(buffer, bytes));
+                        Log.d(TAG, "RCV MSG: " + format(buffer, bytes));
                     }
 
                     // Send the obtained bytes to the UI Activity
-                    mHandler.obtainMessage(BluzActivity.MESSAGE_READ, bytes, -1, buffer)
+                    mHandler.obtainMessage(LocalService.MESSAGE_READ, bytes, -1, buffer)
                             .sendToTarget();
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
@@ -277,11 +287,11 @@ public class BluetoothChatService {
                 
                 mmOutStream.write(buffer);
                 if (DEBUG_MSG) {
-                    Log.e(TAG, "SND MSG: " + format(buffer, buffer.length));
+                    Log.d(TAG, "SND MSG: " + format(buffer, buffer.length));
                 }
                 
                 // Share the sent message back to the UI Activity
-                mHandler.obtainMessage(BluzActivity.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
+                mHandler.obtainMessage(LocalService.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
             } catch (IOException e) {
                 Log.e(TAG, "Exception during write", e);
             }
@@ -297,18 +307,6 @@ public class BluetoothChatService {
 
     // Name for the SDP record when creating server socket
     private static final String NAME = "ChatActivity";
-
-    public static final int STATE_CONNECTED = 3; // now connected to a remote
-                                                 // device
-
-    public static final int STATE_CONNECTING = 2; // now initiating an outgoing
-                                                  // connection
-
-    public static final int STATE_LISTEN = 1; // now listening for incoming
-                                              // connections
-
-    // Constants that indicate the current connection state
-    public static final int STATE_NONE = 0; // we're doing nothing
 
     // Debugging
     private static final String TAG = "BluetoothChatService";
@@ -349,11 +347,10 @@ public class BluetoothChatService {
         return formatStr + " " + hexStr;
     }
 
-    /**
-     * Start the ConnectThread to initiate a connection to a remote device.
-     * 
-     * @param device The BluetoothDevice to connect
+    /* (non-Javadoc)
+     * @see com.broadgalaxy.bluz.IChatService#connect(android.bluetooth.BluetoothDevice)
      */
+    @Override
     public synchronized void connect(BluetoothDevice device) {
         if (D)
             Log.d(TAG, "connect to: " + device);
@@ -412,7 +409,7 @@ public class BluetoothChatService {
         mConnectedThread.start();
 
         // Send the name of the connected device back to the UI Activity
-        Message msg = mHandler.obtainMessage(BluzActivity.MESSAGE_DEVICE_NAME);
+        Message msg = mHandler.obtainMessage(LocalService.MESSAGE_DEVICE_NAME);
         Bundle bundle = new Bundle();
         bundle.putString(BluzActivity.DEVICE_NAME, device.getName());
         msg.setData(bundle);
@@ -428,7 +425,7 @@ public class BluetoothChatService {
         setState(STATE_LISTEN);
 
         // Send a failure message back to the Activity
-        Message msg = mHandler.obtainMessage(BluzActivity.MESSAGE_TOAST);
+        Message msg = mHandler.obtainMessage(LocalService.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
         bundle.putString(ChatActivity.TOAST, "Unable to connect device");
         msg.setData(bundle);
@@ -442,16 +439,17 @@ public class BluetoothChatService {
         setState(STATE_LISTEN);
 
         // Send a failure message back to the Activity
-        Message msg = mHandler.obtainMessage(BluzActivity.MESSAGE_TOAST);
+        Message msg = mHandler.obtainMessage(LocalService.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
         bundle.putString(ChatActivity.TOAST, "Device connection was lost");
         msg.setData(bundle);
         mHandler.sendMessage(msg);
     }
 
-    /**
-     * Return the current connection state.
+    /* (non-Javadoc)
+     * @see com.broadgalaxy.bluz.IChatService#getState()
      */
+    @Override
     public synchronized int getState() {
         return mState;
     }
@@ -470,7 +468,7 @@ public class BluetoothChatService {
         mState = state;
 
         // Give the new state to the Handler so the UI Activity can update
-        mHandler.obtainMessage(BluzActivity.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
+        mHandler.obtainMessage(LocalService.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
     }
 
     public static String toStateDesc(int state) {
@@ -495,10 +493,10 @@ public class BluetoothChatService {
         return desc;
     }
 
-    /**
-     * Start the chat service. Specifically start AcceptThread to begin a
-     * session in listening (server) mode. Called by the Activity onResume()
+    /* (non-Javadoc)
+     * @see com.broadgalaxy.bluz.IChatService#start()
      */
+    @Override
     public synchronized void start() {
         if (D)
             Log.d(TAG, "start");
@@ -523,9 +521,10 @@ public class BluetoothChatService {
         setState(STATE_LISTEN);
     }
 
-    /**
-     * Stop all threads
+    /* (non-Javadoc)
+     * @see com.broadgalaxy.bluz.IChatService#stop()
      */
+    @Override
     public synchronized void stop() {
         if (D)
             Log.d(TAG, "stop");
@@ -544,12 +543,10 @@ public class BluetoothChatService {
         setState(STATE_NONE);
     }
 
-    /**
-     * Write to the ConnectedThread in an unsynchronized manner
-     * 
-     * @param out The bytes to write
-     * @see ConnectedThread#write(byte[])
+    /* (non-Javadoc)
+     * @see com.broadgalaxy.bluz.IChatService#write(byte[])
      */
+    @Override
     public void write(byte[] out) {
         // Create temporary object
         ConnectedThread r;
