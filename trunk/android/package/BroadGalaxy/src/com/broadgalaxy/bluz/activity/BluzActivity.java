@@ -2,15 +2,21 @@
 package com.broadgalaxy.bluz.activity;
 
 import com.broadgalaxy.bluz.BluetoothChatService;
+import com.broadgalaxy.bluz.IChatService;
+import com.broadgalaxy.bluz.LocalService;
+import com.broadgalaxy.bluz.LocalService.OnMsgCallBack;
 import com.broadgalaxy.bluz.R;
 import com.broadgalaxy.util.Log;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,41 +26,20 @@ import android.widget.Toast;
 public class BluzActivity extends Activity {
     private static final String TAG = BluzActivity.class.getSimpleName();
     private boolean D = true;
-    
+
     public static final String DEVICE_NAME = "device_name";
-    public static final int MESSAGE_DEVICE_NAME = 4;
-    public static final int MESSAGE_READ = 2;
-    public static final int MESSAGE_STATE_CHANGE = 1;
-    public static final int MESSAGE_TOAST = 5;
-    public static final int MESSAGE_WRITE = 3;
-    
+
     private static final int REQUEST_CONNECT_DEVICE = 1;
-    private static final int REQUEST_ENABLE_BT = 2;    
+    private static final int REQUEST_ENABLE_BT = 2;
     private static final int REQUEST_DISCOVERABLE = 3;
     private BluetoothAdapter mBluetoothAdapter = null;
-    private BluetoothChatService mChatService = null;
-    private final Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MESSAGE_STATE_CHANGE:
-                        handlStateChangeMsg(msg.arg1);
-                        break;
-                    case MESSAGE_WRITE:
-                        handleWriteMsg(msg);
-                        break;
-                    case MESSAGE_READ:
-                        handlReadmsg(msg);
-                        break;
-                    case MESSAGE_DEVICE_NAME:
-                        handleDeviceNameMsg(msg);
-                        break;
-                    case MESSAGE_TOAST:
-                        handToastmsg(msg);
-                        break;
-                }
-            }
-    };
+    // private IChatService mChatService = null;
+    private ServiceConnection mconn;
+    private boolean mbound;
+    private LocalService mService;
+    private OnMsgCallBack mCallback;
+    private boolean mBluzEnable;
+
     protected void handleDeviceNameMsg(Message msg) {
         // TODO Auto-generated method stub
 
@@ -70,7 +55,7 @@ public class BluzActivity extends Activity {
 
     }
 
-    protected void handlStateChangeMsg(int arg1) {
+    protected void handlStateChangeMsg(int state) {
         // TODO Auto-generated method stub
 
     }
@@ -93,16 +78,68 @@ public class BluzActivity extends Activity {
             finish();
             return;
         }
+
+        mCallback = new OnMsgCallBack() {
+
+            @Override
+            public void handleWriteMsg(Message msg) {
+                BluzActivity.this.handleWriteMsg(msg);
+            }
+
+            @Override
+            public void handleDeviceNameMsg(Message msg) {
+                BluzActivity.this.handleDeviceNameMsg(msg);
+            }
+
+            @Override
+            public void handlStateChangeMsg(int state) {
+                BluzActivity.this.handlStateChangeMsg(state);
+            }
+
+            @Override
+            public void handlReadmsg(Message msg) {
+                BluzActivity.this.handlReadmsg(msg);
+            }
+
+            @Override
+            public void handToastmsg(Message msg) {
+                BluzActivity.this.handToastmsg(msg);
+            }
+        };
+        mconn = new ServiceConnection() {
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                mbound = false;
+                if (null != mService) {
+                    mService.unRegisterOnMsgCallback(mCallback);
+                }
+            }
+
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                mbound = true;
+                mService = ((LocalService.LocalBinder) service).getChatService();
+                mService.registerOnMsgCallback(mCallback);
+                mService.start();
+            }
+        };
+        Intent service = new Intent();
+        service.setClass(this, LocalService.class);
+        bindService(service, mconn, BIND_AUTO_CREATE);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         // Stop the Bluetooth chat services
-        if (mChatService != null)
-            mChatService.stop();
+        if (mbound && mService != null) {
+            mService.stop();
+        }
         if (D)
             Log.e(TAG, "--- ON DESTROY ---");
+
+        unbindService(mconn);
     }
 
     @Override
@@ -150,7 +187,7 @@ public class BluzActivity extends Activity {
         super.onStart();
         if (D)
             Log.e(TAG, "++ ON START ++");
-    
+
         // If BT is not on, request that it be enabled.
         // setupChat() will then be called during onActivityResult
         if (!mBluetoothAdapter.isEnabled()) {
@@ -158,28 +195,31 @@ public class BluzActivity extends Activity {
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
             // Otherwise, setup the chat session
         } else {
-            if (mChatService == null)
-//                onBluetoothEnabled();
-
-                // Initialize the BluetoothChatService to perform bluetooth connections
-                mChatService = new BluetoothChatService(this, mHandler);
+            mBluzEnable = true;
+            // if (mChatService == null)
+            // onBluetoothEnabled();
+            //
+            // Initialize the BluetoothChatService to perform bluetooth
+            // connections
+            // mChatService = new BluetoothChatService(this, mHandler);
         }
     }
 
     protected void onBluetoothEnabled() {
         // TODO Auto-generated method stub
         // Initialize the BluetoothChatService to perform bluetooth connections
-        mChatService = new BluetoothChatService(this, mHandler);
-        
+        // mChatService = new BluetoothChatService(this, mHandler);
+        mBluzEnable = true;
+
     }
-    
+
     protected void write(byte[] msg) {
 
-        mChatService.write(msg);
+        mService.write(msg);
     }
-    
+
     protected int getState() {
-        return mChatService.getState();
+        return mService.getState();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -195,7 +235,11 @@ public class BluzActivity extends Activity {
                     // Get the BLuetoothDevice object
                     BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
                     // Attempt to connect to the device
-                    mChatService.connect(device);
+                    if (mbound) {
+                        mService.connect(device);
+                    } else {
+                        Log.e(TAG, "service is NOT bounded.");
+                    }
                 }
                 break;
             case REQUEST_ENABLE_BT:
@@ -231,17 +275,17 @@ public class BluzActivity extends Activity {
         super.onResume();
         if (D)
             Log.e(TAG, "+ ON RESUME +");
-    
+
         // Performing this check in onResume() covers the case in which BT was
         // not enabled during onStart(), so we were paused to enable it...
         // onResume() will be called when ACTION_REQUEST_ENABLE activity
         // returns.
-        if (mChatService != null) {
+        if (mService != null) {
             // Only if the state is STATE_NONE, do we know that we haven't
             // started already
-            if (mChatService.getState() == BluetoothChatService.STATE_NONE) {
+            if (mService.getState() == IChatService.STATE_NONE) {
                 // Start the Bluetooth chat services
-                mChatService.start();
+                mService.start();
             }
         }
     }

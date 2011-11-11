@@ -46,6 +46,7 @@
         </activity>
         <activity android:name="com.broadgalaxy.bluz.activity.HomeActivity" >
         </activity>
+        <service android:name="LocalService"></service>
     </application>
 
 </manifest>
