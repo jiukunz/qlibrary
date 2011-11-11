@@ -7,7 +7,7 @@ public class ReflecUtil {
     private static String TAG = ReflecUtil.class.getSimpleName();
 
     public static String fieldName(Class clazz, String fieldPrefix, int fieldValue) {
-        String name = "un known name";
+        String name = "unknown name";
         Field[] fields = clazz.getFields();
         String fname;
         int fvalue;
@@ -19,6 +19,7 @@ public class ReflecUtil {
                         fvalue = f.getInt(null);
                         if (fieldValue == fvalue) {
                             name = fname;
+                            break;
                         }
                     } catch (IllegalArgumentException e) {
                         Log.e(TAG, "IllegalArgumentException", e);// it's safe
