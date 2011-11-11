@@ -209,6 +209,7 @@ public class BluzActivity extends Activity {
                             .show();
                     finish();
                 }
+                break;
             case REQUEST_DISCOVERABLE:
                 if (RESULT_OK == resultCode) {
                     Log.e(TAG, "discoverable ok");
