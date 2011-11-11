@@ -25,8 +25,8 @@ public class BluzClassUtil {
         String  majorDeviceClassDesc = ReflecUtil.fieldName(BluetoothClass.Device.Major.class, "", majorDeviceClass);
         String service = determinateService(classs);
         
-        message = "\tdeviceClass: " + deviceClass + "\tdeviceClassDesc: " + deviceClassDesc + 
-                    "\tmajorDeviceClass: " + majorDeviceClass + "\tmajorDeviceClassDesc" + majorDeviceClassDesc + 
+        message += "\tdeviceClass: " + deviceClass + "\tdeviceClassDesc: " + deviceClassDesc + 
+                    "\tmajorDeviceClass: " + majorDeviceClass + "\tmajorDeviceClassDesc: " + majorDeviceClassDesc + 
                     "\tservice: " + service;
         Log.d(TAG, message);
     }
