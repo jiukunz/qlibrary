@@ -37,6 +37,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.broadgalaxy.bluz.R;
+import com.broadgalaxy.util.BluzClassUtil;
 import com.broadgalaxy.util.Log;
 
 /**
@@ -93,6 +94,7 @@ public class DeviceListActivity extends Activity {
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 // Get the BluetoothDevice object from the Intent
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                BluzClassUtil.dump(device);
                 // If it's already paired, skip it, because it's been listed
                 // already
                 if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
@@ -181,6 +183,9 @@ public class DeviceListActivity extends Activity {
 
         // Get a set of currently paired devices
         Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
+        for (BluetoothDevice device : pairedDevices) {
+            BluzClassUtil.dump(device);
+        }
 
         // If there are paired devices, add each one to the ArrayAdapter
         if (pairedDevices.size() > 0) {
