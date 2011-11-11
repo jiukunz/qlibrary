@@ -241,7 +241,7 @@ public class BluetoothChatService {
                 // successful connection or an exception
                 mmSocket.connect();
             } catch (IOException e) {
-                Log.e(TAG, "unable to connect remote device", e);
+                Log.e(TAG, "unable to connect remote device" + mmDevice.getAddress(), e);
                 connectionFailed();
                 // Close the socket
                 try {

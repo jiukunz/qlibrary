@@ -29,8 +29,8 @@ public class BluzActivity extends Activity {
     public static final int MESSAGE_WRITE = 3;
     
     private static final int REQUEST_CONNECT_DEVICE = 1;
-    private static final int REQUEST_ENABLE_BT = 2;
-    
+    private static final int REQUEST_ENABLE_BT = 2;    
+    private static final int REQUEST_DISCOVERABLE = 3;
     private BluetoothAdapter mBluetoothAdapter = null;
     private BluetoothChatService mChatService = null;
     private final Handler mHandler = new Handler() {
@@ -55,8 +55,6 @@ public class BluzActivity extends Activity {
                 }
             }
     };
-    
-    
     protected void handleDeviceNameMsg(Message msg) {
         // TODO Auto-generated method stub
 
@@ -136,7 +134,7 @@ public class BluzActivity extends Activity {
         if (mBluetoothAdapter.getScanMode() != BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
             Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
             discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
-            startActivity(discoverableIntent);
+            startActivityForResult(discoverableIntent, REQUEST_DISCOVERABLE);
         }
     }
 
@@ -210,6 +208,12 @@ public class BluzActivity extends Activity {
                     Toast.makeText(this, R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT)
                             .show();
                     finish();
+                }
+            case REQUEST_DISCOVERABLE:
+                if (RESULT_OK == resultCode) {
+                    Log.e(TAG, "discoverable ok");
+                } else {
+                    Log.e(TAG, "discoverable FALSE");
                 }
         }
     }
