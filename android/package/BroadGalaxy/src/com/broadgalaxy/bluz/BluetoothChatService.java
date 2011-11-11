@@ -165,6 +165,9 @@ public class BluetoothChatService {
                 try {
                     // Read from the InputStream
                     bytes = mmInStream.read(buffer);
+                    if (DEBUG_MSG) {
+                        Log.e(TAG, "RCV MSG: " + format(buffer, bytes));
+                    }
 
                     // Send the obtained bytes to the UI Activity
                     mHandler.obtainMessage(BluzActivity.MESSAGE_READ, bytes, -1, buffer)
@@ -186,8 +189,12 @@ public class BluetoothChatService {
          */
         public void write(byte[] buffer) {
             try {
+                
                 mmOutStream.write(buffer);
-
+                if (DEBUG_MSG) {
+                    Log.e(TAG, "SND MSG: " + format(buffer, buffer.length));
+                }
+                
                 // Share the sent message back to the UI Activity
                 mHandler.obtainMessage(BluzActivity.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
             } catch (IOException e) {
@@ -241,7 +248,7 @@ public class BluetoothChatService {
                 // successful connection or an exception
                 mmSocket.connect();
             } catch (IOException e) {
-                Log.e(TAG, "unable to connect remote device" + mmDevice.getAddress(), e);
+                Log.e(TAG, "unable to connect remote device: " + mmDevice.getAddress(), e);
                 connectionFailed();
                 // Close the socket
                 try {
@@ -267,7 +274,8 @@ public class BluetoothChatService {
             Log.i(TAG, "BEGIN mConnectThread");
         }
     }
-
+    
+    private static final boolean DEBUG_MSG = true;  
     private static final boolean D = true;
 
     // Unique UUID for this application
@@ -314,6 +322,12 @@ public class BluetoothChatService {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
         mHandler = handler;
+    }
+
+    public String format(byte[] buffer, int bytes) {
+        String formatStr = "";
+        formatStr = new String(buffer, 0, bytes);
+        return formatStr;
     }
 
     /**
