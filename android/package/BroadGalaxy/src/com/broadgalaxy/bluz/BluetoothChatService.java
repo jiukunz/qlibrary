@@ -59,7 +59,12 @@ public class BluetoothChatService {
                 UUID uuid = MY_UUID;
                 String name = NAME;
                 Log.d(TAG, "listen rfcommsocket using name: " + name + "\tuuid: " + uuid);
-                tmp = mAdapter.listenUsingRfcommWithServiceRecord(name, uuid);
+                boolean insecure = false;
+                if (!insecure) {
+                    tmp = mAdapter.listenUsingRfcommWithServiceRecord(name, uuid);
+                } else {
+//                    tmp = mAdapter.listenUsingInsecureRfcommWithServiceRecord(name, uuid);
+                }
             } catch (IOException e) {
                 Log.e(TAG, "listen() failed", e);
             }
