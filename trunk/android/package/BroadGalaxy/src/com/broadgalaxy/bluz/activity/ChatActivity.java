@@ -59,6 +59,7 @@ public class ChatActivity extends BluzActivity {
     protected void handlStateChangeMsg(int state) {
         if (D)
             Log.i(TAG, "MESSAGE_STATE_CHANGE: " + state + " " + BluetoothChatService.toStateDesc(state));
+        mSendButton.setEnabled(BluetoothChatService.STATE_CONNECTED == state);
         switch (state) {
             case BluetoothChatService.STATE_CONNECTED:
                 mTitle.setText(R.string.title_connected_to);
@@ -163,6 +164,7 @@ public class ChatActivity extends BluzActivity {
         mTitle.setText(R.string.app_name);
         mTitle = (TextView) findViewById(R.id.title_right_text);
 
+        setupChat();
     }
 
     /**

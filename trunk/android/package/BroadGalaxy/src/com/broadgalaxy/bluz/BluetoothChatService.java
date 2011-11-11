@@ -175,6 +175,8 @@ public class BluetoothChatService {
                     break;
                 }
             }
+
+            Log.i(TAG, "END mConnectedThread");
         }
 
         /**
@@ -213,7 +215,7 @@ public class BluetoothChatService {
             try {
                 tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
             } catch (IOException e) {
-                Log.e(TAG, "create() failed", e);
+                Log.e(TAG, "create outgoing connection failed", e);
             }
             mmSocket = tmp;
         }
@@ -239,6 +241,7 @@ public class BluetoothChatService {
                 // successful connection or an exception
                 mmSocket.connect();
             } catch (IOException e) {
+                Log.e(TAG, "unable to connect remote device", e);
                 connectionFailed();
                 // Close the socket
                 try {
@@ -248,6 +251,8 @@ public class BluetoothChatService {
                 }
                 // Start the service over to restart listening mode
                 BluetoothChatService.this.start();
+
+                Log.i(TAG, "END mConnectThread");
                 return;
             }
 
@@ -258,6 +263,8 @@ public class BluetoothChatService {
 
             // Start the connected thread
             connected(mmSocket, mmDevice);
+
+            Log.i(TAG, "BEGIN mConnectThread");
         }
     }
 
@@ -423,8 +430,8 @@ public class BluetoothChatService {
      */
     private synchronized void setState(int state) {
         if (D)
-            Log.d(TAG, "setState() " + 
-                    mState + " " + toStateDesc(mState) + 
+            Log.d(TAG, "setState() " +
+                    mState + " " + toStateDesc(mState) +
                     " -> "
                     + state + " " + toStateDesc(state));
         mState = state;
@@ -432,7 +439,7 @@ public class BluetoothChatService {
         // Give the new state to the Handler so the UI Activity can update
         mHandler.obtainMessage(BluzActivity.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
     }
-    
+
     public static String toStateDesc(int state) {
         String desc = "unknown state";
         Field[] fields = BluetoothChatService.class.getFields();
@@ -515,8 +522,10 @@ public class BluetoothChatService {
         ConnectedThread r;
         // Synchronize a copy of the ConnectedThread
         synchronized (this) {
-            if (mState != STATE_CONNECTED)
+            if (mState != STATE_CONNECTED) {
+                Log.e(TAG, "ignore write request when not in STATE_CONNECTED.");
                 return;
+            }
             r = mConnectedThread;
         }
         // Perform the write unsynchronized
