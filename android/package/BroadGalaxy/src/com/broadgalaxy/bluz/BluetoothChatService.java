@@ -56,7 +56,10 @@ public class BluetoothChatService {
 
             // Create a new listening server socket
             try {
-                tmp = mAdapter.listenUsingRfcommWithServiceRecord(NAME, MY_UUID);
+                UUID uuid = MY_UUID;
+                String name = NAME;
+                Log.d(TAG, "listen rfcommsocket using name: " + name + "\tuuid: " + uuid);
+                tmp = mAdapter.listenUsingRfcommWithServiceRecord(name, uuid);
             } catch (IOException e) {
                 Log.e(TAG, "listen() failed", e);
             }
@@ -220,7 +223,9 @@ public class BluetoothChatService {
             // Get a BluetoothSocket for a connection with the
             // given BluetoothDevice
             try {
-                tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
+                UUID uuid = MY_UUID;
+                Log.d(TAG, "create rfcommsocket using uuid: " + uuid);
+                tmp = device.createRfcommSocketToServiceRecord(uuid);
             } catch (IOException e) {
                 Log.e(TAG, "create outgoing connection failed", e);
             }
@@ -280,6 +285,7 @@ public class BluetoothChatService {
 
     // Unique UUID for this application
     private static final UUID MY_UUID = UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
+    private static final UUID WELL_KNOWN_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     // Name for the SDP record when creating server socket
     private static final String NAME = "ChatActivity";
@@ -327,7 +333,12 @@ public class BluetoothChatService {
     public String format(byte[] buffer, int bytes) {
         String formatStr = "";
         formatStr = new String(buffer, 0, bytes);
-        return formatStr;
+        String hexStr = "0x";
+        for (int i = 0 ; i < bytes ; i++) {
+            int intValue = new Byte(buffer[i]).intValue();
+            hexStr += " " + Integer.toHexString(intValue);
+        }
+        return formatStr + " " + hexStr;
     }
 
     /**
