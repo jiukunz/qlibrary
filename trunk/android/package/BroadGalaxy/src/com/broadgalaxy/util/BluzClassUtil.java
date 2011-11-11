@@ -14,8 +14,9 @@ public class BluzClassUtil {
         String address = device.getAddress();
         int boundState = device.getBondState();
         String boundStateDesc = ReflecUtil.fieldName(BluetoothDevice.class, "BOND_", boundState);
-        Log.d(TAG , "name: " + name + "\taddress: " + address + "\tboundState: " + boundState
-                + "\tboundState desc: " + boundStateDesc);
+
+        String message = "name: " + name + "\taddress: " + address + "\tboundState: " + boundState
+                + "\tboundState desc: " + boundStateDesc;
         BluetoothClass classs = device.getBluetoothClass();
         
         int deviceClass = classs.getDeviceClass();
@@ -24,19 +25,30 @@ public class BluzClassUtil {
         String  majorDeviceClassDesc = ReflecUtil.fieldName(BluetoothClass.Device.Major.class, "", majorDeviceClass);
         String service = determinateService(classs);
         
-        Log.d(TAG, "deviceClass: " + deviceClass + "\tdeviceClassDesc: " + deviceClassDesc + 
-                    "majorDeviceClass: " + majorDeviceClass + "\tmajorDeviceClassDesc" + majorDeviceClassDesc + 
-                    service);
+        message = "\tdeviceClass: " + deviceClass + "\tdeviceClassDesc: " + deviceClassDesc + 
+                    "\tmajorDeviceClass: " + majorDeviceClass + "\tmajorDeviceClassDesc" + majorDeviceClassDesc + 
+                    "\tservice: " + service;
+        Log.d(TAG, message);
     }
 
     private static String determinateService(BluetoothClass classs) {
         String service = "";
-        int[] services = new int[]{};
+        int[] services = new int[]{ BluetoothClass.Service.AUDIO,
+                                    BluetoothClass.Service.CAPTURE,
+                                    BluetoothClass.Service.INFORMATION,
+                                    BluetoothClass.Service.LIMITED_DISCOVERABILITY,
+                                    BluetoothClass.Service.NETWORKING,
+                                    BluetoothClass.Service.OBJECT_TRANSFER,
+                                    BluetoothClass.Service.RENDER,
+                                    BluetoothClass.Service.TELEPHONY};
         for (int i : services) {
             if (classs.hasService(i)) {
-                service = ReflecUtil.fieldName(BluetoothClass.Service.class, "", i);
-                break;
+                service += ReflecUtil.fieldName(BluetoothClass.Service.class, "", i) + " ";
             }
+        }
+        
+        if (service.length() < 2 ) {
+            service = "un known service";
         }
         
         return service;
