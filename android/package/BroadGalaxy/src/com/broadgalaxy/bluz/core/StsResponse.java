@@ -13,6 +13,10 @@ public class StsResponse extends Response {
     int mPower5;
     int mPower6;    
     
+    public StsResponse(byte[] msgBytes) {
+        super(msgBytes);
+    }
+
     @Override
     int getPayloadLen() {
         return 1 + 3 + 1 + 1 * 6;

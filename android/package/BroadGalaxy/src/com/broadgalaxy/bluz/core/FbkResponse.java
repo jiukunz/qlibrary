@@ -6,6 +6,10 @@ public class FbkResponse extends Response {
     int mFlag;
     int mExtra;
     
+    public FbkResponse(byte[] msgBytes) {
+        super(msgBytes);
+    }
+
     @Override
     int getPayloadLen() {
         return 1 + 4;

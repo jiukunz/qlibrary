@@ -10,6 +10,10 @@ public class TimResponse extends Response {
     int mMin;
     int mSec;
     
+    public TimResponse(byte[] msgBytes) {
+        super(msgBytes);
+    }
+
     @Override
     int getPayloadLen() {
         // TODO Auto-generated method stub

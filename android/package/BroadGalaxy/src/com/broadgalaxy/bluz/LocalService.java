@@ -11,10 +11,16 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 
+import com.broadgalaxy.bluz.core.FbkResponse;
+import com.broadgalaxy.bluz.core.IccResponse;
 import com.broadgalaxy.bluz.core.LocationResponse;
 import com.broadgalaxy.bluz.core.MessageResponse;
 import com.broadgalaxy.bluz.core.Pack;
 import com.broadgalaxy.bluz.core.Response;
+import com.broadgalaxy.bluz.core.SigResponse;
+import com.broadgalaxy.bluz.core.StsResponse;
+import com.broadgalaxy.bluz.core.TimResponse;
+import com.broadgalaxy.bluz.core.ZrdResponse;
 import com.broadgalaxy.util.Log;
 
 public class LocalService extends android.app.Service implements IChatService {
@@ -101,6 +107,18 @@ public class LocalService extends android.app.Service implements IChatService {
             res = new MessageResponse(msgBytes);
         } else if (Pack.CODE_LOCATION.equals(codeStr)) {
             res = new LocationResponse(msgBytes);
+        } else if (Pack.CODE_FBK.equals(codeStr)) {
+            res = new FbkResponse(msgBytes);
+        } else if (Pack.CODE_ICC.equals(codeStr)) {
+            res = new IccResponse(msgBytes);
+        } else if (Pack.CODE_SIG.contains(codeStr)) {
+            res = new SigResponse(msgBytes);
+        } else if (Pack.CODE_STS.equals(codeStr)) {
+            res = new StsResponse(msgBytes);
+        } else if (Pack.CODE_TIM.equals(codeStr)) {
+            res = new TimResponse(msgBytes);
+        } else if (Pack.CODE_ZRd.equals(codeStr)) {
+            res  = new ZrdResponse(msgBytes);
         } else {
             Log.e(TAG, "unknown msg. msg: " + codeStr);
         }
