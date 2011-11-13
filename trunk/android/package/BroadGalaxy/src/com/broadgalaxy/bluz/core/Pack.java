@@ -10,20 +10,28 @@ public class Pack {
     public static final String CODE_MESSGE = "$Msg_";
     public static final String CODE_LOCATION = "$Pos_";
     private static final String TAG = Pack.class.getSimpleName();
+    public static final int ENCODE_ZH = 0x44;
+    public static final int ENCODE_CODE = 0x46;
+    
+
+    public static final int MSG_INDEX = 0;
+    public static final int LENGTH_INDEX = MSG_INDEX + 5;
+    public static final int ADDRESS_INDEX = LENGTH_INDEX + 2;
+    public static final int PAYLOAD_INDEX = ADDRESS_INDEX  + 3;
+    public static final int ADDRESS_LEN = 3;
+    
+    
     String mCode;
     int mLength;
     int mUserAddress;
     byte[] mPayload;
     int mCRC;
     
-    public Pack(String code, int address, byte[] payload){
-        mCode = code;
-        mUserAddress = address;
-        mPayload = payload;
-        mLength = caculateLength();
-        mCRC = genCRC();
+    public Pack() {
+
     }
     
+
     public byte[] getByte() {
 //        ByteBuffer buffer = ByteBuffer.allocate(1024);
 //        buffer.put(mCode.getBytes());  // 指令
@@ -42,7 +50,7 @@ public class Pack {
         return ByteUtil.appendByte(nonCRC, new byte[]{crc});
     }
     
-    private byte[] getNonCRCByte() {
+    protected byte[] getNonCRCByte() {
         ByteBuffer buffer = ByteBuffer.allocate(1024);
         buffer.put(mCode.getBytes());  // 指令
         buffer.putShort((short)mLength); // 长度　
@@ -69,7 +77,7 @@ public class Pack {
     }
     
     public static byte[] address2bytes(int address) {
-        Log.d(TAG , "address: " + address + "\tbinaryString: " + Integer.toBinaryString(address));
+//        Log.d(TAG , "address: " + address + "\tbinaryString: " + Integer.toBinaryString(address));
         byte[] add = new byte[3];
         add[2] = (byte)((address << 24) >> 24);
         add[1] = (byte)((address << 16) >> 24);
@@ -77,45 +85,41 @@ public class Pack {
         return add;
     }
     
-    private int caculateLength() {
-        return 5 + 2 + 3 + mPayload.length + 1;
-    }
-
-    private int genCRC() {
-        CRC32 crc = new CRC32();
-        crc.update(getNonCRCByte());
+    public int byte2Address(byte[] addressBytes) {
+        int address = 0;
         
-        return (int)crc.getValue();
+        return address & addressBytes[0] << 24 & addressBytes[1] << 16 & addressBytes[2];
     }
     
+  
     public String getCode() {
         return mCode;
     }
-    public void setmCode(String mCode) {
+    public void setCode(String mCode) {
         this.mCode = mCode;
     }
     public int getLength() {
         return mLength;
     }
-    public void setmLength(int mLength) {
+    public void setLength(int mLength) {
         this.mLength = mLength;
     }
     public int getUserAddress() {
         return mUserAddress;
     }
-    public void setmUserAddress(int mUserAddress) {
+    public void setUserAddress(int mUserAddress) {
         this.mUserAddress = mUserAddress;
     }
     public byte[] getPayload() {
         return mPayload;
     }
-    public void setmPayload(byte[] mPayload) {
+    public void setPayload(byte[] mPayload) {
         this.mPayload = mPayload;
     }
     public int getCRC() {
         return mCRC;
     }
-    public void setmCRC(int mCRC) {
+    public void setCRC(int mCRC) {
         this.mCRC = mCRC;
     }
 }
