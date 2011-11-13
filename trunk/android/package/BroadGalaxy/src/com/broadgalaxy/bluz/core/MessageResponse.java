@@ -22,22 +22,27 @@ public class MessageResponse extends Response {
     public MessageResponse(byte[] data) {
         ByteBuffer buffer = ByteBuffer.wrap(data).asReadOnlyBuffer();
         setCode(Pack.CODE_LOCATION);
-        setLength(buffer.getShort(LENGTH_INDEX));
+        
+        buffer.position(LENGTH_INDEX);
+        setLength(buffer.getShort());
+        
         int address = 0;
         byte[] addressBytes = new byte[ADDRESS_LEN];
         buffer.get(addressBytes, 0, ADDRESS_LEN);
         address = byte2Address(addressBytes);
         setUserAddress(address);
+        
         int payloadLen = 0;
 //        payload = getPayloadLen();
         buffer.position(PAYLOAD_LEN_INDEX);
         payloadLen = buffer.getShort(PAYLOAD_LEN_INDEX);
         Log.d(TAG, "payloadLen: " + payloadLen);
-        byte[] payload = new byte[payloadLen];
-        
+        byte[] payload = new byte[payloadLen];        
         buffer.get(payload, PAYLOAD_INDEX, payloadLen);
         setPayload(payload);
+        
         parsePayload(payload);
+        
         setCRC(buffer.get(ADDRESS_INDEX + payloadLen));
     }
     
