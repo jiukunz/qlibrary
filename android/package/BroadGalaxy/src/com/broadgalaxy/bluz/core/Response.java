@@ -18,9 +18,16 @@ abstract public class Response extends Pack {
         byte[] payload = new byte[payloadLen];
         buffer.get(payload,ADDRESS_INDEX, payloadLen);
         setPayload(payload);
+        parsePayload(payload);
         setCRC(buffer.get(ADDRESS_INDEX + payloadLen));
     }
     
+    public Response(){
+        super();
+    }
+    
     abstract int getPayloadLen();
+    
+    abstract void parsePayload(byte[] payload);
 
 }

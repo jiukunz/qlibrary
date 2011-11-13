@@ -9,6 +9,7 @@ import com.broadgalaxy.bluz.LocalService;
 import com.broadgalaxy.bluz.LocalService.OnMsgCallBack;
 import com.broadgalaxy.bluz.R;
 import com.broadgalaxy.bluz.core.Pack;
+import com.broadgalaxy.bluz.core.Response;
 import com.broadgalaxy.util.Log;
 
 import android.app.Activity;
@@ -54,11 +55,9 @@ public class BluzActivity extends Activity {
 
     }
 
-    protected void handlReadmsg(Message msg) {
+    protected void handlReadmsg(Response response) {
         // TODO Auto-generated method stub
-        int len = msg.arg1;
-        byte[] msgBytes = (byte[]) msg.obj;
-        handleReadmsg(len, msgBytes);
+
     }
 
     private void handleReadmsg(int len, byte[] msgBytes) {
@@ -117,8 +116,8 @@ public class BluzActivity extends Activity {
             }
 
             @Override
-            public void handlReadmsg(Message msg) {
-                BluzActivity.this.handlReadmsg(msg);
+            public void handlReadmsg(Response response) {
+                BluzActivity.this.handlReadmsg(response);
             }
 
             @Override

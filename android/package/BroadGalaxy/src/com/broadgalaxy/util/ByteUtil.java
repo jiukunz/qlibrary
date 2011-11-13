@@ -11,7 +11,7 @@ public class ByteUtil {
         int len = base.length + append.length;
         byte[] result = new byte[len];
         System.arraycopy(base, 0, result, 0, base.length);
-        System.arraycopy(append, 0, result, 0, append.length);
+        System.arraycopy(append, 0, result, base.length, append.length);
         
         return result;
     }
@@ -27,6 +27,6 @@ public class ByteUtil {
     }
 
     public static String byte2HexString(byte b) {
-        return "" + HEX_ARRAY[((byte)b>>4 & 0x0f)] + HEX_ARRAY[((byte)b & 0x0f)];
+        return "" + HEX_ARRAY[((byte)(b>>4 & 0x0f))] + HEX_ARRAY[((byte)(b & 0x0f))];
     }
 }

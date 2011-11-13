@@ -1,5 +1,6 @@
 package com.broadgalaxy.bluz;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,8 +11,14 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 
+import com.broadgalaxy.bluz.core.LocationResponse;
+import com.broadgalaxy.bluz.core.MessageResponse;
+import com.broadgalaxy.bluz.core.Pack;
+import com.broadgalaxy.bluz.core.Response;
+import com.broadgalaxy.util.Log;
+
 public class LocalService extends android.app.Service implements IChatService {
-    
+    private static final String TAG = LocalService.class.getSimpleName();    
     
     public class LocalBinder extends Binder{
         public LocalService getChatService() {
@@ -23,15 +30,13 @@ public class LocalService extends android.app.Service implements IChatService {
         public void handToastmsg(Message msg);
         public void handleDeviceNameMsg(Message msg);
 
-        public void handlReadmsg(Message msg);
+        public void handlReadmsg(Response response);
 
         public void handleWriteMsg(Message msg);
 
         public void handlStateChangeMsg(int state);
     }
-    
-    
-    
+        
     private IBinder mBinder = new LocalBinder();
     
     public static final int MESSAGE_DEVICE_NAME = 4;
@@ -39,6 +44,7 @@ public class LocalService extends android.app.Service implements IChatService {
     public static final int MESSAGE_STATE_CHANGE = 1;
     public static final int MESSAGE_TOAST = 5;
     public static final int MESSAGE_WRITE = 3;
+
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -83,8 +89,24 @@ public class LocalService extends android.app.Service implements IChatService {
     }
 
     protected void handlReadmsg(Message msg) {
+        int len = msg.arg1;
+        byte[] msgBytes = (byte[]) msg.obj;
+        ByteBuffer buffer = ByteBuffer.wrap(msgBytes).asReadOnlyBuffer();
+        byte[] code = new byte[5];
+        buffer.position(0);
+        buffer.get(code, 0 , 5);
+        String codeStr = new String(code);
+        Response res = null;
+        if (Pack.CODE_MESSGE.equals(codeStr)) {
+            res = new MessageResponse(msgBytes);
+        } else if (Pack.CODE_LOCATION.equals(codeStr)) {
+            res = new LocationResponse(msgBytes);
+        } else {
+            Log.e(TAG, "unknown msg. msg: " + codeStr);
+        }
+        
         for (OnMsgCallBack c : mListener) {
-            c.handlReadmsg(msg);
+            c.handlReadmsg(res);
         }
     }
 
