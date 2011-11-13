@@ -1,11 +1,14 @@
 
 package com.broadgalaxy.bluz.activity;
 
+import java.nio.ByteBuffer;
+
 import com.broadgalaxy.bluz.BluetoothChatService;
 import com.broadgalaxy.bluz.IChatService;
 import com.broadgalaxy.bluz.LocalService;
 import com.broadgalaxy.bluz.LocalService.OnMsgCallBack;
 import com.broadgalaxy.bluz.R;
+import com.broadgalaxy.bluz.core.Pack;
 import com.broadgalaxy.util.Log;
 
 import android.app.Activity;
@@ -47,12 +50,29 @@ public class BluzActivity extends Activity {
 
     protected void handleWriteMsg(Message msg) {
         // TODO Auto-generated method stub
+        
 
     }
 
     protected void handlReadmsg(Message msg) {
         // TODO Auto-generated method stub
+        int len = msg.arg1;
+        byte[] msgBytes = (byte[]) msg.obj;
+        handleReadmsg(len, msgBytes);
+    }
 
+    private void handleReadmsg(int len, byte[] msgBytes) {
+        ByteBuffer buffer = ByteBuffer.wrap(msgBytes).asReadOnlyBuffer();
+        byte[] code = new byte[5];
+        buffer.position(0);
+        buffer.get(code, 0 , 5);
+        String codeStr = new String(code);
+        if (Pack.CODE_MESSGE.equals(codeStr)) {
+            
+        } else if (Pack.CODE_LOCATION.equals(codeStr)) {
+            
+        }
+        
     }
 
     protected void handlStateChangeMsg(int state) {

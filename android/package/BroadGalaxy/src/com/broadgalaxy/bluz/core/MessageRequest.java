@@ -4,12 +4,13 @@ import java.nio.ByteBuffer;
 
 import com.broadgalaxy.util.ByteUtil;
 
-public class Msg extends Pack {
-    public static final int ENCODE_ZH = 0x44;
-    public static final int ENCODE_CODE = 0x46; //???
+public class MessageRequest extends Request {
+    public MessageRequest(int fromAddress, int toAddress, int encode, String msg){
+        super(Pack.CODE_MESSGE, fromAddress, format(toAddress, encode, msg));
+    }
     
-    public Msg(int fromAddress, int toAddress, int encode, String msg){
-        super(Msg.CODE_MESSGE, fromAddress, format(toAddress, encode, msg));
+    public MessageRequest(int fromAddress, int toAddress, String msg){
+        this(fromAddress, toAddress, ENCODE_CODE, msg);
     }
 
     private static byte[] format(int toAddress, int encode, String msg) {

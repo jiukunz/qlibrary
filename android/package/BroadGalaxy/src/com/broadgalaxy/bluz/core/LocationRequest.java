@@ -1,7 +1,7 @@
 package com.broadgalaxy.bluz.core;
 
-public class Location extends Pack {
-    public Location(int address, byte freqency){
+public class LocationRequest extends Request {
+    public LocationRequest(int address, byte freqency){
         super(CODE_LOCATION, address, toPayload(freqency));
     }
 

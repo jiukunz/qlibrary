@@ -4,8 +4,9 @@ import java.io.File;
 
 import android.os.Environment;
 
-import com.broadgalaxy.bluz.core.Location;
-import com.broadgalaxy.bluz.core.Msg;
+import com.broadgalaxy.bluz.core.LocationRequest;
+import com.broadgalaxy.bluz.core.MessageRequest;
+import com.broadgalaxy.bluz.core.Pack;
 import com.broadgalaxy.util.Log;
 
 public class Application extends android.app.Application {
@@ -28,10 +29,10 @@ public class Application extends android.app.Application {
     private void tst() {
         // TODO Auto-generated method stub
         int fromAddress = 1;
-        int toAddress = 4;
-        Location l = new Location(fromAddress, (byte)1);
+        int toAddress = 3;
+        LocationRequest l = new LocationRequest(fromAddress, (byte)1);
         Log.e(TAG, "location: " + l.toHexString());
-        Msg m= new Msg(fromAddress, toAddress, Msg.ENCODE_CODE, "this is my tst");
+        Pack m= new MessageRequest(fromAddress, toAddress, Pack.ENCODE_CODE, "this is my tst");
         Log.d(TAG, "msg: " + m.toHexString());
         
     }
