@@ -2,23 +2,41 @@ package com.broadgalaxy.bluz.core;
 
 import java.nio.ByteBuffer;
 
-abstract public class Response extends Pack {
+import com.broadgalaxy.util.Log;
 
+abstract public class Response extends Pack {
+    private static final String TAG = Response.class.getSimpleName();
+    private static final boolean DEBUG = true;
+    
     public Response(byte[] data) {
         super();
         ByteBuffer buffer = ByteBuffer.wrap(data).asReadOnlyBuffer();
-        setCode(Pack.CODE_LOCATION);
+        
+        buffer.position(0);
+        byte[] codeBytes = new byte[CODE_LEN];
+        buffer.get(codeBytes, 0, CODE_LEN);
+        String code = new String(codeBytes);
+        if (DEBUG) {
+            Log.d(TAG, "code: " + code);
+        }
+        setCode(code);        
+        
         setLength(buffer.getShort(LENGTH_INDEX));
+        
         int address = 0;
         byte[] addressBytes = new byte[ADDRESS_LEN];
         buffer.get(addressBytes, 0, ADDRESS_LEN);
         address = byte2Address(addressBytes);
         setUserAddress(address);
+        
         int payloadLen = getPayloadLen();
         byte[] payload = new byte[payloadLen];
-        buffer.get(payload,ADDRESS_INDEX, payloadLen);
+        buffer.position(ADDRESS_INDEX);
+        buffer.get(payload, 0, payloadLen);
         setPayload(payload);
+        
         parsePayload(payload);
+        
         setCRC(buffer.get(ADDRESS_INDEX + payloadLen));
     }
     

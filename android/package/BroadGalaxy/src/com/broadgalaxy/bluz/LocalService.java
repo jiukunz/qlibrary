@@ -51,6 +51,8 @@ public class LocalService extends android.app.Service implements IChatService {
     public static final int MESSAGE_TOAST = 5;
     public static final int MESSAGE_WRITE = 3;
 
+    private static final boolean DEBUG = true;
+
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -97,7 +99,13 @@ public class LocalService extends android.app.Service implements IChatService {
     protected void handlReadmsg(Message msg) {
         int len = msg.arg1;
         byte[] msgBytes = (byte[]) msg.obj;
-        ByteBuffer buffer = ByteBuffer.wrap(msgBytes).asReadOnlyBuffer();
+        int size = msg.arg1;
+        if (DEBUG) {
+            Log.d(TAG, "msg size: " + size);
+        }
+        ByteBuffer buffer = ByteBuffer.allocate(size);
+        buffer.put(msgBytes, 0, size);
+        msgBytes = buffer.array();
         byte[] code = new byte[5];
         buffer.position(0);
         buffer.get(code, 0 , 5);
