@@ -9,6 +9,10 @@ public class IccResponse extends Response {
     int mServeFreq;
     int mLevel;
     
+    public IccResponse(byte[] msgBytes) {
+        super(msgBytes);
+    }
+
     @Override
     int getPayloadLen() {
         return 3 + 2 + 1;
