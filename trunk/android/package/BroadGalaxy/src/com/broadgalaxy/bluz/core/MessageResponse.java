@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 import com.broadgalaxy.util.Log;
 
 public class MessageResponse extends Response {
+    private static final boolean DEBUG = true;
     private static final String TAG = MessageResponse.class.getSimpleName();
     private static final int PAYLOAD_LEN_INDEX = PAYLOAD_INDEX  + 3 + 2;
 
@@ -21,13 +22,14 @@ public class MessageResponse extends Response {
 
     public MessageResponse(byte[] data) {
         ByteBuffer buffer = ByteBuffer.wrap(data).asReadOnlyBuffer();
-        setCode(Pack.CODE_LOCATION);
+        setCode(Pack.CODE_MESSGE);
         
         buffer.position(LENGTH_INDEX);
         setLength(buffer.getShort());
         
         int address = 0;
         byte[] addressBytes = new byte[ADDRESS_LEN];
+        buffer.position(ADDRESS_INDEX);
         buffer.get(addressBytes, 0, ADDRESS_LEN);
         address = byte2Address(addressBytes);
         setUserAddress(address);
@@ -36,9 +38,12 @@ public class MessageResponse extends Response {
 //        payload = getPayloadLen();
         buffer.position(PAYLOAD_LEN_INDEX);
         payloadLen = buffer.getShort(PAYLOAD_LEN_INDEX);
-        Log.d(TAG, "payloadLen: " + payloadLen);
-        byte[] payload = new byte[payloadLen];        
-        buffer.get(payload, PAYLOAD_INDEX, payloadLen);
+        if (DEBUG) {
+            Log.d(TAG, "payloadLen: " + payloadLen);
+        }
+        byte[] payload = new byte[payloadLen];   
+        buffer.position(PAYLOAD_INDEX);
+        buffer.get(payload, 0, payloadLen);
         setPayload(payload);
         
         parsePayload(payload);
@@ -55,10 +60,14 @@ public class MessageResponse extends Response {
     void parsePayload(byte[] payload) {
         ByteBuffer buffer = ByteBuffer.wrap(payload).asReadOnlyBuffer();
         byte[] senderAddBytes = new byte[ADDRESS_LEN];
+        buffer.position(0);
         buffer.get(senderAddBytes, 0, ADDRESS_LEN);
         mSenderAddress = byte2Address(senderAddBytes);
+        
         mSendTimeHour = buffer.get(HOUR_INDEX);
+        
         mSendTimeMin = buffer.get(MIN_INDEX);
+        
         mMsgLen = buffer.getShort(LEN_INDEX);
         
         byte[] msg = new byte[mMsgLen];

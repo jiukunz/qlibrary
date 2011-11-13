@@ -8,6 +8,9 @@ import com.broadgalaxy.util.ByteUtil;
 import com.broadgalaxy.util.Log;
 
 public class Pack {
+    private static final String TAG = Pack.class.getSimpleName();
+    
+    public static final int CODE_LEN = 5;
     public static final String CODE_MESSGE = "$Msg_"; // 通信申请　
     public static final String CODE_LOCATION = "$Pos_";// 定位
     public static final String CODE_SIG = "$Sig_";//　功率
@@ -19,10 +22,8 @@ public class Pack {
     public static final String CODE_TIM = "$Tim_";//　时间输出
     public static final String CODE_FBK = "$Fbk_";// 反馈
     
-    private static final String TAG = Pack.class.getSimpleName();
     public static final int ENCODE_ZH = 0x44;
-    public static final int ENCODE_CODE = 0x46;
-    
+    public static final int ENCODE_CODE = 0x46;    
 
     public static final int MSG_INDEX = 0;
     public static final int LENGTH_INDEX = MSG_INDEX + 5;

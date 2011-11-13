@@ -33,6 +33,7 @@ import android.os.Message;
 
 import com.broadgalaxy.bluz.activity.BluzActivity;
 import com.broadgalaxy.bluz.activity.ChatActivity;
+import com.broadgalaxy.util.ByteUtil;
 import com.broadgalaxy.util.Log;
 
 /**
@@ -337,14 +338,18 @@ public class BluetoothChatService implements IChatService {
     }
 
     private String format(byte[] buffer, int bytes) {
-        String formatStr = "";
-        formatStr = new String(buffer, 0, bytes);
         String hexStr = "0x";
-        for (int i = 0 ; i < bytes ; i++) {
-            int intValue = new Byte(buffer[i]).intValue();
-            hexStr += " " + Integer.toHexString(intValue);
+        int count = 0;
+        for (byte b : buffer) {
+            if (count == bytes) {
+                break;
+            }
+            count++;
+            
+            hexStr += " " + ByteUtil.byte2HexString(b);
         }
-        return formatStr + " " + hexStr;
+        
+        return hexStr;
     }
 
     /* (non-Javadoc)
