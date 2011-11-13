@@ -59,7 +59,8 @@ public class Pack {
         byte[] bytes = getByte();
         String hexString = "0x";
         for (byte b : bytes) {
-            hexString += " " + Integer.toHexString(new Integer(b).byteValue());
+            hexString += " " + ByteUtil.byte2HexString(b);
+            Integer.toHexString(new Integer(b).byteValue());
 
 //            hexString += " " + Byte.toString(b);
         }
@@ -68,7 +69,7 @@ public class Pack {
     }
     
     public static byte[] address2bytes(int address) {
-        Log.d(TAG , "address: " + Integer.toBinaryString(address));
+        Log.d(TAG , "address: " + address + "\tbinaryString: " + Integer.toBinaryString(address));
         byte[] add = new byte[3];
         add[2] = (byte)((address << 24) >> 24);
         add[1] = (byte)((address << 16) >> 24);
