@@ -8,8 +8,17 @@ import com.broadgalaxy.util.ByteUtil;
 import com.broadgalaxy.util.Log;
 
 public class Pack {
-    public static final String CODE_MESSGE = "$Msg_";
-    public static final String CODE_LOCATION = "$Pos_";
+    public static final String CODE_MESSGE = "$Msg_"; // 通信申请　
+    public static final String CODE_LOCATION = "$Pos_";// 定位
+    public static final String CODE_SIG = "$Sig_";//　功率
+    public static final String CODE_BST = "$Bst_";//　串口输出
+    public static final String CODE_ICC = "$Icc_"; //　ＩＣ
+    public static final String CODE_STS = "$Sts_";//　系统自检
+    public static final String CODE_ZST= "$Zst_";//　零值设置
+    public static final String CODE_ZRd = "$Zrd_";//　零值读取
+    public static final String CODE_TIM = "$Tim_";//　时间输出
+    public static final String CODE_FBK = "$Fbk_";// 反馈
+    
     private static final String TAG = Pack.class.getSimpleName();
     public static final int ENCODE_ZH = 0x44;
     public static final int ENCODE_CODE = 0x46;

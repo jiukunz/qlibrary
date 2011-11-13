@@ -1,9 +1,8 @@
 package com.broadgalaxy.bluz.core;
 
-import java.nio.ByteBuffer;
 import java.util.zip.CRC32;
 
-public class Request extends Pack {
+abstract public class Request extends Pack {
 
     public Request(String code, int address, byte[] payload) {
         super();
@@ -24,6 +23,4 @@ public class Request extends Pack {
         
         return (int)crc.getValue();
     }
-   
-
 }
