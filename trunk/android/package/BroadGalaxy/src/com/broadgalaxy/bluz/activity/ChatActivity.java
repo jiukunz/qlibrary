@@ -62,7 +62,7 @@ public class ChatActivity extends BluzActivity {
     /**
      * @param msg
      */
-    protected void handlStateChangeMsg(int state) {
+    protected void handleStateChangeMsg(int state) {
         if (D) {
             Log.i(TAG,
                     "MESSAGE_STATE_CHANGE: " + state + " "
