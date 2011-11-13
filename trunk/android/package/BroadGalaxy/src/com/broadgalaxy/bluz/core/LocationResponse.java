@@ -1,10 +1,11 @@
 package com.broadgalaxy.bluz.core;
 
+import java.nio.ByteBuffer;
 
-public class LocationResponse extends Response {
-    
-    
+
+public class LocationResponse extends Response {    
     private static final int PAYLOAD_LEN = 4 + 4 + 4 + 2 + 2;
+    
     private int mLocationT;
     private int mLocationL;
     private int mLocationB;
@@ -13,8 +14,6 @@ public class LocationResponse extends Response {
 
     public LocationResponse(byte[] data) {
         super(data);
-        
-        parserPayload(getPayload());
     }
 
     @Override
@@ -22,9 +21,14 @@ public class LocationResponse extends Response {
         return PAYLOAD_LEN;
     }
 
-    private void parserPayload(byte[] payload) {
-        // TODO Auto-generated method stub
-        
+    @Override
+    void parsePayload(byte[] payload) {
+        ByteBuffer buffer = ByteBuffer.wrap(payload).asReadOnlyBuffer();
+        mLocationT = buffer.getInt();
+        mLocationL = buffer.getInt();
+        mLocationB = buffer.getInt();
+        mLocationH = buffer.getShort();
+        mLocationX = buffer.getShort();
     }
 
     public int getLocationT(){

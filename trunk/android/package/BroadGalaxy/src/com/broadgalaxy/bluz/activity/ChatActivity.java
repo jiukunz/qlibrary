@@ -33,6 +33,11 @@ import android.widget.Toast;
 import com.broadgalaxy.bluz.BluetoothChatService;
 import com.broadgalaxy.bluz.IChatService;
 import com.broadgalaxy.bluz.R;
+import com.broadgalaxy.bluz.core.LocationRequest;
+import com.broadgalaxy.bluz.core.MessageRequest;
+import com.broadgalaxy.bluz.core.MessageResponse;
+import com.broadgalaxy.bluz.core.Pack;
+import com.broadgalaxy.bluz.core.Response;
 import com.broadgalaxy.util.Log;
 
 /**
@@ -99,12 +104,20 @@ public class ChatActivity extends BluzActivity {
     }
 
     /**
-     * @param msg
+     * @param response
      */
-    protected void handlReadmsg(Message msg) {
-        byte[] readBuf = (byte[]) msg.obj;
-        // construct a string from the valid bytes in the buffer
-        String readMessage = new String(readBuf, 0, msg.arg1);
+    protected void handlReadmsg(Response response) {
+        // byte[] readBuf = (byte[]) response.obj;
+        // // construct a string from the valid bytes in the buffer
+        String readMessage = "";
+        MessageResponse msgRes = null;
+        if (response instanceof MessageResponse) {
+            msgRes = (MessageResponse) response;
+            readMessage = msgRes.getMsg();
+        } else {
+            readMessage = "unknown msg. ";
+        }
+
         mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
     }
 
@@ -186,7 +199,13 @@ public class ChatActivity extends BluzActivity {
         // Check that there's actually something to send
         if (message.length() > 0) {
             // Get the message bytes and tell the BluetoothChatService to write
+          
             byte[] send = message.getBytes();
+            int fromAddress = 1;
+            int toAddress = 3;
+            Pack m = new MessageRequest(fromAddress, toAddress, Pack.ENCODE_CODE, message);
+            write(m.getByte());
+            
             write(send);
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);

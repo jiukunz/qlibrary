@@ -1,5 +1,6 @@
 package com.broadgalaxy.bluz.core;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.zip.CRC32;
 
@@ -18,6 +19,7 @@ public class Pack {
     public static final int LENGTH_INDEX = MSG_INDEX + 5;
     public static final int ADDRESS_INDEX = LENGTH_INDEX + 2;
     public static final int PAYLOAD_INDEX = ADDRESS_INDEX  + 3;
+    
     public static final int ADDRESS_LEN = 3;
     
     
@@ -52,7 +54,12 @@ public class Pack {
     
     protected byte[] getNonCRCByte() {
         ByteBuffer buffer = ByteBuffer.allocate(1024);
-        buffer.put(mCode.getBytes());  // 指令
+        try {
+            byte[] c = mCode.getBytes("utf-8");
+            buffer.put(c);
+        } catch (UnsupportedEncodingException e) {
+            Log.e(TAG, "UnsupportedEncodingException", e);
+        }  // 指令
         buffer.putShort((short)mLength); // 长度　
         buffer.put(Pack.address2bytes(mUserAddress)); // 用户地址
         buffer.put(mPayload); // 信息内容
@@ -68,7 +75,7 @@ public class Pack {
         String hexString = "0x";
         for (byte b : bytes) {
             hexString += " " + ByteUtil.byte2HexString(b);
-            Integer.toHexString(new Integer(b).byteValue());
+//            Integer.toHexString(new Integer(b).byteValue());
 
 //            hexString += " " + Byte.toString(b);
         }
