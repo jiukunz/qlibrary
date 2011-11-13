@@ -26,23 +26,6 @@ import com.broadgalaxy.util.Log;
 public class LocalService extends android.app.Service implements IChatService {
     private static final String TAG = LocalService.class.getSimpleName();    
     
-    public class LocalBinder extends Binder{
-        public LocalService getChatService() {
-            return LocalService.this;
-        }
-    }
-    
-    public interface OnMsgCallBack {
-        public void handToastmsg(Message msg);
-        public void handleDeviceNameMsg(Message msg);
-
-        public void handlReadmsg(Response response);
-
-        public void handleWriteMsg(Message msg);
-
-        public void handlStateChangeMsg(int state);
-    }
-        
     private IBinder mBinder = new LocalBinder();
     
     public static final int MESSAGE_DEVICE_NAME = 4;
@@ -53,37 +36,25 @@ public class LocalService extends android.app.Service implements IChatService {
 
     private static final boolean DEBUG = true;
 
-    private final Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MESSAGE_STATE_CHANGE:
-                        handlStateChangeMsg(msg.arg1);
-                        break;
-                    case MESSAGE_WRITE:
-                        handleWriteMsg(msg);
-                        break;
-                    case MESSAGE_READ:
-                        handlReadmsg(msg);
-                        break;
-                    case MESSAGE_DEVICE_NAME:
-                        handleDeviceNameMsg(msg);
-                        break;
-                    case MESSAGE_TOAST:
-                        handToastmsg(msg);
-                        break;
-                }
-            }
-    };
-    private IChatService mService = new BluetoothChatService(this, mHandler);;
-
-    private List<OnMsgCallBack> mListener = new ArrayList<OnMsgCallBack>();
-    
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
     }
     
+    
+    @Override
+    public void onCreate() {
+        mService.start();
+        super.onCreate();
+    }
+    
+    @Override
+    public void onDestroy() {
+        mService.stop();
+        super.onDestroy();
+    }
+
+
     protected void handToastmsg(Message msg) {
         for (OnMsgCallBack c : mListener) {
             c.handToastmsg(msg);
@@ -100,9 +71,6 @@ public class LocalService extends android.app.Service implements IChatService {
         int len = msg.arg1;
         byte[] msgBytes = (byte[]) msg.obj;
         int size = msg.arg1;
-        if (DEBUG) {
-            Log.d(TAG, "msg size: " + size);
-        }
         ByteBuffer buffer = ByteBuffer.allocate(size);
         buffer.put(msgBytes, 0, size);
         msgBytes = buffer.array();
@@ -149,11 +117,6 @@ public class LocalService extends android.app.Service implements IChatService {
     }
 
     @Override
-    public void onCreate() {
-        // TODO Auto-generated method stub
-        super.onCreate();
-    }
-    @Override
     public void connect(BluetoothDevice device) {
         mService.connect(device);
     }
@@ -181,5 +144,49 @@ public class LocalService extends android.app.Service implements IChatService {
 
     public void unRegisterOnMsgCallback(OnMsgCallBack callback) {
         mListener.remove(callback);
+    }
+
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MESSAGE_STATE_CHANGE:
+                        handlStateChangeMsg(msg.arg1);
+                        break;
+                    case MESSAGE_WRITE:
+                        handleWriteMsg(msg);
+                        break;
+                    case MESSAGE_READ:
+                        handlReadmsg(msg);
+                        break;
+                    case MESSAGE_DEVICE_NAME:
+                        handleDeviceNameMsg(msg);
+                        break;
+                    case MESSAGE_TOAST:
+                        handToastmsg(msg);
+                        break;
+                }
+            }
+    };
+
+    private List<OnMsgCallBack> mListener = new ArrayList<OnMsgCallBack>();
+
+    private IChatService mService = new BluetoothChatService(this, mHandler);
+
+    public class LocalBinder extends Binder{
+        public LocalService getChatService() {
+            return LocalService.this;
+        }
+    }
+
+    public interface OnMsgCallBack {
+        public void handToastmsg(Message msg);
+        public void handleDeviceNameMsg(Message msg);
+    
+        public void handlReadmsg(Response response);
+    
+        public void handleWriteMsg(Message msg);
+    
+        public void handlStateChangeMsg(int state);
     }
 }
