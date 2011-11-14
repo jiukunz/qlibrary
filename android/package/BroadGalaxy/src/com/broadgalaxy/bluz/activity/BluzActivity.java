@@ -1,16 +1,12 @@
 
 package com.broadgalaxy.bluz.activity;
 
-import org.openintents.intents.AboutIntents;
-
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
@@ -176,9 +172,9 @@ public class BluzActivity extends Activity {
                 // Ensure this device is discoverable by others
                 ensureDiscoverable();
                 return true;
-            case R.id.about:
-                startAbout();
-                break;                
+//            case R.id.about:
+//                startAbout();
+//                break;                
         }
         
         return false;
