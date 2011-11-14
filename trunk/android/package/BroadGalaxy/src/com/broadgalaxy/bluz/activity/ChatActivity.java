@@ -178,9 +178,9 @@ public class ChatActivity extends BluzActivity {
 
         // Set up the custom title
         mTitle = (TextView) findViewById(R.id.title_left_text);
-        mTitle.setText(R.string.app_name);
+        mTitle.setText(R.string.broadgalaxy);
         mTitle = (TextView) findViewById(R.id.title_right_text);
-
+        
         setupChat();
     }
 
