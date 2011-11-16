@@ -20,7 +20,7 @@ public class Application extends android.app.Application implements UncaughtExce
     public void onCreate() {
         super.onCreate();
         
-        Thread.setDefaultUncaughtExceptionHandler(this);
+//        Thread.setDefaultUncaughtExceptionHandler(this);
         Log.setLog2File(true);
         Log.init(appExternalLogDir);
         Log.d(TAG , "hi world. @@@");

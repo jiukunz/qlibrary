@@ -28,14 +28,14 @@ public class BluzActivity extends Activity {
 
     public static final String DEVICE_NAME = "device_name";
 
-    private static final int REQUEST_CONNECT_DEVICE = 1;
+    public static final int REQUEST_CONNECT_DEVICE = 1;
     private static final int REQUEST_ENABLE_BT = 2;
     private static final int REQUEST_DISCOVERABLE = 3;
-    private BluetoothAdapter mBluetoothAdapter = null;
+    protected BluetoothAdapter mBluetoothAdapter = null;
     // private IChatService mChatService = null;
     private ServiceConnection mconn;
-    private boolean mbound;
-    private LocalService mService;
+    protected boolean mbound;
+    protected LocalService mService;
     private OnMsgCallBack mCallback;
     private boolean mBluzEnable;
 
