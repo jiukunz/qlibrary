@@ -39,12 +39,11 @@ public class LocalService extends android.app.Service implements IChatService {
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
-    }
-    
+    }    
     
     @Override
     public void onCreate() {
-        mService.start();
+//        mService.start();
         super.onCreate();
     }
     

@@ -1,6 +1,8 @@
 
 package com.broadgalaxy.bluz.component;
 
+import com.broadgalaxy.bluz.R;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
@@ -8,8 +10,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.broadgalaxy.bluz.R;
 
 public class Navigation extends ListView {
 
@@ -30,28 +30,21 @@ public class Navigation extends ListView {
 
         init();
     }
-
+    
     private void init() {
         mData = new String[] {
                 "new", "inbox", "outbox", "draft"
         };
+        mData = getContext().getResources().getStringArray(R.array.navigation);
         mAdapter = new ArrayAdapter<String>(getContext(), R.layout.navigation_item, mData);
         setAdapter(mAdapter);
         
         setOnItemClickListener(new OnItemClickListener(){
 
             @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                TextView labelV = (TextView) arg1;
-                String label = (String) labelV.getText();
-                int index = 0;
-                for (String s : mData) {
-                    if (null != s && s.equalsIgnoreCase(label)) {
-                        onNavClick(index);
-                        break;
-                    }
-                    
-                    index++;
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
+                if (isEnabled()) {
+                    onNavClick(position);
                 }
             }});
     }
@@ -67,7 +60,9 @@ public class Navigation extends ListView {
     }
     
     public interface OnNavClickListener {
-        // keep sync with {@link #mData}
+        /**
+         *  keep sync with {@link #mData}
+         */
         public static final int NAV_NEW = 0;
         public static final int NAV_INBOX = 1;
         public static final int NAV_OUTBOX = 2;

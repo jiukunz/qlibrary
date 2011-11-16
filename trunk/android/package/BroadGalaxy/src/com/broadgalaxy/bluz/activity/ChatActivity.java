@@ -71,7 +71,7 @@ public class ChatActivity extends BluzActivity {
         mSendButton.setEnabled(IChatService.STATE_CONNECTED == state);
         switch (state) {
             case IChatService.STATE_CONNECTED:
-                mTitle.setText(R.string.title_connected_to);
+                mTitle.setText(R.string.title_connected);
                 mTitle.append(mConnectedDeviceName);
                 mConversationArrayAdapter.clear();
                 break;
