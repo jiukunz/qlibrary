@@ -41,10 +41,10 @@ public class Application extends android.app.Application implements UncaughtExce
 
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
-        Log.e(TAG, "uncaughtException in thread: " + thread, ex); 
-        android.os.Process.killProcess(android.os.Process.myPid());
-        
+        Log.e(TAG, "uncaughtException in thread: " + thread, ex);         
         Log.e(TAG, "bye bye world. ###");
+        
+        android.os.Process.killProcess(android.os.Process.myPid());
         System.exit(10);        
     }
 
