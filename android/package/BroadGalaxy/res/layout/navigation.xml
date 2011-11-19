@@ -1,13 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_gravity="center"
-	android:layout_width="fill_parent" android:layout_height="fill_parent">
-	<com.broadgalaxy.bluz.component.Navigation
-		android:id="@+id/navigation" 
-		android:layout_width="fill_parent" android:layout_height="wrap_content" />
-	<Button android:text="@string/locate" android:layout_width="fill_parent"
-		android:enabled="false" android:layout_height="wrap_content"
-		android:id="@+id/locate" />
-	<Button android:text="@string/connect" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:id="@+id/connect" />
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/location"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/no_locaton" />
+
+    <com.broadgalaxy.bluz.component.Navigation
+        android:id="@+id/navigation"
+        android:enabled="false"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/locate"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="@string/locate"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/sig"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="@string/sig"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/connect"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/connect"
+        android:visibility="gone" />
+
 </LinearLayout>

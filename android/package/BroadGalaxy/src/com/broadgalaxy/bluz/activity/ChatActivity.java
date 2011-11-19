@@ -202,10 +202,6 @@ public class ChatActivity extends BluzActivity {
             // Get the message bytes and tell the BluetoothChatService to write
           
             byte[] send = message.getBytes();
-            int fromAddress = 1;
-            int toAddress = 3;
-            Pack m = new MessageRequest(fromAddress, toAddress, Pack.ENCODE_CODE, message);
-            write(m.getByte());
             
             write(send);
             // Reset out string buffer to zero and clear the edit text field
