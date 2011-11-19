@@ -33,11 +33,11 @@ import android.widget.Toast;
 import com.broadgalaxy.bluz.BluetoothChatService;
 import com.broadgalaxy.bluz.IChatService;
 import com.broadgalaxy.bluz.R;
-import com.broadgalaxy.bluz.core.LocationRequest;
-import com.broadgalaxy.bluz.core.MessageRequest;
-import com.broadgalaxy.bluz.core.MessageResponse;
-import com.broadgalaxy.bluz.core.Pack;
-import com.broadgalaxy.bluz.core.Response;
+import com.broadgalaxy.bluz.protocol.LocationRequest;
+import com.broadgalaxy.bluz.protocol.MessageRequest;
+import com.broadgalaxy.bluz.protocol.MessageResponse;
+import com.broadgalaxy.bluz.protocol.Pack;
+import com.broadgalaxy.bluz.protocol.Response;
 import com.broadgalaxy.util.Log;
 
 /**

@@ -11,16 +11,16 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 
-import com.broadgalaxy.bluz.core.FbkResponse;
-import com.broadgalaxy.bluz.core.IccResponse;
-import com.broadgalaxy.bluz.core.LocationResponse;
-import com.broadgalaxy.bluz.core.MessageResponse;
-import com.broadgalaxy.bluz.core.Pack;
-import com.broadgalaxy.bluz.core.Response;
-import com.broadgalaxy.bluz.core.SigResponse;
-import com.broadgalaxy.bluz.core.StsResponse;
-import com.broadgalaxy.bluz.core.TimResponse;
-import com.broadgalaxy.bluz.core.ZrdResponse;
+import com.broadgalaxy.bluz.protocol.FbkResponse;
+import com.broadgalaxy.bluz.protocol.IccResponse;
+import com.broadgalaxy.bluz.protocol.LocationResponse;
+import com.broadgalaxy.bluz.protocol.MessageResponse;
+import com.broadgalaxy.bluz.protocol.Pack;
+import com.broadgalaxy.bluz.protocol.Response;
+import com.broadgalaxy.bluz.protocol.SigResponse;
+import com.broadgalaxy.bluz.protocol.StsResponse;
+import com.broadgalaxy.bluz.protocol.TimResponse;
+import com.broadgalaxy.bluz.protocol.ZrdResponse;
 import com.broadgalaxy.util.Log;
 
 public class LocalService extends android.app.Service implements IChatService {

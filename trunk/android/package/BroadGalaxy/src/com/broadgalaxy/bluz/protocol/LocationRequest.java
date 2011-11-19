@@ -1,4 +1,4 @@
-package com.broadgalaxy.bluz.core;
+package com.broadgalaxy.bluz.protocol;
 
 public class LocationRequest extends Request {
     public LocationRequest(int address, byte freqency){
