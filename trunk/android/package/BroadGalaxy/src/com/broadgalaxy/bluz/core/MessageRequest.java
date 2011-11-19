@@ -24,7 +24,9 @@ public class MessageRequest extends Request {
         ByteBuffer buffer = ByteBuffer.allocate(1024);
         buffer.put(Pack.address2bytes(toAddress)); //收件方地址
         buffer.put((byte)encode); // 信息类型
-        buffer.putShort((short)msgLen);// 电文长度　
+        short len = (short)msgLen;
+        len *= 8; // int bit unit.
+        buffer.putShort(len);// 电文长度　
         buffer.put(msgBytes);//　电文内容
              
         int payloadLen = msgLen + 3 + 1 + 2 ;
