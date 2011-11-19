@@ -59,6 +59,7 @@ public class BluetoothChatService implements IChatService {
             // Create a new listening server socket
             try {
                 UUID uuid = MY_UUID;
+                uuid = WELL_KNOWN_UUID;
                 String name = NAME;
                 Log.d(TAG, "listen rfcommsocket using name: " + name + "\tuuid: " + uuid);
                 boolean insecure = false;
@@ -151,6 +152,7 @@ public class BluetoothChatService implements IChatService {
             // given BluetoothDevice
             try {
                 UUID uuid = MY_UUID;
+                uuid = WELL_KNOWN_UUID;
                 Log.d(TAG, "create rfcommsocket using uuid: " + uuid);
                 tmp = device.createRfcommSocketToServiceRecord(uuid);
             } catch (IOException e) {
@@ -266,8 +268,8 @@ public class BluetoothChatService implements IChatService {
                     }
 
                     // Send the obtained bytes to the UI Activity
-                    mHandler.obtainMessage(LocalService.MESSAGE_READ, bytes, -1, buffer)
-                            .sendToTarget();
+//                    mHandler.obtainMessage(LocalService.MESSAGE_READ, bytes, -1, buffer)
+//                            .sendToTarget();
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
                     onConnectionLost();
@@ -305,6 +307,7 @@ public class BluetoothChatService implements IChatService {
     // Unique UUID for this application
     private static final UUID MY_UUID = UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
     private static final UUID WELL_KNOWN_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+//    private static final UUID TARGET_UUID = UUID.fromString("0018-11-518058");
 
     // Name for the SDP record when creating server socket
     private static final String NAME = "ChatActivity";
@@ -313,7 +316,7 @@ public class BluetoothChatService implements IChatService {
     private static final String TAG = "BluetoothChatService";
 
     private AcceptThread mAcceptThread;
-
+    
     // Member fields
     private final BluetoothAdapter mAdapter;
 

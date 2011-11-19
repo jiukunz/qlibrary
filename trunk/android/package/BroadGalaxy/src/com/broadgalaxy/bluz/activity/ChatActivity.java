@@ -48,6 +48,7 @@ public class ChatActivity extends BluzActivity {
 
     // Debugging
     static final String TAG = "ChatActivity";
+    String myAdd = "000238";
 
     public static final String TOAST = "toast";
 
