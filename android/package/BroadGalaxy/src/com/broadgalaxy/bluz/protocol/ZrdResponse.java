@@ -1,4 +1,4 @@
-package com.broadgalaxy.bluz.core;
+package com.broadgalaxy.bluz.protocol;
 
 public class ZrdResponse extends Response {
     int mCheck;

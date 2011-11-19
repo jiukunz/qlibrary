@@ -21,10 +21,10 @@ import com.broadgalaxy.bluz.LocalService;
 import com.broadgalaxy.bluz.R;
 import com.broadgalaxy.bluz.component.Navigation;
 import com.broadgalaxy.bluz.component.Navigation.OnNavClickListener;
-import com.broadgalaxy.bluz.core.LocationRequest;
-import com.broadgalaxy.bluz.core.MessageRequest;
-import com.broadgalaxy.bluz.core.Pack;
-import com.broadgalaxy.bluz.core.SigRequest;
+import com.broadgalaxy.bluz.protocol.LocationRequest;
+import com.broadgalaxy.bluz.protocol.MessageRequest;
+import com.broadgalaxy.bluz.protocol.Pack;
+import com.broadgalaxy.bluz.protocol.SigRequest;
 import com.broadgalaxy.util.Log;
 
 public class HomeActivity extends BluzActivity {

@@ -5,9 +5,9 @@ import java.lang.Thread.UncaughtExceptionHandler;
 
 import android.os.Environment;
 
-import com.broadgalaxy.bluz.core.LocationRequest;
-import com.broadgalaxy.bluz.core.MessageRequest;
-import com.broadgalaxy.bluz.core.Pack;
+import com.broadgalaxy.bluz.protocol.LocationRequest;
+import com.broadgalaxy.bluz.protocol.MessageRequest;
+import com.broadgalaxy.bluz.protocol.Pack;
 import com.broadgalaxy.util.Log;
 
 public class Application extends android.app.Application implements UncaughtExceptionHandler {

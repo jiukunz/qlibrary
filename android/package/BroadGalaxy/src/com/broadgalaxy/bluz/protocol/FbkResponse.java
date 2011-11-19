@@ -1,4 +1,4 @@
-package com.broadgalaxy.bluz.core;
+package com.broadgalaxy.bluz.protocol;
 
 import java.nio.ByteBuffer;
 

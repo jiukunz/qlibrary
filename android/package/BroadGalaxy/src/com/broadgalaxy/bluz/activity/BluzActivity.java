@@ -19,7 +19,7 @@ import com.broadgalaxy.bluz.IChatService;
 import com.broadgalaxy.bluz.LocalService;
 import com.broadgalaxy.bluz.LocalService.OnMsgCallBack;
 import com.broadgalaxy.bluz.R;
-import com.broadgalaxy.bluz.core.Response;
+import com.broadgalaxy.bluz.protocol.Response;
 import com.broadgalaxy.util.Log;
 
 public class BluzActivity extends Activity {
