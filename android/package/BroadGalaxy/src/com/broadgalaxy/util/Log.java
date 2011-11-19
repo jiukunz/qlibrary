@@ -30,7 +30,7 @@ public class Log {
     private static boolean mLog2File = false;
     private static Logger mLogger = null;
     private static Handler mFileHandler;
-    private static int COUNT = 5;
+    private static int COUNT = 10;
     private static int LIMIT = 1 * 1024 * 1024;
 
     public static void setRootTag(String rootTag) {

@@ -16,11 +16,16 @@ public class Application extends android.app.Application implements UncaughtExce
     private static final String TAG = Application.class.getSimpleName();
     private File appExternalLogDir = new File(Environment.getExternalStorageDirectory(), "broadgalaxy/logs");
     
+    public static final boolean RELEASE_MODE = true;
+    
     @Override
     public void onCreate() {
         super.onCreate();
         
-//        Thread.setDefaultUncaughtExceptionHandler(this);
+        if (RELEASE_MODE) {
+            Thread.setDefaultUncaughtExceptionHandler(this);
+        }
+        
         Log.setLog2File(true);
         Log.init(appExternalLogDir);
         Log.d(TAG , "hi world. @@@");
@@ -32,8 +37,6 @@ public class Application extends android.app.Application implements UncaughtExce
         // TODO Auto-generated method stub
         int fromAddress = 1;
         int toAddress = 3;
-        LocationRequest l = new LocationRequest(fromAddress, (byte)1);
-        Log.e(TAG, "location: " + l.toHexString());
         Pack m= new MessageRequest(fromAddress, toAddress, Pack.ENCODE_CODE, "this is my tst");
         Log.d(TAG, "msg: " + m.toHexString());
         

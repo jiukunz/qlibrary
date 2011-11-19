@@ -1,23 +1,28 @@
 
 package com.broadgalaxy.bluz.activity;
 
-import com.broadgalaxy.bluz.BluetoothChatService;
-import com.broadgalaxy.bluz.IChatService;
-import com.broadgalaxy.bluz.R;
-import com.broadgalaxy.bluz.component.Navigation;
-import com.broadgalaxy.bluz.component.Navigation.OnNavClickListener;
-import com.broadgalaxy.util.Log;
-
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.broadgalaxy.bluz.BluetoothChatService;
+import com.broadgalaxy.bluz.IChatService;
+import com.broadgalaxy.bluz.R;
+import com.broadgalaxy.bluz.component.Navigation;
+import com.broadgalaxy.bluz.component.Navigation.OnNavClickListener;
+import com.broadgalaxy.bluz.core.LocationRequest;
+import com.broadgalaxy.bluz.core.MessageRequest;
+import com.broadgalaxy.bluz.core.Pack;
+import com.broadgalaxy.bluz.core.SigRequest;
+import com.broadgalaxy.util.Log;
 
 public class HomeActivity extends BluzActivity {
 
@@ -90,8 +95,21 @@ public class HomeActivity extends BluzActivity {
     }
 
     protected void tryLocate() {
-        // TODO Auto-generated method stub
-
+        // Check that we're actually connected before trying anything
+        if (/* mChatService. */getState() != IChatService.STATE_CONNECTED) {
+            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        
+        int fromAddress = Integer.valueOf("000238");
+        fromAddress = 568; // ox 00 02 38
+        int toAddress = 3;
+        Pack m = new LocationRequest(fromAddress, (byte)0);
+        m = new SigRequest(fromAddress, (byte)0);
+        m = new MessageRequest(fromAddress, fromAddress, "kk");
+        m = new LocationRequest(fromAddress, (byte)0);
+//        Log.e(TAG, "sig: " + m.toHexString());
+        write(m.getByte());
     }
 
     protected void tryConnect() {
