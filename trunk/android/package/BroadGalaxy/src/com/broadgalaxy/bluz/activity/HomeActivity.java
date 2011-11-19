@@ -6,6 +6,8 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 
 import com.broadgalaxy.bluz.BluetoothChatService;
 import com.broadgalaxy.bluz.IChatService;
+import com.broadgalaxy.bluz.LocalService;
 import com.broadgalaxy.bluz.R;
 import com.broadgalaxy.bluz.component.Navigation;
 import com.broadgalaxy.bluz.component.Navigation.OnNavClickListener;
@@ -35,10 +38,13 @@ public class HomeActivity extends BluzActivity {
     private Button mConnectBtn;
 
     private Button mLocateBtn;
+    private Button mSig;
 
     private String mUserId;
 
     private TextView mTitle;
+
+    private TextView mLocation;
 
     private static int REQUEST_CODE_USER_ID = 11111;
 
@@ -57,8 +63,9 @@ public class HomeActivity extends BluzActivity {
         mTitle.setText(R.string.broadgalaxy);
         mTitle = (TextView) findViewById(R.id.title_right_text);
         
+        mLocation = (TextView) findViewById(R.id.location);
         mNav = (Navigation) findViewById(R.id.navigation);
-//        mNav.setEnabled(false);
+        mNav.setEnabled(true);// FIXME 
         mNav.setOnNavListener(new OnNavClickListener() {
 
             @Override
@@ -86,38 +93,43 @@ public class HomeActivity extends BluzActivity {
                 tryConnect();
             }
         });
+        mSig = (Button)findViewById(R.id.sig);
+        mSig.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                trySig();
+            }
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // TODO Auto-generated method stub
-        return false;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.home_option_menu, menu);
+        
+        return true;
     }
 
-    protected void tryLocate() {
-        // Check that we're actually connected before trying anything
-        if (/* mChatService. */getState() != IChatService.STATE_CONNECTED) {
-            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
-            return;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.scan:
+                // Launch the DeviceListActivity to see devices and do scan
+                Intent serverIntent = new Intent(this, DeviceListActivity.class);
+                startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
+                return true;
+            case R.id.locate:
+                tryLocate();
+                return true;
+            case R.id.power:
+                trySig();
+                return true;
         }
         
-        int fromAddress = Integer.valueOf("000238");
-        fromAddress = 568; // ox 00 02 38
-        int toAddress = 3;
-        Pack m = new LocationRequest(fromAddress, (byte)0);
-        m = new SigRequest(fromAddress, (byte)0);
-        m = new MessageRequest(fromAddress, fromAddress, "kk");
-        m = new LocationRequest(fromAddress, (byte)0);
-//        Log.e(TAG, "sig: " + m.toHexString());
-        write(m.getByte());
+        return false;
     }
-
-    protected void tryConnect() {
-        // Launch the DeviceListActivity to see devices and do scan
-        Intent serverIntent = new Intent(this, DeviceListActivity.class);
-        startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
-    }
-
+    
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (D) {
             Log.d(TAG, "onActivityResult " + resultCode);
@@ -142,8 +154,56 @@ public class HomeActivity extends BluzActivity {
                 break;
         }
     }
+
+    @Override
+    protected void onServiceConnected(LocalService mService) {
+        super.onServiceConnected(mService);
+        
+//        tryConnect();
+    }
+
+    protected void tryLocate() {
+        // Check that we're actually connected before trying anything
+        if (/* mChatService. */getState() != IChatService.STATE_CONNECTED) {
+            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        
+        int fromAddress = Integer.valueOf("000238");
+        fromAddress = 568; // ox 00 02 38
+        int toAddress = 3;
+        Pack m = new LocationRequest(fromAddress, (byte)0);
+        m = new SigRequest(fromAddress, (byte)0);
+        m = new MessageRequest(fromAddress, fromAddress, "kk");
+        m = new LocationRequest(fromAddress, (byte)0);
+//        Log.e(TAG, "sig: " + m.toHexString());
+        write(m.getByte());
+    }   
     
-    
+    protected void trySig() {   
+        // Check that we're actually connected before trying anything
+        if (/* mChatService. */getState() != IChatService.STATE_CONNECTED) {
+            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        
+        int fromAddress = Integer.valueOf("000238");
+        fromAddress = 568; // ox 00 02 38
+        int toAddress = 3;
+        Pack m = new LocationRequest(fromAddress, (byte)0);
+        m = new SigRequest(fromAddress, (byte)0);
+//        m = new MessageRequest(fromAddress, fromAddress, "kk");
+//        m = new LocationRequest(fromAddress, (byte)0);
+//        Log.e(TAG, "sig: " + m.toHexString());
+        write(m.getByte());
+        
+    }
+
+    protected void tryConnect() {
+        // Launch the DeviceListActivity to see devices and do scan
+        Intent serverIntent = new Intent(this, DeviceListActivity.class);
+        startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
+    }
 
     @Override
     protected void handleStateChangeMsg(int state) {
@@ -169,7 +229,7 @@ public class HomeActivity extends BluzActivity {
                 break;
         }
     }
-
+    
     private void onLoacted(Object locateInfo) {
 
     }
@@ -177,12 +237,16 @@ public class HomeActivity extends BluzActivity {
     private void onConnected() {
         mNav.setEnabled(true);
         mLocateBtn.setEnabled(true);
+        mSig.setEnabled(true);
         mConnectBtn.setVisibility(View.GONE);
+        
+        tryLocate();
     }
 
     private void onDisConnected() {
         mNav.setEnabled(false);
         mLocateBtn.setEnabled(false);
+        mSig.setEnabled(false);
         mConnectBtn.setVisibility(View.VISIBLE);
     }
 

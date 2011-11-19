@@ -20,12 +20,15 @@
     <string name="user_id">user id: </string>
     <string name="btn_connect">connect device</string>
     <string name="locate">locate</string>
+    <string name="no_locaton">no location info.</string>
+    <string name="sig">sig</string>
+    <string name="power">power</string>
     <string name="about">About</string>
     
     <!--  Broadgalaxy -->
     <string name="send">Send</string>
     <string name="not_connected">not connected</string>
-    <string name="bt_not_enabled_leaving">Bluetooth was not enabled. Leaving Bluetooth Chat.</string>
+    <string name="bt_not_enabled_leaving">Bluetooth was not enabled. Leaving.</string>
     <string name="title_connecting">connecting...</string>
     <string name="title_connected">connected</string>
     <string name="title_not_connected">not connected</string>

@@ -129,13 +129,20 @@ public class BluzActivity extends Activity {
                 mbound = true;
                 mService = ((LocalService.LocalBinder) service).getChatService();
                 mService.registerOnMsgCallback(mCallback);
+                BluzActivity.this.onServiceConnected(mService);
                 handleStateChangeMsg(mService.getState());
 //                mService.start();
             }
+
         };
         Intent service = new Intent();
         service.setClass(this, LocalService.class);
         bindService(service, mconn, BIND_AUTO_CREATE);
+    }
+    
+
+    protected void onServiceConnected(LocalService mService) {
+        
     }
 
     @Override
