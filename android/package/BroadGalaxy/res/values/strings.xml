@@ -25,6 +25,11 @@
     <string name="power">power</string>
     <string name="about">About</string>
     
+    <!-- BoxActivity -->
+    <string name="dia_delete_msg_title">delete meesage</string>
+    <string name="dia_delete_msg_message">delete selected messsage, are you sure?</string>
+    <string name="delete_thread">delete thread</string>
+    
     <!--  Broadgalaxy -->
     <string name="send">Send</string>
     <string name="not_connected">not connected</string>

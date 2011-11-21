@@ -74,6 +74,11 @@ public class HomeActivity extends BluzActivity {
                     Intent intent = new Intent();
                     intent.setClass(HomeActivity.this, ChatActivity.class);
                     HomeActivity.this.startActivity(intent);
+                } else {
+                    Intent intent = new Intent();
+                    intent.setClass(HomeActivity.this, BoxActivity.class);
+                    intent.putExtra(BoxActivity.EXTRA_BOX_TYPE, navId);
+                    HomeActivity.this.startActivity(intent);
                 }
             }
         });
