@@ -68,7 +68,7 @@ public class UserId extends FrameLayout {
 
     protected boolean isValid(Editable s) {
         // TODO Auto-generated method stub
-        return null != s && s.length() > 10;
+        return null != s && s.length() > 0;
     }
 
 }

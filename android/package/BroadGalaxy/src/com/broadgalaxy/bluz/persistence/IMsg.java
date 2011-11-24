@@ -10,9 +10,9 @@ public interface IMsg extends BaseColumns{
     public static final String COLUMN_DATA_LEN = "data_len";
     
     public static final int STATUS_INVALID = 0;
-    public static final int STATUS_DRAFT = 1;
-    public static final int STATUS_SENDING = 2;
-    public static final int STATUS_SENT = 3;
-    public static final int STATUS_RCVD = 4;
+    public static final int STATUS_RCVD = 1;
+    public static final int STATUS_SENT = 2;
+    public static final int STATUS_DRAFT = 3;
+    public static final int STATUS_SENDING = 4;
     public static final String COLUMN_STATUS = "status";
 }
