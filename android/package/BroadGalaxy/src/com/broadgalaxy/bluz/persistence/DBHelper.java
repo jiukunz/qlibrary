@@ -25,12 +25,12 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         final String createMsgTable = "create table " + MSG_TABLE_NAME + "(" +
-                                      IMsg._COUNT + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                                      IMsg._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                                       IMsg.COLUMN_FROM_ADDRESS + " TEXT NOT NULL, " + 
                                       IMsg.COLUMN_DEST_ADDRESS + " TEXT NOT NULL, " + 
                                       IMsg.COLUMN_DATA + " TEXT NOT NULL, " + 
-                                      IMsg.COLUMN_DATA_LEN + " TEXT NOT NULL, " + 
-                                      IMsg.COLUMN_TIME + " TEXT, " + 
+                                      IMsg.COLUMN_DATA_LEN + " INTEGER NOT NULL, " + 
+                                      IMsg.COLUMN_TIME + " LONG, " + 
                                       IMsg.COLUMN_STATUS + " INTEGER DEFAULT 0 " + 
                                       ")" + 
                                       "";

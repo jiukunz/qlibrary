@@ -4,10 +4,13 @@ package com.broadgalaxy.bluz.activity;
 import com.broadgalaxy.bluz.R;
 import com.broadgalaxy.bluz.persistence.DBHelper;
 import com.broadgalaxy.bluz.persistence.IMsg;
+import com.broadgalaxy.util.Log;
+import com.broadgalaxy.util.ReflecUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -29,11 +32,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BoxActivity extends Activity {
-    public static final int INBOX = 1;
-
-    public static final int OUTBOX = 2;
-
-    public static final int DRAFTBOX = 3;
+    public static final int TYPE_INBOX = 1;
+    public static final int TYPE_OUTBOX = 2;
+    public static final int TYPE_DRAFTBOX = 3;
 
     /**
      * type: int
@@ -49,6 +50,7 @@ public class BoxActivity extends Activity {
     private DBHelper mDB;
 
     protected long mSelectId;
+    private String TAG = BoxActivity.class.getSimpleName();
 
     protected static final int DIALOG_DELETE = 0;
 
@@ -62,7 +64,8 @@ public class BoxActivity extends Activity {
         mDB = new DBHelper(this);
         setContentView(R.layout.box);
         Intent intent = getIntent();
-        mBoxType = intent.getIntExtra(EXTRA_BOX_TYPE, INBOX);
+        mBoxType = intent.getIntExtra(EXTRA_BOX_TYPE, TYPE_INBOX);
+        Log.d(TAG , "boxType: " + toType(mBoxType));
         String boxLabel = getLabel(mBoxType);
 
         mConversation = (ListView) findViewById(R.id.conversation);
@@ -82,6 +85,12 @@ public class BoxActivity extends Activity {
             }
         });
         queryDB();
+    }
+
+    private String toType(int mBoxType) {
+        String desc = "type: " + mBoxType;
+        desc += "\tdesc: " + ReflecUtil.fieldName(getClass(), "TYPE_", mBoxType);
+        return desc;
     }
 
     private void queryDB() {
@@ -188,21 +197,36 @@ public class BoxActivity extends Activity {
 
     }
 
-    static class MessageEntity {
+    public static class MessageEntity {
         public long id;
-        int fromAdd;
-        int toAdd;
-        String message;
-        long timeTick;
+        public String fromAdd;
+        public String toAdd;
+        public String message;
+        private int messageLen;
+        public long timeTick;
+        public int status;
         
         public static MessageEntity fromCursor(Cursor c) {
             MessageEntity e = new MessageEntity();
             e.id = (long) c.getInt(c.getColumnIndex(IMsg._ID));
-            e.fromAdd = c.getInt(c.getColumnIndex(IMsg.COLUMN_FROM_ADDRESS));
-            e.toAdd = c.getInt(c.getColumnIndex(IMsg.COLUMN_DEST_ADDRESS));
+            e.fromAdd = c.getString(c.getColumnIndex(IMsg.COLUMN_FROM_ADDRESS));
+            e.toAdd = c.getString(c.getColumnIndex(IMsg.COLUMN_DEST_ADDRESS));
             e.timeTick = c.getLong(c.getColumnIndex(IMsg.COLUMN_TIME));
             e.message = c.getString(c.getColumnIndex(IMsg.COLUMN_DATA));
+            e.messageLen = c.getInt(c.getColumnIndex(IMsg.COLUMN_DATA_LEN));
+            e.status = c.getInt(c.getColumnIndex(IMsg.COLUMN_STATUS));
             return e;
+        }
+        
+        public static ContentValues toValues(MessageEntity e){
+            ContentValues v = new ContentValues();
+            v.put(IMsg.COLUMN_FROM_ADDRESS, e.fromAdd);
+            v.put(IMsg.COLUMN_DEST_ADDRESS, e.toAdd);
+            v.put(IMsg.COLUMN_DATA, e.message);
+            v.put(IMsg.COLUMN_DATA_LEN, e.messageLen);
+            v.put(IMsg.COLUMN_TIME, System.currentTimeMillis());
+            v.put(IMsg.COLUMN_STATUS, e.status);
+            return v;
         }
 
     }
