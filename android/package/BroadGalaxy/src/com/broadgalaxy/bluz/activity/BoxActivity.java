@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -51,8 +52,9 @@ public class BoxActivity extends Activity {
 
     protected long mSelectId;
     private String TAG = BoxActivity.class.getSimpleName();
+    private TextView mTitle;
 
-    protected static final int DIALOG_DELETE = 0;
+    protected static final int DIALOG_ITEM_DELETE = 0;
 
     private static ListAdapter mAdapter;
 
@@ -62,16 +64,26 @@ public class BoxActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         mDB = new DBHelper(this);
+
+        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         setContentView(R.layout.box);
+        
         Intent intent = getIntent();
         mBoxType = intent.getIntExtra(EXTRA_BOX_TYPE, TYPE_INBOX);
         Log.d(TAG , "boxType: " + toType(mBoxType));
-        String boxLabel = getLabel(mBoxType);
+        String boxLabel = getLabel(mBoxType); 
+        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
+
+        // Set up the custom title
+        mTitle = (TextView) findViewById(R.id.title_left_text);
+        mTitle.setText(R.string.broadgalaxy);
+        mTitle = (TextView) findViewById(R.id.title_right_text);
+        mTitle.setText(boxLabel);
 
         mConversation = (ListView) findViewById(R.id.conversation);
-        TextView footer = new TextView(this);
-        footer.setText(boxLabel);
-        mConversation.addFooterView(footer);
+        TextView header = new TextView(this);
+        header.setText(boxLabel);
+        mConversation.addHeaderView(header);
         TextView emptyView = new TextView(this);
         emptyView.setText(R.string.no_data);
         mConversation.setEmptyView(emptyView);
@@ -81,7 +93,7 @@ public class BoxActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mSelectPosition = position;
                 mSelectId = id;
-                showDialog(DIALOG_DELETE);
+                showDialog(DIALOG_ITEM_DELETE);
             }
         });
         queryDB();
@@ -108,6 +120,7 @@ public class BoxActivity extends Activity {
         if (c.moveToFirst()) {
             while(!c.isAfterLast()) {
                 messages.add(MessageEntity.fromCursor(c));
+                c.moveToNext();
             }
         }
     }
@@ -123,7 +136,7 @@ public class BoxActivity extends Activity {
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
-            case DIALOG_DELETE:
+            case DIALOG_ITEM_DELETE:                
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.dia_delete_msg_title);
                 builder.setMessage(R.string.dia_delete_msg_message);
@@ -162,7 +175,7 @@ public class BoxActivity extends Activity {
     }
 
     protected void deleteSelectedMessage() {
-        String where = IMsg.COLUMN_STATUS + "=? android " + IMsg._ID + "=?";;
+        String where = IMsg.COLUMN_STATUS + "=? and " + IMsg._ID + "=?";;
         String[] whereArgs = new String[]{mBoxType + "", mSelectId + ""};
         mDB.getWritableDatabase().delete(DBHelper.MSG_TABLE_NAME, where, whereArgs);
         
@@ -180,21 +193,14 @@ public class BoxActivity extends Activity {
         private List<MessageEntity> mData;
 
         public MessageAdapter(final Context context, final List<MessageEntity> data) {
-            this(context, R.layout.box_item, data);
-        }
-
-        public MessageAdapter(Context context, int resource, List<MessageEntity> objects) {
-            super(context, resource, objects);
-            mData = objects;
+            super(context, R.layout.box_item, R.id.message, data);
+            mData = data;
         }
 
         @Override
         public long getItemId(int position) {
             return mData.get(position).id;
         }
-        
-        
-
     }
 
     public static class MessageEntity {
@@ -229,5 +235,11 @@ public class BoxActivity extends Activity {
             return v;
         }
 
+        @Override
+        public String toString() {
+            return message;
+        }
+
+        
     }
 }
