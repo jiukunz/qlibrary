@@ -2,7 +2,10 @@ package com.broadgalaxy.bluz.protocol;
 
 import java.nio.ByteBuffer;
 
+import com.broadgalaxy.bluz.persistence.IMsg;
 import com.broadgalaxy.util.Log;
+
+import android.content.ContentValues;
 
 public class MessageResponse extends Response {
     private static final boolean DEBUG = true;
@@ -119,6 +122,16 @@ public class MessageResponse extends Response {
     }
 
     public void setMsg(String msg) {
-        this.msg = msg;
+        this.msg = msg; 
+    }
+
+    public ContentValues toValues() {
+        ContentValues v = new ContentValues();
+        v.put(IMsg.COLUMN_FROM_ADDRESS, mSenderAddress + "");
+        v.put(IMsg.COLUMN_DEST_ADDRESS, mUserAddress);
+        v.put(IMsg.COLUMN_DATA, msg);
+        v.put(IMsg.COLUMN_STATUS, IMsg.STATUS_RCVD);
+        v.put(IMsg.COLUMN_TIME, System.currentTimeMillis());
+        return v;
     }
 }

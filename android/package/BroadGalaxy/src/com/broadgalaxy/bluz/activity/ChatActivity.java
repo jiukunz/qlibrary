@@ -16,8 +16,18 @@
 
 package com.broadgalaxy.bluz.activity;
 
+import com.broadgalaxy.bluz.BluetoothChatService;
+import com.broadgalaxy.bluz.IChatService;
+import com.broadgalaxy.bluz.R;
+import com.broadgalaxy.bluz.protocol.MessageRequest;
+import com.broadgalaxy.bluz.protocol.MessageResponse;
+import com.broadgalaxy.bluz.protocol.Response;
+import com.broadgalaxy.util.Log;
+
 import android.os.Bundle;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,16 +39,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.broadgalaxy.bluz.BluetoothChatService;
-import com.broadgalaxy.bluz.IChatService;
-import com.broadgalaxy.bluz.R;
-import com.broadgalaxy.bluz.protocol.LocationRequest;
-import com.broadgalaxy.bluz.protocol.MessageRequest;
-import com.broadgalaxy.bluz.protocol.MessageResponse;
-import com.broadgalaxy.bluz.protocol.Pack;
-import com.broadgalaxy.bluz.protocol.Response;
-import com.broadgalaxy.util.Log;
 
 /**
  * This is the main Activity that displays the current chat session.
@@ -131,7 +131,7 @@ public class ChatActivity extends BluzActivity {
         String writeMessage = new String(writeBuf);
         mConversationArrayAdapter.add("Me:  " + writeMessage);
     }
-
+    EditText mDestAddressText;
     private EditText mOutEditText;
 
     // String buffer for outgoing messages
@@ -202,8 +202,10 @@ public class ChatActivity extends BluzActivity {
             // Get the message bytes and tell the BluetoothChatService to write
           
             byte[] send = message.getBytes();
-            
-            write(send);
+            int fromAddress = 0;
+            int toAddress = 1;
+            MessageRequest msgR = new MessageRequest(fromAddress, toAddress, MessageRequest.ENCODE_CODE, message);
+            write(msgR, send);
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);
             mOutEditText.setText(mOutStringBuffer);
@@ -218,6 +220,27 @@ public class ChatActivity extends BluzActivity {
         mConversationView = (ListView) findViewById(R.id.in);
         mConversationView.setAdapter(mConversationArrayAdapter);
 
+        mDestAddressText = (EditText) findViewById(R.id.dest_address);
+        mDestAddressText.addTextChangedListener(new TextWatcher(){
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > 0) {
+                    
+                }
+            }});
         // Initialize the compose field with a listener for the return key
         mOutEditText = (EditText) findViewById(R.id.edit_text_out);
         mOutEditText.setOnEditorActionListener(mWriteListener);

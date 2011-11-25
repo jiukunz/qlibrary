@@ -17,6 +17,7 @@
 <resources>
     <string name="broadgalaxy">Broadgalaxy</string>
 	
+	<string name="dest_address">destination address</string>
     <string name="user_id">user id: </string>
     <string name="btn_connect">connect device</string>
     <string name="locate">locate</string>
