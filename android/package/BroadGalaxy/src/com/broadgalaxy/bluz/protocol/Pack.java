@@ -80,8 +80,7 @@ public class Pack {
         return result;
     }
     
-    public String toHexString() {
-        byte[] bytes = getByte();
+    public static String toHexString(byte[] bytes) {
         String hexString = "0x";
         for (byte b : bytes) {
             hexString += " " + ByteUtil.byte2HexString(b);

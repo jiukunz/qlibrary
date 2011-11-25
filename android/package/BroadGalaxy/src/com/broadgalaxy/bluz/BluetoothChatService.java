@@ -268,8 +268,8 @@ public class BluetoothChatService implements IChatService {
                     }
 
                     // Send the obtained bytes to the UI Activity
-//                    mHandler.obtainMessage(LocalService.MESSAGE_READ, bytes, -1, buffer)
-//                            .sendToTarget();
+                    mHandler.obtainMessage(LocalService.MESSAGE_READ, bytes, -1, buffer)
+                            .sendToTarget();
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
                     onConnectionLost();
