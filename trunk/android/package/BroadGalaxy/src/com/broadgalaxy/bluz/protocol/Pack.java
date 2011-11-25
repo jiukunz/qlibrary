@@ -35,7 +35,7 @@ public class Pack {
     
     String mCode;
     int mLength;
-    int mUserAddress;
+    protected int mUserAddress;
     byte[] mPayload;
     int mCRC;
     

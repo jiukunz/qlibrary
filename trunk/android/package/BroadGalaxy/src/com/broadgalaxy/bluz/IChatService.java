@@ -1,6 +1,8 @@
 
 package com.broadgalaxy.bluz;
 
+import com.broadgalaxy.bluz.protocol.MessageRequest;
+
 import android.bluetooth.BluetoothDevice;
 import android.os.Message;
 
@@ -45,6 +47,6 @@ public interface IChatService {
      * @param out The bytes to write
      * @see ConnectedThread#write(byte[])
      */
-    public abstract void write(byte[] out);
+    public abstract void write(MessageRequest msg, byte[] out);
 
 }

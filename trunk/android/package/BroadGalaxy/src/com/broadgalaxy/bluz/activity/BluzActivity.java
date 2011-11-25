@@ -19,6 +19,7 @@ import com.broadgalaxy.bluz.IChatService;
 import com.broadgalaxy.bluz.LocalService;
 import com.broadgalaxy.bluz.LocalService.OnMsgCallBack;
 import com.broadgalaxy.bluz.R;
+import com.broadgalaxy.bluz.protocol.MessageRequest;
 import com.broadgalaxy.bluz.protocol.Response;
 import com.broadgalaxy.util.Log;
 
@@ -299,9 +300,9 @@ public class BluzActivity extends Activity {
 
     }
 
-    protected void write(byte[] msg) {
+    protected void write(MessageRequest msg, byte[] data) {
 
-        mService.write(msg);
+        mService.write(msg, data);
     }
 
     protected int getState() {

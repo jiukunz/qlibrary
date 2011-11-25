@@ -16,11 +16,11 @@
 
 package com.broadgalaxy.bluz;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.reflect.Field;
-import java.util.UUID;
+import com.broadgalaxy.bluz.activity.BluzActivity;
+import com.broadgalaxy.bluz.activity.ChatActivity;
+import com.broadgalaxy.bluz.protocol.MessageRequest;
+import com.broadgalaxy.util.ByteUtil;
+import com.broadgalaxy.util.Log;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -31,10 +31,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import com.broadgalaxy.bluz.activity.BluzActivity;
-import com.broadgalaxy.bluz.activity.ChatActivity;
-import com.broadgalaxy.util.ByteUtil;
-import com.broadgalaxy.util.Log;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.reflect.Field;
+import java.util.UUID;
 
 /**
  * This class does all the work for setting up and managing Bluetooth
@@ -285,7 +286,7 @@ public class BluetoothChatService implements IChatService {
          * 
          * @param buffer The bytes to write
          */
-        public void write(byte[] buffer) {
+        public void write(MessageRequest msg, byte[] buffer) {
             try {
                 
                 mmOutStream.write(buffer);
@@ -555,7 +556,7 @@ public class BluetoothChatService implements IChatService {
      * @see com.broadgalaxy.bluz.IChatService#write(byte[])
      */
     @Override
-    public void write(byte[] out) {
+    public void write(MessageRequest msg, byte[] out) {
         // Create temporary object
         ConnectedThread r;
         // Synchronize a copy of the ConnectedThread
@@ -567,6 +568,6 @@ public class BluetoothChatService implements IChatService {
             r = mConnectedThread;
         }
         // Perform the write unsynchronized
-        r.write(out);
+        r.write(msg, out);
     }
 }
