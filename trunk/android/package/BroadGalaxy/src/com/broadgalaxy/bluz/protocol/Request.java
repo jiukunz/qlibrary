@@ -1,3 +1,4 @@
+
 package com.broadgalaxy.bluz.protocol;
 
 import java.util.zip.CRC32;
@@ -21,7 +22,6 @@ public class Request extends Pack {
     }
 
     private int genCRC() {
-        CRC32 crc = new CRC32();
         byte c = 0;
         byte[] nonCrcBytes = getNonCRCByte();
         boolean first = true;
@@ -33,16 +33,7 @@ public class Request extends Pack {
                 c ^= b;
             }
         }
-        
-        if (true) {
-            return c;
-        }
-        crc.update(getNonCRCByte());
-        
-        long crcV = crc.getValue();
-        Log.d(TAG, "crcV: " + crcV);
-        Log.d(TAG, "binary: " + Long.toHexString(crcV));
-//        Log.d(TAG, "binary: " + crcV)
-        return (int)crc.getValue();
+
+        return c;
     }
 }

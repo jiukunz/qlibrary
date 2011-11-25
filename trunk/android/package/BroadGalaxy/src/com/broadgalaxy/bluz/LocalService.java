@@ -67,15 +67,15 @@ public class LocalService extends android.app.Service implements IChatService {
     }
 
     protected void handlReadmsg(Message msg) {
-        int len = msg.arg1;
         byte[] msgBytes = (byte[]) msg.obj;
         int size = msg.arg1;
         ByteBuffer buffer = ByteBuffer.allocate(size);
         buffer.put(msgBytes, 0, size);
         msgBytes = buffer.array();
-        byte[] code = new byte[5];
+        final int MSG_HEAD_LEN = 5;
+        byte[] code = new byte[MSG_HEAD_LEN];
         buffer.position(0);
-        buffer.get(code, 0 , 5);
+        buffer.get(code, 0 , MSG_HEAD_LEN);
         String codeStr = new String(code);
         Response res = null;
         if (Pack.CODE_MESSGE.equals(codeStr)) {
@@ -96,6 +96,7 @@ public class LocalService extends android.app.Service implements IChatService {
             res  = new ZrdResponse(msgBytes);
         } else {
             Log.e(TAG, "unknown msg. msg: " + codeStr);
+            Log.d(TAG, "hex : " + Pack.toHexString(msgBytes));
         }
         
         for (OnMsgCallBack c : mListener) {

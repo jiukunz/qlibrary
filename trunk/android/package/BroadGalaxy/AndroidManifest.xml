@@ -71,7 +71,7 @@
         Activities from OI Distribution Library
         <activity android:name="org.openintents.distribution.EulaActivity" />
         <activity android:name="org.openintents.distribution.NewVersionActivity" /> -->
-        <activity android:name=".activity.BoxActivity"></activity>
+        <activity android:name=".activity.BoxActivity" android:launchMode="singleInstance"></activity>
     </application>
 
 </manifest>

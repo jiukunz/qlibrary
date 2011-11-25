@@ -1,3 +1,4 @@
+
 package com.broadgalaxy.bluz;
 
 import java.io.File;
@@ -37,8 +38,8 @@ public class Application extends android.app.Application implements UncaughtExce
         // TODO Auto-generated method stub
         int fromAddress = 1;
         int toAddress = 3;
-        Pack m= new MessageRequest(fromAddress, toAddress, Pack.ENCODE_CODE, "this is my tst");
-        Log.d(TAG, "msg: " + m.toHexString());
+//        Pack m= new MessageRequest(fromAddress, toAddress, Pack.ENCODE_CODE, "this is my tst");
+//        Log.d(TAG, "msg: " + m.toHexString());
         
     }
 
