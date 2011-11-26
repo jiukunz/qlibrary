@@ -25,13 +25,14 @@ abstract public class Response extends Pack {
         
         int address = 0;
         byte[] addressBytes = new byte[ADDRESS_LEN];
+        buffer.position(ADDRESS_INDEX);
         buffer.get(addressBytes, 0, ADDRESS_LEN);
         address = byte2Address(addressBytes);
         setUserAddress(address);
         
         int payloadLen = getPayloadLen();
         byte[] payload = new byte[payloadLen];
-        buffer.position(ADDRESS_INDEX);
+        buffer.position(PAYLOAD_INDEX);
         buffer.get(payload, 0, payloadLen);
         setPayload(payload);
         

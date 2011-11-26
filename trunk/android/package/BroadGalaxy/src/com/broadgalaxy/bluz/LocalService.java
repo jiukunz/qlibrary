@@ -114,7 +114,8 @@ public class LocalService extends android.app.Service implements IChatService {
             Log.e(TAG, "unknown msg. msg: " + codeStr);
             Log.d(TAG, "hex : " + Pack.toHexString(msgBytes));
         }
-
+        
+        Log.d(TAG, "rcvd pack: " + res);
         for (OnMsgCallBack c : mListener) {
             c.handlReadmsg(res);
         }

@@ -290,6 +290,10 @@ public class BluetoothChatService implements IChatService {
         public void write(MessageRequest msg, byte[] buffer) {
             try {
                 
+                if (null != msg) {
+                    buffer = msg.getByte();
+                }
+                    
                 mmOutStream.write(buffer);
                 if (DEBUG_MSG) {
                     Log.d(TAG, "SND MSG: " + format(buffer, buffer.length));

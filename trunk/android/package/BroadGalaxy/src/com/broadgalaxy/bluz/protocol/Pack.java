@@ -43,7 +43,11 @@ public class Pack {
 
     }
     
-
+    @Override
+    public String toString() {
+        return "code: " + mCode + "\tlength: " + mLength + "\tuserAddress: " + mUserAddress;
+    }
+    
     public byte[] getByte() {
 //        ByteBuffer buffer = ByteBuffer.allocate(1024);
 //        buffer.put(mCode.getBytes());  // 指令
@@ -104,7 +108,7 @@ public class Pack {
     public int byte2Address(byte[] addressBytes) {
         int address = 0;
         
-        return address & addressBytes[0] << 24 & addressBytes[1] << 16 & addressBytes[2];
+        return addressBytes[0] << 16 | addressBytes[1] << 8 | addressBytes[2];
     }
     
   

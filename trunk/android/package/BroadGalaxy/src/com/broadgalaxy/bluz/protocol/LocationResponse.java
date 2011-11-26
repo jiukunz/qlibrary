@@ -24,11 +24,22 @@ public class LocationResponse extends Response {
     @Override
     void parsePayload(byte[] payload) {
         ByteBuffer buffer = ByteBuffer.wrap(payload).asReadOnlyBuffer();
+//        buffer.po
         mLocationT = buffer.getInt();
         mLocationL = buffer.getInt();
         mLocationB = buffer.getInt();
         mLocationH = buffer.getShort();
         mLocationX = buffer.getShort();
+    }
+    
+    @Override
+    public String toString() {
+        return super.toString() + 
+               "\tmLocationT: " + mLocationT + 
+               "\tmLocationL: " + mLocationL + 
+               "\tmLocationB: " + mLocationB + 
+               "\tmLocationH: " + mLocationH + 
+               "\tmLocationX: " + mLocationX;
     }
 
     public int getLocationT(){
