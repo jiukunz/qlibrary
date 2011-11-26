@@ -6,9 +6,9 @@ import java.lang.Thread.UncaughtExceptionHandler;
 
 import android.os.Environment;
 
-import com.broadgalaxy.bluz.protocol.LocationRequest;
-import com.broadgalaxy.bluz.protocol.MessageRequest;
-import com.broadgalaxy.bluz.protocol.Pack;
+import com.broadgalaxy.bluz.protocol.MessageResponse;
+import com.broadgalaxy.bluz.protocol.Response;
+import com.broadgalaxy.util.ByteUtil;
 import com.broadgalaxy.util.Log;
 
 public class Application extends android.app.Application implements UncaughtExceptionHandler {
@@ -36,6 +36,10 @@ public class Application extends android.app.Application implements UncaughtExce
 
     private void tst() {
         // TODO Auto-generated method stub
+        
+        byte[] array = ByteUtil.string2ByteArray("24 4d 73 67 5f 00 33 00 02 38 00 02 38 02 02 10 02 03 88");
+        
+//        Response r = new MessageResponse(array);
         int fromAddress = 1;
         int toAddress = 3;
 //        Pack m= new MessageRequest(fromAddress, toAddress, Pack.ENCODE_CODE, "this is my tst");
