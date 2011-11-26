@@ -34,15 +34,17 @@ public class LocalService extends android.app.Service implements IChatService {
 
     private DBHelper mDBHelper;
 
-
-
     public static final int MESSAGE_STATE_CHANGE = 1;
-    public static final int MESSAGE_READ = 2;
-    public static final int MESSAGE_WRITE = 3;
-    public static final int MESSAGE_DEVICE_NAME = 4;
-    public static final int MESSAGE_TOAST = 5;
-    public static final int MESSAGE_WRITE_ACK = 6;
 
+    public static final int MESSAGE_READ = 2;
+
+    public static final int MESSAGE_WRITE = 3;
+
+    public static final int MESSAGE_DEVICE_NAME = 4;
+
+    public static final int MESSAGE_TOAST = 5;
+
+    public static final int MESSAGE_WRITE_ACK = 6;
 
     private static final boolean DEBUG = true;
 
@@ -119,6 +121,9 @@ public class LocalService extends android.app.Service implements IChatService {
     }
 
     protected void handleWriteMsg(Message msg) {
+        MessageRequest mReq = (MessageRequest) msg.obj;
+        ContentValues values = mReq.toValues();
+        mDBHelper.getWritableDatabase().insert(DBHelper.MSG_TABLE_NAME, null, values);
         for (OnMsgCallBack c : mListener) {
             c.handleWriteMsg(msg);
         }
