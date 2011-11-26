@@ -37,22 +37,20 @@ public class MessageResponse extends Response {
         address = byte2Address(addressBytes);
         setUserAddress(address);
         
-        int payloadLen = 0;
+        int msgPayloadLen = 0;
         buffer.position(MESSAGE_LEN_INDEX);
-        payloadLen = buffer.getShort(MESSAGE_LEN_INDEX);
-        payloadLen = payloadLen / 8;
-        if (DEBUG) {
-            Log.d(TAG, "messageLen: " + payloadLen);
-        }
-        byte[] payload = new byte[payloadLen + 7]; 
+        msgPayloadLen = buffer.getShort(MESSAGE_LEN_INDEX);
+        msgPayloadLen = msgPayloadLen / 8;
+
+        byte[] payload = new byte[msgPayloadLen + 7]; 
         
         buffer.position(PAYLOAD_INDEX);
-        buffer.get(payload, 0, payloadLen);
+        buffer.get(payload, 0, msgPayloadLen + 7);
         setPayload(payload);
         
         parsePayload(payload);
         
-        setCRC(buffer.get(ADDRESS_INDEX + payloadLen));
+        setCRC(buffer.get(PAYLOAD_INDEX + msgPayloadLen));
     }
     
     @Override

@@ -16,9 +16,7 @@ abstract public class Response extends Pack {
         byte[] codeBytes = new byte[CODE_LEN];
         buffer.get(codeBytes, 0, CODE_LEN);
         String code = new String(codeBytes);
-        if (DEBUG) {
-            Log.d(TAG, "code: " + code);
-        }
+
         setCode(code);        
         
         setLength(buffer.getShort(LENGTH_INDEX));
