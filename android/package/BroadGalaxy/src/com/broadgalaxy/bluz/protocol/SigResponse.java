@@ -16,6 +16,17 @@ public class SigResponse extends Response {
     }
 
     @Override
+    public String toString() {
+        return super.toString() + 
+                "\tsig1: " + mSig1 +
+                "\tsig2: " + mSig2 +
+                "\tsig3: " + mSig3 +
+                "\tsig4: " + mSig4 +
+                "\tsig5: " + mSig5 +
+                "\tsig6: " + mSig6;
+    }
+    
+    @Override
     int getPayloadLen() {
         return 6;
     }

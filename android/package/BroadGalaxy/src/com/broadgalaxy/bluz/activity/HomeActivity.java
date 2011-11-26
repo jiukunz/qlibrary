@@ -22,9 +22,12 @@ import com.broadgalaxy.bluz.R;
 import com.broadgalaxy.bluz.component.Navigation;
 import com.broadgalaxy.bluz.component.Navigation.OnNavClickListener;
 import com.broadgalaxy.bluz.protocol.LocationRequest;
+import com.broadgalaxy.bluz.protocol.LocationResponse;
 import com.broadgalaxy.bluz.protocol.MessageRequest;
 import com.broadgalaxy.bluz.protocol.Pack;
+import com.broadgalaxy.bluz.protocol.Response;
 import com.broadgalaxy.bluz.protocol.SigRequest;
+import com.broadgalaxy.bluz.protocol.SigResponse;
 import com.broadgalaxy.util.Log;
 
 public class HomeActivity extends BluzActivity {
@@ -232,6 +235,21 @@ public class HomeActivity extends BluzActivity {
             case IChatService.STATE_NONE:
                 mTitle.setText(R.string.title_not_connected);
                 break;
+        }
+    }
+    
+    protected void handlReadmsg(Response response) {
+        if (response instanceof SigResponse) {
+            SigResponse s = (SigResponse) response;
+            Log.d(TAG, "sig: " + s);
+        } else if (response instanceof LocationResponse) {
+            LocationResponse l = (LocationResponse) response;
+            String location = "T: " + l.getLocationT() +
+                             "  L: " + l.getLocationL() +
+                             "  B: " + l.getLocationB() + 
+                             "  H: " + l.getLocationH() + 
+                             "  X: " + l.getLocationX();
+            mLocation.setText(location);
         }
     }
     
