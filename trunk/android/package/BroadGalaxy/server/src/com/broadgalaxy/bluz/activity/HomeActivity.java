@@ -163,7 +163,7 @@ public class HomeActivity extends BluzActivity {
     @Override
     protected void onServiceConnected(LocalService mService) {
         super.onServiceConnected(mService);
-        
+        mService.start();
 //        tryConnect();
     }
 
