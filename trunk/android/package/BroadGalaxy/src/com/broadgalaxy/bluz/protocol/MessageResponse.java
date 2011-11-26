@@ -138,6 +138,7 @@ public class MessageResponse extends Response {
         v.put(IMsg.COLUMN_FROM_ADDRESS, mSenderAddress + "");
         v.put(IMsg.COLUMN_DEST_ADDRESS, mUserAddress);
         v.put(IMsg.COLUMN_DATA, msg);
+        v.put(IMsg.COLUMN_DATA_LEN, msg.getBytes().length);
         v.put(IMsg.COLUMN_STATUS, IMsg.STATUS_RCVD);
         v.put(IMsg.COLUMN_TIME, System.currentTimeMillis());
         return v;

@@ -31,7 +31,7 @@ public class UserIdActivity extends Activity {
         int userid = getSharedPreferences(Application.PREF_FILE_NAME, MODE_PRIVATE)
                             .getInt(Application.PREF_USER_ID, 0);
         if (0 != userid) {
-            mUserId.setText(userid + " ");
+            mUserId.setText(userid + "");
             mConfirm.setEnabled(true);
         }
         mConfirm.setOnClickListener(new OnClickListener() {

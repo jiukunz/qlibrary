@@ -49,6 +49,7 @@ public class MessageRequest extends Request {
         values.put(IMsg.COLUMN_FROM_ADDRESS, mUserAddress + "");
         values.put(IMsg.COLUMN_DEST_ADDRESS, mToAdd + "");
         values.put(IMsg.COLUMN_DATA, mMsg);
+        values.put(IMsg.COLUMN_DATA_LEN, mMsg.getBytes().length);
         values.put(IMsg.COLUMN_STATUS, IMsg.STATUS_SENT);
         values.put(IMsg.COLUMN_TIME, System.currentTimeMillis());
         return values;
