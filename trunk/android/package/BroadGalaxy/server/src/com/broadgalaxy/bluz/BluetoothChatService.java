@@ -16,9 +16,21 @@
 
 package com.broadgalaxy.bluz;
 
+import com.broadgalaxy.bluz.LocalService.OnMsgCallBack;
 import com.broadgalaxy.bluz.activity.BluzActivity;
 import com.broadgalaxy.bluz.activity.ChatActivity;
+import com.broadgalaxy.bluz.persistence.DBHelper;
+import com.broadgalaxy.bluz.protocol.FbkResponse;
+import com.broadgalaxy.bluz.protocol.IccResponse;
+import com.broadgalaxy.bluz.protocol.LocationResponse;
 import com.broadgalaxy.bluz.protocol.MessageRequest;
+import com.broadgalaxy.bluz.protocol.MessageResponse;
+import com.broadgalaxy.bluz.protocol.Pack;
+import com.broadgalaxy.bluz.protocol.Response;
+import com.broadgalaxy.bluz.protocol.SigResponse;
+import com.broadgalaxy.bluz.protocol.StsResponse;
+import com.broadgalaxy.bluz.protocol.TimResponse;
+import com.broadgalaxy.bluz.protocol.ZrdResponse;
 import com.broadgalaxy.util.ByteUtil;
 import com.broadgalaxy.util.Log;
 
@@ -26,6 +38,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
+import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,6 +48,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
+import java.nio.ByteBuffer;
 import java.util.UUID;
 
 /**
@@ -67,12 +81,14 @@ public class BluetoothChatService implements IChatService {
                 if (!insecure) {
                     tmp = mAdapter.listenUsingRfcommWithServiceRecord(name, uuid);
                 } else {
-//                    tmp = mAdapter.listenUsingInsecureRfcommWithServiceRecord(name, uuid);
+                    // tmp =
+                    // mAdapter.listenUsingInsecureRfcommWithServiceRecord(name,
+                    // uuid);
                 }
             } catch (IOException e) {
                 Log.e(TAG, "listen() failed", e);
             }
-            
+
             mmServerSocket = tmp;
         }
 
@@ -141,14 +157,14 @@ public class BluetoothChatService implements IChatService {
      */
     private class ConnectThread extends Thread {
         private final BluetoothDevice mmDevice;
-    
+
         private final BluetoothSocket mmSocket;
-    
+
         public ConnectThread(BluetoothDevice device) {
             setName("ConnectThread");
             mmDevice = device;
             BluetoothSocket tmp = null;
-    
+
             // Get a BluetoothSocket for a connection with the
             // given BluetoothDevice
             try {
@@ -161,7 +177,7 @@ public class BluetoothChatService implements IChatService {
             }
             mmSocket = tmp;
         }
-    
+
         public void cancel() {
             if (D) {
                 Log.d(TAG, "cancel " + this);
@@ -172,14 +188,14 @@ public class BluetoothChatService implements IChatService {
                 Log.e(TAG, "close() of connect socket failed", e);
             }
         }
-    
+
         public void run() {
             Log.i(TAG, "BEGIN mConnectThread");
             setName("ConnectThread");
-    
+
             // Always cancel discovery because it will slow down a connection
             mAdapter.cancelDiscovery();
-    
+
             // Make a connection to the BluetoothSocket
             try {
                 // This is a blocking call and will only return on a
@@ -196,19 +212,19 @@ public class BluetoothChatService implements IChatService {
                 }
                 // Start the service over to restart listening mode
                 BluetoothChatService.this.start();
-    
+
                 Log.i(TAG, "END mConnectThread");
                 return;
             }
-    
+
             // Reset the ConnectThread because we're done
             synchronized (BluetoothChatService.this) {
                 mConnectThread = null;
             }
-    
+
             // Start the connected thread
             onConnected(mmSocket, mmDevice);
-    
+
             Log.i(TAG, "BEGIN mConnectThread");
         }
     }
@@ -268,9 +284,11 @@ public class BluetoothChatService implements IChatService {
                         Log.d(TAG, "RCV MSG: " + format(buffer, bytes));
                     }
 
+                    doServer(bytes, buffer);
                     // Send the obtained bytes to the UI Activity
-                    mHandler.obtainMessage(LocalService.MESSAGE_READ, bytes, -1, buffer)
-                            .sendToTarget();
+                    // mHandler.obtainMessage(LocalService.MESSAGE_READ, bytes,
+                    // -1, buffer)
+                    // .sendToTarget();
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
                     onConnectionLost();
@@ -281,6 +299,54 @@ public class BluetoothChatService implements IChatService {
             Log.i(TAG, "END mConnectedThread");
         }
 
+        private void doServer(int bytes, byte[] buff) {
+            // TODO Auto-generated method stub
+            byte[] msgBytes = buff;
+            int size = bytes;
+            ByteBuffer buffer = ByteBuffer.allocate(size);
+            buffer.put(msgBytes, 0, size);
+            msgBytes = buffer.array();
+            final int MSG_HEAD_LEN = 5;
+            byte[] code = new byte[MSG_HEAD_LEN];
+            buffer.position(0);
+            buffer.get(code, 0, MSG_HEAD_LEN);
+            String codeStr = new String(code);
+            Response res = null;
+            String userAdd = " 00 02 38 ";
+            if (Pack.CODE_MESSGE.equals(codeStr)) {
+                res = new MessageResponse(msgBytes);
+                MessageResponse m = (MessageResponse) res;
+                String nullColumnHack = null;
+                ContentValues values = m.toValues();
+                // mDBHelper.getWritableDatabase().insert(DBHelper.MSG_TABLE_NAME,
+                // nullColumnHack, values);
+            } else if (Pack.CODE_LOCATION.equals(codeStr)) {
+                res = new LocationResponse(msgBytes);
+                String bStr =  " 24 50 6f 73 5f " + 
+                               " 00 0c " + 
+                               userAdd + 
+                               " 00 01 00 00 " + "00 00 00 01 " +
+                               " 00 00 00 01 " + "00 00 00 01 " +
+                               "01";
+                write(null, ByteUtil.string2ByteArray(bStr));
+            } else if (Pack.CODE_FBK.equals(codeStr)) {
+                res = new FbkResponse(msgBytes);
+            } else if (Pack.CODE_ICC.equals(codeStr)) {
+                res = new IccResponse(msgBytes);
+            } else if (Pack.CODE_SIG.contains(codeStr)) {
+                res = new SigResponse(msgBytes);
+            } else if (Pack.CODE_STS.equals(codeStr)) {
+                res = new StsResponse(msgBytes);
+            } else if (Pack.CODE_TIM.equals(codeStr)) {
+                res = new TimResponse(msgBytes);
+            } else if (Pack.CODE_ZRd.equals(codeStr)) {
+                res = new ZrdResponse(msgBytes);
+            } else {
+                Log.e(TAG, "unknown msg. msg: " + codeStr);
+                Log.d(TAG, "hex : " + Pack.toHexString(msgBytes));
+            }
+        }
+
         /**
          * Write to the connected OutStream.
          * 
@@ -289,12 +355,12 @@ public class BluetoothChatService implements IChatService {
          */
         public void write(MessageRequest msg, byte[] buffer) {
             try {
-                
+
                 mmOutStream.write(buffer);
                 if (DEBUG_MSG) {
                     Log.d(TAG, "SND MSG: " + format(buffer, buffer.length));
                 }
-                
+
                 // Share the sent message back to the UI Activity
                 if (null != msg) {
                     mHandler.obtainMessage(LocalService.MESSAGE_WRITE, -1, -1, msg).sendToTarget();
@@ -305,13 +371,18 @@ public class BluetoothChatService implements IChatService {
         }
     }
 
-    private static final boolean DEBUG_MSG = true;  
+    private static final boolean DEBUG_MSG = true;
+
     private static final boolean D = true;
 
     // Unique UUID for this application
     private static final UUID MY_UUID = UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
-    private static final UUID WELL_KNOWN_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-//    private static final UUID TARGET_UUID = UUID.fromString("0018-11-518058");
+
+    private static final UUID WELL_KNOWN_UUID = UUID
+            .fromString("00001101-0000-1000-8000-00805F9B34FB");
+
+    // private static final UUID TARGET_UUID =
+    // UUID.fromString("0018-11-518058");
 
     // Name for the SDP record when creating server socket
     private static final String NAME = "ChatActivity";
@@ -320,7 +391,7 @@ public class BluetoothChatService implements IChatService {
     private static final String TAG = "BluetoothChatService";
 
     private AcceptThread mAcceptThread;
-    
+
     // Member fields
     private final BluetoothAdapter mAdapter;
 
@@ -352,15 +423,18 @@ public class BluetoothChatService implements IChatService {
                 break;
             }
             count++;
-            
+
             hexStr += " " + ByteUtil.byte2HexString(b);
         }
-        
+
         return hexStr;
     }
 
-    /* (non-Javadoc)
-     * @see com.broadgalaxy.bluz.IChatService#connect(android.bluetooth.BluetoothDevice)
+    /*
+     * (non-Javadoc)
+     * @see
+     * com.broadgalaxy.bluz.IChatService#connect(android.bluetooth.BluetoothDevice
+     * )
      */
     @Override
     public synchronized void connect(BluetoothDevice device) {
@@ -458,7 +532,8 @@ public class BluetoothChatService implements IChatService {
         mHandler.sendMessage(msg);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see com.broadgalaxy.bluz.IChatService#getState()
      */
     @Override
@@ -473,10 +548,8 @@ public class BluetoothChatService implements IChatService {
      */
     private synchronized void setState(int state) {
         if (D)
-            Log.d(TAG, "setState() " +
-                    mState + " " + toStateDesc(mState) +
-                    " -> "
-                    + state + " " + toStateDesc(state));
+            Log.d(TAG, "setState() " + mState + " " + toStateDesc(mState) + " -> " + state + " "
+                    + toStateDesc(state));
         mState = state;
 
         // Give the new state to the Handler so the UI Activity can update
@@ -505,7 +578,8 @@ public class BluetoothChatService implements IChatService {
         return desc;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see com.broadgalaxy.bluz.IChatService#start()
      */
     @Override
@@ -533,7 +607,8 @@ public class BluetoothChatService implements IChatService {
         setState(STATE_LISTEN);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see com.broadgalaxy.bluz.IChatService#stop()
      */
     @Override
@@ -555,7 +630,8 @@ public class BluetoothChatService implements IChatService {
         setState(STATE_NONE);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see com.broadgalaxy.bluz.IChatService#write(byte[])
      */
     @Override
