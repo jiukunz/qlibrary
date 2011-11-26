@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import com.broadgalaxy.bluz.Application;
 import com.broadgalaxy.bluz.R;
+import com.broadgalaxy.util.MiscUtil;
 
 public class UserIdActivity extends Activity {
 
@@ -27,10 +28,10 @@ public class UserIdActivity extends Activity {
         mUserId = ((EditText) findViewById(R.id.user_id));
         mConfirm =
                 ((Button) findViewById(R.id.confirm));
-        String userid = getSharedPreferences(Application.PREF_FILE_NAME, MODE_PRIVATE)
-                            .getString(Application.PREF_USER_ID, "");
-        if (null != userid && userid.length() > 1) {
-            mUserId.setText(userid);
+        int userid = getSharedPreferences(Application.PREF_FILE_NAME, MODE_PRIVATE)
+                            .getInt(Application.PREF_USER_ID, 0);
+        if (0 != userid) {
+            mUserId.setText(userid + " ");
             mConfirm.setEnabled(true);
         }
         mConfirm.setOnClickListener(new OnClickListener() {
@@ -40,7 +41,10 @@ public class UserIdActivity extends Activity {
                 // TODO Auto-generated method stub
 
                 Editor e = getSharedPreferences(Application.PREF_FILE_NAME, MODE_PRIVATE).edit();
-                e.putString(Application.PREF_USER_ID, mUserId.getText().toString());
+                String userId = mUserId.getText().toString();
+                int id = 0;
+                id = MiscUtil.userid2int(userId);
+                e.putInt(Application.PREF_USER_ID, id );
                 e.commit();
 
                 Intent activity = new Intent();
