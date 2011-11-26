@@ -40,7 +40,7 @@
     <string name="not_connected">not connected</string>
     <string name="bt_not_enabled_leaving">Bluetooth was not enabled. Leaving.</string>
     <string name="title_connecting">connecting...</string>
-    <string name="title_connected">connected</string>
+    <string name="title_connected">connected:</string>
     <string name="title_not_connected">not connected</string>
 
     <!--  DeviceListActivity -->

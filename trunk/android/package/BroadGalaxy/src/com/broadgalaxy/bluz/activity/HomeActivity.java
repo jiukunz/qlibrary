@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -48,6 +49,8 @@ public class HomeActivity extends BluzActivity {
     private TextView mTitle;
 
     private TextView mLocation;
+
+    private String mConnectedDeviceName;
 
     private static int REQUEST_CODE_USER_ID = 11111;
 
@@ -213,6 +216,15 @@ public class HomeActivity extends BluzActivity {
         startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
     }
 
+
+    /**
+     * @param msg
+     */
+    protected void handleDeviceNameMsg(Message msg) {
+        // save the connected device's name
+        mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
+    }
+    
     @Override
     protected void handleStateChangeMsg(int state) {
         if (D) {
@@ -224,7 +236,9 @@ public class HomeActivity extends BluzActivity {
         switch (state) {
             case IChatService.STATE_CONNECTED:
                 mTitle.setText(R.string.title_connected);
-//                mTitle.append(mConnectedDeviceName);
+
+                mConnectedDeviceName = mService.getConnectDName();
+                mTitle.append(mConnectedDeviceName);
 //                mConversationArrayAdapter.clear();
                 onConnected();
                 break;
