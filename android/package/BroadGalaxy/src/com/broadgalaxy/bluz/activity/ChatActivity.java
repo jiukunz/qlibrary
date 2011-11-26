@@ -118,11 +118,8 @@ public class ChatActivity extends BluzActivity {
         if (response instanceof MessageResponse) {
             msgRes = (MessageResponse) response;
             readMessage = msgRes.getMsg();
-        } else {
-            readMessage = "unknown msg. ";
-        }
-
-        mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
+            mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
+        } 
     }
 
     /**
@@ -231,7 +228,9 @@ public class ChatActivity extends BluzActivity {
         
         mUserId = getSharedPreferences(Application.PREF_FILE_NAME, MODE_PRIVATE).getInt(Application.PREF_USER_ID, 0);
         mDestAddressText = (EditText) findViewById(R.id.dest_address);
-        mDestAddressText.setText(mUserId + "");
+        if (mUserId != 0) {
+            mDestAddressText.setText(mUserId + "");
+        }
         mDestAddressText.addTextChangedListener(new TextWatcher(){
 
             @Override
