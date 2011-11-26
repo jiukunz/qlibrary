@@ -311,40 +311,53 @@ public class BluetoothChatService implements IChatService {
             buffer.position(0);
             buffer.get(code, 0, MSG_HEAD_LEN);
             String codeStr = new String(code);
+            Log.e(TAG, "code: " + codeStr);
             Response res = null;
             String userAdd = " 00 02 38 ";
+            String bStr = "";
             if (Pack.CODE_MESSGE.equals(codeStr)) {
-                res = new MessageResponse(msgBytes);
+//                res = new MessageResponse(msgBytes);
                 MessageResponse m = (MessageResponse) res;
-                String nullColumnHack = null;
-                ContentValues values = m.toValues();
+                
+                String originAddress = " 00 02 38 ";
+                bStr = "24 4D 73 67 5F " + 
+                        " 00 33 " + // length
+                        userAdd +
+                        originAddress  + 
+                        " 02 02 " + // time
+                        " 00 10 " + // payload len
+                        " 02 03 " + 
+                        " 88";
+//                String nullColumnHack = null;
+//                ContentValues values = m.toValues();
                 // mDBHelper.getWritableDatabase().insert(DBHelper.MSG_TABLE_NAME,
                 // nullColumnHack, values);
             } else if (Pack.CODE_LOCATION.equals(codeStr)) {
-                res = new LocationResponse(msgBytes);
-                String bStr =  " 24 50 6f 73 5f " + 
+//                res = new LocationResponse(msgBytes);
+                bStr =  " 24 50 6f 73 5f " + 
                                " 00 0c " + 
                                userAdd + 
                                " 00 01 00 00 " + "00 00 00 01 " +
                                " 00 00 00 01 " + "00 00 00 01 " +
                                "01";
-                write(null, ByteUtil.string2ByteArray(bStr));
             } else if (Pack.CODE_FBK.equals(codeStr)) {
-                res = new FbkResponse(msgBytes);
+//                res = new FbkResponse(msgBytes);
             } else if (Pack.CODE_ICC.equals(codeStr)) {
-                res = new IccResponse(msgBytes);
+//                res = new IccResponse(msgBytes);
             } else if (Pack.CODE_SIG.contains(codeStr)) {
-                res = new SigResponse(msgBytes);
+//                res = new SigResponse(msgBytes);
             } else if (Pack.CODE_STS.equals(codeStr)) {
-                res = new StsResponse(msgBytes);
+//                res = new StsResponse(msgBytes);
             } else if (Pack.CODE_TIM.equals(codeStr)) {
-                res = new TimResponse(msgBytes);
+//                res = new TimResponse(msgBytes);
             } else if (Pack.CODE_ZRd.equals(codeStr)) {
-                res = new ZrdResponse(msgBytes);
+//                res = new ZrdResponse(msgBytes);
             } else {
                 Log.e(TAG, "unknown msg. msg: " + codeStr);
                 Log.d(TAG, "hex : " + Pack.toHexString(msgBytes));
             }
+            
+            write(null, ByteUtil.string2ByteArray(bStr));
         }
 
         /**
