@@ -150,7 +150,7 @@ public class HomeActivity extends BluzActivity {
                     BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
                     // Attempt to connect to the device
                     if (mbound) {
-                        mService.start();
+//                        mService.start();
                         mService.connect(device);
                     } else {
                         Log.e(TAG, "service is NOT bounded.");

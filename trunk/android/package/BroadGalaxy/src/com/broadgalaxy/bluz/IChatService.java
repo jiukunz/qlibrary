@@ -35,6 +35,8 @@ public interface IChatService {
      * session in listening (server) mode. Called by the Activity onResume()
      */
     public abstract void start();
+    
+    public abstract String getConnectDName();
 
     /**
      * Stop all threads

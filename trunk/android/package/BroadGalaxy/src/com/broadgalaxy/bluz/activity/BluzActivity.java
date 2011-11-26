@@ -26,6 +26,7 @@ import com.broadgalaxy.util.Log;
 public class BluzActivity extends Activity {
     private static final String TAG = BluzActivity.class.getSimpleName();
     private boolean D = true;
+    private boolean DEBUG_LIFE_CYCLE = false;
 
     public static final String DEVICE_NAME = "device_name";
 
@@ -51,10 +52,6 @@ public class BluzActivity extends Activity {
 
     protected void handlReadmsg(Response response) {
         // TODO Auto-generated method stub
-    }
-
-    private void handleReadmsg(int len, byte[] msgBytes) {
-      
     }
 
     protected void handleStateChangeMsg(int state) {
@@ -153,7 +150,7 @@ public class BluzActivity extends Activity {
         if (mbound && mService != null) {
 //            mService.stop();
         }
-        if (D) {
+        if (DEBUG_LIFE_CYCLE) {
             Log.e(TAG, "--- ON DESTROY ---");
         }
 
@@ -188,67 +185,6 @@ public class BluzActivity extends Activity {
         return false;
     }
 
-    private void startAbout() {
-//        Intent intent = new Intent(AboutIntents.ACTION_SHOW_ABOUT_DIALOG);
-//
-//        intent.putExtra(AboutIntents.EXTRA_PACKAGE_NAME, getPackageName());
-//        
-//        //Supply the image.
-//        /*//alternative 2b: Put the image resId into the provider.
-//        Bitmap image = BitmapFactory.decodeResource(getResources(), 
-//                R.drawable.icon);//lossy
-//        String uri = Images.Media.insertImage(getContentResolver(), image,
-//                getString(R.string.about_logo_title), 
-//                getString(R.string.about_logo_description));
-//        intent.putExtra(AboutIntents.EXTRA_LOGO, uri);*/
-//        
-//        //alternative 3: Supply the image name and package.
-//        intent.putExtra(AboutIntents.EXTRA_ICON_RESOURCE, getResources()
-//                .getResourceName(R.drawable.ic_menu_info_details));
-//        Log.i(TAG, "package for icon: " + getResources()
-//                .getResourcePackageName(R.drawable.ic_menu_info_details));
-//
-//        intent.putExtra(AboutIntents.EXTRA_APPLICATION_LABEL,
-//                getString(R.string.app_name));
-//        
-//        //Get the app version
-//        String version = "?";
-//        try {
-//                PackageInfo pi = getPackageManager().getPackageInfo(
-//                        getPackageName(), 0);
-//                version = pi.versionName;
-//        } catch (PackageManager.NameNotFoundException e) {
-//                Log.e(TAG, "Package name not found", e);
-//        }
-//        intent.putExtra(AboutIntents.EXTRA_VERSION_NAME, version);
-//        
-//        intent.putExtra(AboutIntents.EXTRA_COMMENTS,
-//                getString(R.string.about_comments));
-//        intent.putExtra(AboutIntents.EXTRA_COPYRIGHT,
-//                getString(R.string.about_copyright));
-//        intent.putExtra(AboutIntents.EXTRA_WEBSITE_LABEL,
-//                getString(R.string.about_website_label));
-//        intent.putExtra(AboutIntents.EXTRA_WEBSITE_URL,
-//                getString(R.string.about_website_url));
-//        intent.putExtra(AboutIntents.EXTRA_AUTHORS, getResources()
-//                .getStringArray(R.array.about_authors));
-//        intent.putExtra(AboutIntents.EXTRA_DOCUMENTERS, getResources()
-//                .getStringArray(R.array.about_documenters));
-//        intent.putExtra(AboutIntents.EXTRA_TRANSLATORS, getResources()
-//                .getStringArray(R.array.about_translators));
-//        intent.putExtra(AboutIntents.EXTRA_ARTISTS, getResources()
-//                .getStringArray(R.array.about_artists));
-//
-//        // Supply resource name of raw resource that contains the license:
-//        intent.putExtra(AboutIntents.EXTRA_LICENSE_RESOURCE, getResources()
-//                .getResourceName(R.raw.license_short));
-//        
-//        // Start about  Needs to be "forResult" with requestCode>=0
-//        // because the About dialog may call elements from your Manifest by your
-//        // package name.
-//        startActivityForResult(intent, 0);
-    }
-
     void ensureDiscoverable() {
         if (D) {
             Log.d(TAG, "ensure discoverable");
@@ -263,7 +199,7 @@ public class BluzActivity extends Activity {
     @Override
     public void onStop() {
         super.onStop();
-        if (D) {
+        if (DEBUG_LIFE_CYCLE) {
             Log.e(TAG, "-- ON STOP --");
         }
     }
@@ -271,7 +207,7 @@ public class BluzActivity extends Activity {
     @Override
     public void onStart() {
         super.onStart();
-        if (D) {
+        if (DEBUG_LIFE_CYCLE) {
             Log.e(TAG, "++ ON START ++");
         }
 
@@ -354,7 +290,7 @@ public class BluzActivity extends Activity {
     @Override
     public synchronized void onPause() {
         super.onPause();
-        if (D) {
+        if (DEBUG_LIFE_CYCLE) {
             Log.e(TAG, "- ON PAUSE -");
         }
     }
@@ -362,7 +298,7 @@ public class BluzActivity extends Activity {
     @Override
     public synchronized void onResume() {
         super.onResume();
-        if (D) {
+        if (DEBUG_LIFE_CYCLE) {
             Log.e(TAG, "+ ON RESUME +");
         }
 

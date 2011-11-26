@@ -53,7 +53,7 @@ public class ChatActivity extends BluzActivity {
     public static final String TOAST = "toast";
 
     // Name of the connected device
-    private String mConnectedDeviceName = null;
+    private String mConnectedDeviceName = "";
 
     // Array adapter for the conversation thread
     private ArrayAdapter<String> mConversationArrayAdapter;
@@ -72,6 +72,7 @@ public class ChatActivity extends BluzActivity {
         mSendButton.setEnabled(IChatService.STATE_CONNECTED == state);
         switch (state) {
             case IChatService.STATE_CONNECTED:
+                mConnectedDeviceName = mService.getConnectDName();
                 mTitle.setText(R.string.title_connected);
                 mTitle.append(mConnectedDeviceName);
                 mConversationArrayAdapter.clear();

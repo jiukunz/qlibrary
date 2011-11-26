@@ -335,6 +335,7 @@ public class BluetoothChatService implements IChatService {
     private final Handler mHandler;
 
     private int mState;
+    private String mConnectedDeviceName = "";
 
     /**
      * Constructor. Prepares a new ChatActivity session.
@@ -427,7 +428,8 @@ public class BluetoothChatService implements IChatService {
         // Send the name of the connected device back to the UI Activity
         Message msg = mHandler.obtainMessage(LocalService.MESSAGE_DEVICE_NAME);
         Bundle bundle = new Bundle();
-        bundle.putString(BluzActivity.DEVICE_NAME, device.getName());
+        mConnectedDeviceName  = device.getName();
+        bundle.putString(BluzActivity.DEVICE_NAME, mConnectedDeviceName);
         msg.setData(bundle);
         mHandler.sendMessage(msg);
 
@@ -468,6 +470,11 @@ public class BluetoothChatService implements IChatService {
     @Override
     public synchronized int getState() {
         return mState;
+    }
+    
+    @Override
+    public String getConnectDName() {
+        return mConnectedDeviceName;
     }
 
     /**

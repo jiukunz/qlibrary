@@ -145,6 +145,10 @@ public class LocalService extends android.app.Service implements IChatService {
     public int getState() {
         return mService.getState();
     }
+    
+    public String getConnectDName() {
+        return mService.getConnectDName();
+    }
 
     @Override
     public void start() {
