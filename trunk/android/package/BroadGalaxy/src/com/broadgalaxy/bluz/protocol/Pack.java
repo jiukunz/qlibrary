@@ -106,12 +106,9 @@ public class Pack {
     }
     
     public int byte2Address(byte[] addressBytes) {
-        int address = 0;
-        
         return addressBytes[0] << 16 | addressBytes[1] << 8 | addressBytes[2];
     }
-    
-  
+      
     public String getCode() {
         return mCode;
     }
