@@ -7,6 +7,20 @@ public class ByteUtil {
                                                           '4', '5', '6', '7', 
                                                           '8', '9', 'a', 'b', 
                                                           'c', 'd', 'e', 'f'};
+    public static byte[] string2ByteArray(String str) {
+        str = str.replaceAll("\\s+", "");
+        int len = str.length();
+        byte[] array = new byte[len / 2];
+        byte b;
+        for (int i = 0 ; i < len ; ) {
+            b = Byte.valueOf(str.substring(i, i + 2));
+            i += 2;
+            array[i / 2] = b;
+        }
+        
+        return array;
+    }
+    
     public static byte[] appendByte(byte[] base, byte[] append) {
         int len = base.length + append.length;
         byte[] result = new byte[len];

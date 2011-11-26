@@ -182,7 +182,7 @@ public class HomeActivity extends BluzActivity {
         m = new MessageRequest(fromAddress, fromAddress, "kk");
         m = new LocationRequest(fromAddress, (byte)0);
 //        Log.e(TAG, "sig: " + m.toHexString());
-        write(null, m.getByte());
+//        write(null, m.getByte());
     }   
     
     protected void trySig() {   
