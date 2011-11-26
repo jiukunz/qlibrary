@@ -36,7 +36,7 @@ public class Navigation extends ListView {
                 "new", "inbox", "outbox", "draft"
         };
         mData = getContext().getResources().getStringArray(R.array.navigation);
-        mAdapter = new ArrayAdapter<String>(getContext(), R.layout.navigation_item, mData);
+        mAdapter = new ArrayAdapter<String>(getContext(), R.layout.navigation_item, R.id.item, mData);
         setAdapter(mAdapter);
         
         setOnItemClickListener(new OnItemClickListener(){
