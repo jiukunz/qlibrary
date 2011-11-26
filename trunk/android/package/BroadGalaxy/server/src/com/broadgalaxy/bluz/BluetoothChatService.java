@@ -346,6 +346,11 @@ public class BluetoothChatService implements IChatService {
 //                res = new IccResponse(msgBytes);
             } else if (Pack.CODE_SIG.contains(codeStr)) {
 //                res = new SigResponse(msgBytes);
+                bStr = "24 53 69 67 5f " + 
+                        " 00 0c " + 
+                        " 00 02 38 " +
+                        " 02 03 04 06 09 a0" + 
+                        " 0f  ";
             } else if (Pack.CODE_STS.equals(codeStr)) {
 //                res = new StsResponse(msgBytes);
             } else if (Pack.CODE_TIM.equals(codeStr)) {
