@@ -1,12 +1,19 @@
 package com.broadgalaxy.bluz.protocol;
 
+import com.broadgalaxy.bluz.persistence.IMsg;
+
+import android.content.ContentValues;
+
 import java.nio.ByteBuffer;
 
-import com.broadgalaxy.util.ByteUtil;
-
 public class MessageRequest extends Request {
+    private String mMsg;
+    private int mToAdd;
+
     public MessageRequest(int fromAddress, int toAddress, int encode, String msg){
         super(Pack.CODE_MESSGE, fromAddress, format(toAddress, encode, msg));
+        mMsg = msg;
+        mToAdd = toAddress;
     }
     
     public MessageRequest(int fromAddress, int toAddress, String msg){
@@ -34,5 +41,16 @@ public class MessageRequest extends Request {
         buffer.position(0);
         buffer.get(result, 0, payloadLen);
         return result;
+    }
+    
+    public ContentValues toValues() {
+        ContentValues values = new ContentValues();
+
+        values.put(IMsg.COLUMN_FROM_ADDRESS, mUserAddress + "");
+        values.put(IMsg.COLUMN_DEST_ADDRESS, mToAdd + "");
+        values.put(IMsg.COLUMN_DATA, mMsg);
+        values.put(IMsg.COLUMN_STATUS, IMsg.STATUS_SENT);
+        values.put(IMsg.COLUMN_TIME, System.currentTimeMillis());
+        return values;
     }
 }

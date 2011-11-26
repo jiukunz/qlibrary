@@ -284,6 +284,7 @@ public class BluetoothChatService implements IChatService {
         /**
          * Write to the connected OutStream.
          * 
+         * @msg null if not MessageRequest;
          * @param buffer The bytes to write
          */
         public void write(MessageRequest msg, byte[] buffer) {
@@ -295,7 +296,9 @@ public class BluetoothChatService implements IChatService {
                 }
                 
                 // Share the sent message back to the UI Activity
-                mHandler.obtainMessage(LocalService.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
+                if (null != msg) {
+                    mHandler.obtainMessage(LocalService.MESSAGE_WRITE, -1, -1, msg).sendToTarget();
+                }
             } catch (IOException e) {
                 Log.e(TAG, "Exception during write", e);
             }
