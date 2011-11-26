@@ -53,4 +53,20 @@ public class MessageRequest extends Request {
         values.put(IMsg.COLUMN_TIME, System.currentTimeMillis());
         return values;
     }
+
+    public String getmMsg() {
+        return mMsg;
+    }
+
+    public void setmMsg(String mMsg) {
+        this.mMsg = mMsg;
+    }
+
+    public int getmToAdd() {
+        return mToAdd;
+    }
+
+    public void setmToAdd(int mToAdd) {
+        this.mToAdd = mToAdd;
+    }
 }

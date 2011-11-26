@@ -126,7 +126,9 @@ public class ChatActivity extends BluzActivity {
      * @param msg
      */
     protected void handleWriteMsg(Message msg) {
-        byte[] writeBuf = (byte[]) msg.obj;
+//        byte[] writeBuf = (byte[]) msg.obj;
+
+        byte[] writeBuf = ((MessageRequest) msg.obj).getmMsg().getBytes();
         // construct a string from the buffer
         String writeMessage = new String(writeBuf);
         mConversationArrayAdapter.add("Me:  " + writeMessage);
