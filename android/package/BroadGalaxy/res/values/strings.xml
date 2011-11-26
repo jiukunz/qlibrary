@@ -32,6 +32,9 @@
     <string name="delete_thread">delete thread</string>
     <string name="no_data">no data.</string>
     
+    <!-- chat activity -->
+    <string name="userid_hint">user id, such as ox000238 or 568</string>
+    
     <!--  Broadgalaxy -->
     <string name="send">Send</string>
     <string name="not_connected">not connected</string>

@@ -16,6 +16,7 @@
 
 package com.broadgalaxy.bluz.activity;
 
+import com.broadgalaxy.bluz.Application;
 import com.broadgalaxy.bluz.BluetoothChatService;
 import com.broadgalaxy.bluz.IChatService;
 import com.broadgalaxy.bluz.R;
@@ -23,6 +24,7 @@ import com.broadgalaxy.bluz.protocol.MessageRequest;
 import com.broadgalaxy.bluz.protocol.MessageResponse;
 import com.broadgalaxy.bluz.protocol.Response;
 import com.broadgalaxy.util.Log;
+import com.broadgalaxy.util.MiscUtil;
 
 import android.os.Bundle;
 import android.os.Message;
@@ -160,6 +162,8 @@ public class ChatActivity extends BluzActivity {
         }
     };
 
+    private int mUserId;
+
     /**
      * 
      */
@@ -184,7 +188,7 @@ public class ChatActivity extends BluzActivity {
         mTitle = (TextView) findViewById(R.id.title_left_text);
         mTitle.setText(R.string.broadgalaxy);
         mTitle = (TextView) findViewById(R.id.title_right_text);
-        
+       
         setupChat();
     }
 
@@ -193,7 +197,7 @@ public class ChatActivity extends BluzActivity {
      * 
      * @param message A string of text to send.
      */
-    private void sendMessage(String message) {
+    private void sendMessage(String message) {      
         // Check that we're actually connected before trying anything
         if (/* mChatService. */getState() != IChatService.STATE_CONNECTED) {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
@@ -205,9 +209,11 @@ public class ChatActivity extends BluzActivity {
             // Get the message bytes and tell the BluetoothChatService to write
           
             byte[] send = message.getBytes();
-            int fromAddress = 0;
-            int toAddress = 1;
+            int fromAddress = mUserId;
+            String userId = mDestAddressText.getText().toString();
+            int toAddress = MiscUtil.userid2int(userId);
             MessageRequest msgR = new MessageRequest(fromAddress, toAddress, MessageRequest.ENCODE_CODE, message);
+           
             write(msgR, send);
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);
@@ -222,8 +228,10 @@ public class ChatActivity extends BluzActivity {
         mConversationArrayAdapter = new ArrayAdapter<String>(this, R.layout.message);
         mConversationView = (ListView) findViewById(R.id.in);
         mConversationView.setAdapter(mConversationArrayAdapter);
-
+        
+        mUserId = getSharedPreferences(Application.PREF_FILE_NAME, MODE_PRIVATE).getInt(Application.PREF_USER_ID, 0);
         mDestAddressText = (EditText) findViewById(R.id.dest_address);
+        mDestAddressText.setText(mUserId + "");
         mDestAddressText.addTextChangedListener(new TextWatcher(){
 
             @Override

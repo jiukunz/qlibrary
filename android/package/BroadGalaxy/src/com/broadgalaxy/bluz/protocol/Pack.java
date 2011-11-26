@@ -105,7 +105,7 @@ public class Pack {
         return add;
     }
     
-    public int byte2Address(byte[] addressBytes) {
+    public static int byte2Address(byte[] addressBytes) {
         return addressBytes[0] << 16 | addressBytes[1] << 8 | addressBytes[2];
     }
       
