@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="navigation">
+        <item>新建电文</item>
+        <item>已收电文</item>
+        <item>已发电文</item>
+        <item>草稿电文</item>
+    </string-array>
+    
+</resources>

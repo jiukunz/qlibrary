@@ -26,8 +26,12 @@ import com.broadgalaxy.bluz.protocol.Response;
 import com.broadgalaxy.util.Log;
 import com.broadgalaxy.util.MiscUtil;
 
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
+import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -46,11 +50,12 @@ import android.widget.Toast;
  * This is the main Activity that displays the current chat session.
  */
 public class ChatActivity extends BluzActivity {
+    private static final int REQUEST_CONTACTS = 1;
+
     static final boolean D = true;
 
     // Debugging
     static final String TAG = "ChatActivity";
-    String myAdd = "000238";
 
     public static final String TOAST = "toast";
 
@@ -93,8 +98,8 @@ public class ChatActivity extends BluzActivity {
      * @param msg
      */
     protected void handToastmsg(Message msg) {
-        Toast.makeText(getApplicationContext(), msg.getData().getString(TOAST),
-                Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), msg.getData().getString(TOAST), Toast.LENGTH_SHORT)
+                .show();
     }
 
     /**
@@ -119,21 +124,23 @@ public class ChatActivity extends BluzActivity {
             msgRes = (MessageResponse) response;
             readMessage = msgRes.getMsg();
             mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
-        } 
+        }
     }
 
     /**
      * @param msg
      */
     protected void handleWriteMsg(Message msg) {
-//        byte[] writeBuf = (byte[]) msg.obj;
+        // byte[] writeBuf = (byte[]) msg.obj;
 
         byte[] writeBuf = ((MessageRequest) msg.obj).getmMsg().getBytes();
         // construct a string from the buffer
         String writeMessage = new String(writeBuf);
         mConversationArrayAdapter.add("Me:  " + writeMessage);
     }
+
     EditText mDestAddressText;
+
     private EditText mOutEditText;
 
     // String buffer for outgoing messages
@@ -183,7 +190,7 @@ public class ChatActivity extends BluzActivity {
         mTitle = (TextView) findViewById(R.id.title_left_text);
         mTitle.setText(R.string.broadgalaxy);
         mTitle = (TextView) findViewById(R.id.title_right_text);
-       
+
         setupChat();
     }
 
@@ -192,7 +199,7 @@ public class ChatActivity extends BluzActivity {
      * 
      * @param message A string of text to send.
      */
-    private void sendMessage(String message) {      
+    private void sendMessage(String message) {
         // Check that we're actually connected before trying anything
         if (/* mChatService. */getState() != IChatService.STATE_CONNECTED) {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
@@ -202,13 +209,14 @@ public class ChatActivity extends BluzActivity {
         // Check that there's actually something to send
         if (message.length() > 0) {
             // Get the message bytes and tell the BluetoothChatService to write
-          
+
             byte[] send = message.getBytes();
             int fromAddress = mUserId;
             String userId = mDestAddressText.getText().toString();
             int toAddress = MiscUtil.userid2int(userId);
-            MessageRequest msgR = new MessageRequest(fromAddress, toAddress, MessageRequest.ENCODE_CODE, message);
-           
+            MessageRequest msgR = new MessageRequest(fromAddress, toAddress,
+                    MessageRequest.ENCODE_CODE, message);
+
             write(msgR, send);
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);
@@ -219,36 +227,49 @@ public class ChatActivity extends BluzActivity {
     private void setupChat() {
         Log.d(TAG, "setupChat()");
 
+        ((Button) findViewById(R.id.select_contact)).setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent pick = new Intent(Intent.ACTION_PICK);
+//                pick.setType(ContactsContract.Contacts.CONTENT_ITEM_TYPE);
+                pick.setData(ContactsContract.Contacts.CONTENT_URI);
+                startActivityForResult(pick, REQUEST_CONTACTS);
+            }
+        });
+
         // Initialize the array adapter for the conversation thread
         mConversationArrayAdapter = new ArrayAdapter<String>(this, R.layout.message);
         mConversationView = (ListView) findViewById(R.id.in);
         mConversationView.setAdapter(mConversationArrayAdapter);
-        
-        mUserId = getSharedPreferences(Application.PREF_FILE_NAME, MODE_PRIVATE).getInt(Application.PREF_USER_ID, 0);
+
+        mUserId = getSharedPreferences(Application.PREF_FILE_NAME, MODE_PRIVATE).getInt(
+                Application.PREF_USER_ID, 0);
         mDestAddressText = (EditText) findViewById(R.id.dest_address);
         if (mUserId != 0) {
             mDestAddressText.setText(mUserId + "");
         }
-        mDestAddressText.addTextChangedListener(new TextWatcher(){
+        mDestAddressText.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // TODO Auto-generated method stub
-                
+
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // TODO Auto-generated method stub
-                
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() > 0) {
-                    
+
                 }
-            }});
+            }
+        });
         // Initialize the compose field with a listener for the return key
         mOutEditText = (EditText) findViewById(R.id.edit_text_out);
         mOutEditText.setOnEditorActionListener(mWriteListener);
@@ -268,4 +289,21 @@ public class ChatActivity extends BluzActivity {
         mOutStringBuffer = new StringBuffer("");
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (REQUEST_CONTACTS == requestCode && resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+            Log.d(TAG, "uri: " + uri);
+            Cursor c = getContentResolver().query(uri, null, null, null, null);
+            if (c.moveToFirst()) {
+                do {
+                    String[] cNames = c.getColumnNames();
+                    Log.d(TAG, "column names: " + cNames);
+                    break;
+                } while (c.moveToNext());
+            }
+        }
+    }
+
+    
 }
