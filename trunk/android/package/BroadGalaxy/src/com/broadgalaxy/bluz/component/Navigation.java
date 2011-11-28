@@ -22,7 +22,7 @@ public class Navigation extends ListView {
     }
 
     public Navigation(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        this(context,attrs, android.R.attr.listViewStyle);
     }
 
     public Navigation(Context context, AttributeSet attrs, int defStyle) {

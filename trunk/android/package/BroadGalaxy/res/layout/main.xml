@@ -31,6 +31,11 @@
             android:hint="@string/userid_hint"
             android:layout_gravity="bottom"
         />
+        <Button android:id="@+id/select_contact" 
+        	android:layout_height="wrap_content"
+        	android:layout_width="wrap_content"
+        	android:layout_gravity="center_vertical"
+        	android:text="@string/select_contact"/>
     </LinearLayout>
     
     <ListView android:id="@+id/in"

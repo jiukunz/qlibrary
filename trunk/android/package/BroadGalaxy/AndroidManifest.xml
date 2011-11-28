@@ -27,8 +27,7 @@
     <application
         android:icon="@drawable/logo"
         android:label="@string/broadgalaxy"
-        android:name=".Application"
-        android:theme="@style/DEUBG" >
+        android:name=".Application" >
         <activity
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/broadgalaxy"

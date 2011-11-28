@@ -79,6 +79,14 @@ public class LocalService extends android.app.Service implements IChatService {
     }
 
     protected void handlReadmsg(Message msg) {
+        try {
+            doHandleReadMessage(msg);
+        } catch (Exception e) {
+            Log.e(TAG, "GENERIC exception.", e);
+        }
+    }
+
+    private void doHandleReadMessage(Message msg) {
         byte[] msgBytes = (byte[]) msg.obj;
         int size = msg.arg1;
         ByteBuffer buffer = ByteBuffer.allocate(size);

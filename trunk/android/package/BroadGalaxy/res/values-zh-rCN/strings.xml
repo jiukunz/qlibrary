@@ -14,7 +14,45 @@
      limitations under the License.
 -->
 
-<resources>	
-    <string name="user_id">用户 id: </string>
-    <string name="btn_connect">连接设备</string>    
+<resources>		
+	<string name="dest_address">目的地址</string>
+    <string name="user_id">用户 ID: </string>
+    <string name="btn_connect">连接</string>
+    <string name="locate">定位</string>
+    <string name="no_locaton">没有位置信息.</string>
+    <string name="sig">功率</string>
+    <string name="power">功率</string>
+    <string name="about">关于</string>
+    
+    <!-- BoxActivity -->
+    <string name="dia_delete_msg_title">删除</string>
+    <string name="dia_delete_msg_message">删除选定信息，确定？</string>
+    <string name="delete_thread">删除整个会话</string>
+    <string name="no_data">没有数据。</string>
+    
+    <!-- chat activity -->
+    <string name="userid_hint">用户 ID, 例如 ox000238 或者 568</string>
+    
+    <!--  Broadgalaxy -->
+    <string name="select_contact">选择联系人</string>
+    <string name="send">发送</string>
+    <string name="not_connected">未连接</string>
+    <string name="bt_not_enabled_leaving">蓝牙求启用，退出。</string>
+    <string name="title_connecting">连接中　。。。</string>
+    <string name="title_connected">连接到：</string>
+    <string name="title_not_connected">未连接</string>
+
+    <!--  DeviceListActivity -->
+    <string name="scanning">扫描设备　。。。</string>
+    <string name="select_device">选择一个设备</string>
+    <string name="none_paired">没有配对</string>
+    <string name="none_found">未发现设备</string>
+    <string name="title_paired_devices">已配对设备</string>
+    <string name="title_other_devices">其它可用设备</string>
+    <string name="button_scan">扫描</string>
+
+    <!-- Options Menu -->
+    <string name="connect">连接</string>
+    <string name="discoverable">可发现</string>
+   
 </resources>
