@@ -35,6 +35,7 @@
     
     <!-- chat activity -->
     <string name="userid_hint">user id, such as ox000238 or 568</string>
+    <string name="hit_message">input message.</string>
     
     <!--  Broadgalaxy -->
     <string name="send">Send</string>
