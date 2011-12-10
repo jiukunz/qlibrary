@@ -32,6 +32,7 @@
     
     <!-- chat activity -->
     <string name="userid_hint">用户 ID, 例如 ox000238 或者 568</string>
+    <string name="hint_message">输入信息</string>
     
     <!--  Broadgalaxy -->
     <string name="select_contact">选择联系人</string>

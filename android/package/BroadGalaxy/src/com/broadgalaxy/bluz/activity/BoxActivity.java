@@ -1,11 +1,8 @@
 
 package com.broadgalaxy.bluz.activity;
 
-import com.broadgalaxy.bluz.R;
-import com.broadgalaxy.bluz.persistence.DBHelper;
-import com.broadgalaxy.bluz.persistence.IMsg;
-import com.broadgalaxy.util.Log;
-import com.broadgalaxy.util.ReflecUtil;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -29,8 +26,11 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.broadgalaxy.bluz.R;
+import com.broadgalaxy.bluz.persistence.DBHelper;
+import com.broadgalaxy.bluz.persistence.IMsg;
+import com.broadgalaxy.util.Log;
+import com.broadgalaxy.util.ReflecUtil;
 
 public class BoxActivity extends Activity {
     public static final int TYPE_INBOX = 1;
@@ -81,12 +81,12 @@ public class BoxActivity extends Activity {
         mTitle.setText(boxLabel);
 
         mConversation = (ListView) findViewById(R.id.conversation);
+        TextView emptyView = new TextView(this);
+        emptyView.setText(R.string.no_data);
+        mConversation.setEmptyView(emptyView );
         TextView header = new TextView(this);
         header.setText(boxLabel);
         mConversation.addHeaderView(header);
-        TextView emptyView = new TextView(this);
-        emptyView.setText(R.string.no_data);
-        mConversation.setEmptyView(emptyView);
         mConversation.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
@@ -109,6 +109,7 @@ public class BoxActivity extends Activity {
         List<MessageEntity> messages = new ArrayList<MessageEntity>();
         fillData(messages);
         mAdapter = new MessageAdapter(this, messages);
+        
         mConversation.setAdapter(mAdapter);
     }
 
