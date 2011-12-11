@@ -20,6 +20,7 @@ import com.broadgalaxy.bluz.Application;
 import com.broadgalaxy.bluz.BluetoothChatService;
 import com.broadgalaxy.bluz.IChatService;
 import com.broadgalaxy.bluz.R;
+import com.broadgalaxy.bluz.protocol.IccResponse;
 import com.broadgalaxy.bluz.protocol.MessageRequest;
 import com.broadgalaxy.bluz.protocol.MessageResponse;
 import com.broadgalaxy.bluz.protocol.Response;
@@ -215,7 +216,8 @@ public class ChatActivity extends BluzActivity {
             String userId = mDestAddressText.getText().toString();
             int toAddress = MiscUtil.userid2int(userId);
             MessageRequest msgR = new MessageRequest(fromAddress, toAddress,
-                    MessageRequest.ENCODE_ZH, message);
+                    MessageRequest.ENCODE_CODE, // 
+                    message);
 
             write(msgR, send);
             // Reset out string buffer to zero and clear the edit text field

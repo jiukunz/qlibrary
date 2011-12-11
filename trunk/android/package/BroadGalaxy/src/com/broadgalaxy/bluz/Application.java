@@ -11,6 +11,12 @@ import com.broadgalaxy.bluz.protocol.MessageRequest;
 import com.broadgalaxy.bluz.protocol.Pack;
 import com.broadgalaxy.util.Log;
 
+/**
+ * @author bysong
+ * 
+ * L
+ *
+ */
 public class Application extends android.app.Application implements UncaughtExceptionHandler {
     public static final String PREF_FILE_NAME= "pref_user";
     public static final String PREF_USER_ID = "pref_user_id";

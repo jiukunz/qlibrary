@@ -259,7 +259,7 @@ public class BluetoothChatService implements IChatService {
         }
 
         public void run() {
-            if (false) {
+            if (true) {
                 runThis();
             } else {
                 runRaw();
@@ -310,7 +310,8 @@ public class BluetoothChatService implements IChatService {
                     if (DEBUG_MSG) {
                         byte[] read = new byte[bytes];
                         System.arraycopy(buffer, index, read, 0, bytes);
-                        Log.d(TAG, "RCV MSG: " + format(read, bytes));
+                        Log.d(TAG, "RCV  MSG: " + format(read, bytes));
+                        Log.d(TAG, "RCV MSGS: " + format(buffer, index + bytes));
                     }
 
                     index += bytes;
@@ -319,17 +320,17 @@ public class BluetoothChatService implements IChatService {
                         bBuff = ByteBuffer.wrap(buffer, 0, index);
                         int msgLen = bBuff.getShort(Pack.LENGTH_INDEX);
                         if (msgLen == index) {
-                            // ok
+                            expectMore = false;// ok
                         } else if (msgLen > index) {
                             Log.e(TAG, "invalid msg. msgLen > totalBytes msg: ");
                             index = 0;
                             continue;
                         } else {
-                            Log.i(TAG, "expect more bytes.");
+                            Log.i(TAG, "msg len has detected, need more byte, expect more bytes.");
                             expectMore = true;
                         }
                     } else {
-                        Log.i(TAG, "expect more bytes.");
+                        Log.i(TAG, "can not deteminate msg len, expect more bytes.");
                         expectMore = true;
                     }
 
@@ -368,7 +369,16 @@ public class BluetoothChatService implements IChatService {
 
                 mmOutStream.write(buffer);
                 if (DEBUG_MSG) {
-                    Log.d(TAG, "SND MSG: " + format(buffer, buffer.length));
+                    String code = "";
+                    if (buffer != null && buffer.length > Pack.LENGTH_INDEX) {
+                        ByteBuffer bBuff = ByteBuffer.wrap(buffer);
+                        byte[] codebytes = new byte[Pack.LENGTH_INDEX];
+                        bBuff.get(codebytes , 0, Pack.LENGTH_INDEX);
+                        code = new String(codebytes);                        
+                    } else if (null != msg) {
+                        code = msg.getCode();
+                    }
+                    Log.d(TAG, "SND MSG: " + code + "\t" + format(buffer, buffer.length));
                 }
 
                 // Share the sent message back to the UI Activity
