@@ -22,6 +22,7 @@ import com.broadgalaxy.bluz.LocalService;
 import com.broadgalaxy.bluz.R;
 import com.broadgalaxy.bluz.component.Navigation;
 import com.broadgalaxy.bluz.component.Navigation.OnNavClickListener;
+import com.broadgalaxy.bluz.protocol.IccRequest;
 import com.broadgalaxy.bluz.protocol.LocationRequest;
 import com.broadgalaxy.bluz.protocol.LocationResponse;
 import com.broadgalaxy.bluz.protocol.MessageRequest;
@@ -186,8 +187,12 @@ public class HomeActivity extends BluzActivity {
         int toAddress = 3;
         Pack m = new LocationRequest(fromAddress, (byte) 0);
         m = new SigRequest(fromAddress, (byte) 0);
+//        write(null, m.getByte());
         m = new MessageRequest(fromAddress, fromAddress, "kk");
+//        write(null, m.getByte());
         m = new LocationRequest(fromAddress, (byte) 0);
+//        write(null, m.getByte());
+        m = new IccRequest();
         // Log.e(TAG, "sig: " + m.toHexString());
         write(null, m.getByte());
     }
