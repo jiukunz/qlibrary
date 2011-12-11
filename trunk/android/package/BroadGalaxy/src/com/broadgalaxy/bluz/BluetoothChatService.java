@@ -16,11 +16,12 @@
 
 package com.broadgalaxy.bluz;
 
-import com.broadgalaxy.bluz.activity.BluzActivity;
-import com.broadgalaxy.bluz.activity.ChatActivity;
-import com.broadgalaxy.bluz.protocol.MessageRequest;
-import com.broadgalaxy.util.ByteUtil;
-import com.broadgalaxy.util.Log;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.reflect.Field;
+import java.nio.ByteBuffer;
+import java.util.UUID;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -31,11 +32,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.reflect.Field;
-import java.util.UUID;
+import com.broadgalaxy.bluz.activity.BluzActivity;
+import com.broadgalaxy.bluz.activity.ChatActivity;
+import com.broadgalaxy.bluz.protocol.MessageRequest;
+import com.broadgalaxy.bluz.protocol.Pack;
+import com.broadgalaxy.util.ByteUtil;
+import com.broadgalaxy.util.Log;
 
 /**
  * This class does all the work for setting up and managing Bluetooth
@@ -280,6 +282,62 @@ public class BluetoothChatService implements IChatService {
 
             Log.i(TAG, "END mConnectedThread");
         }
+        
+        public void runThis() {
+            Log.i(TAG, "BEGIN mConnectedThread");
+            byte[] buffer = new byte[1024];
+            int bytes = 0;
+            
+            int index = 0;
+            ByteBuffer bBuff = null;
+            boolean expectMore = false;
+            
+            // Keep listening to the InputStream while connected
+            while (true) {
+                try {
+                    if (!expectMore) {
+                        // Read from the InputStream
+                        bytes = mmInStream.read(buffer, index, 1024 - index);
+                        index = bytes;
+                        if (DEBUG_MSG) {
+                            Log.d(TAG, "RCV MSG: " + format(buffer, bytes));
+                        }
+                        
+                        if (bytes >= Pack.ADDRESS_INDEX) {
+                           bBuff = ByteBuffer.wrap(buffer, 0, bytes);
+                           int msgLen = bBuff.getShort(Pack.LENGTH_INDEX);
+                           if (msgLen == bytes) {
+                               // ok
+                           } else if (msgLen > bytes) {
+                               Log.e(TAG, "invalid msg. msgLen > totalBytes msg: ");
+                               continue;
+                           } else {
+                               expectMore = true;
+                           }
+                        } else {
+                            expectMore = true;
+                        }
+                    }
+                    
+                    if (expectMore) {
+                        continue;
+                    }
+
+                    if (!expectMore) {
+                        // Send the obtained bytes to the UI Activity
+                        mHandler.obtainMessage(LocalService.MESSAGE_READ, bytes, -1, buffer)
+                        .sendToTarget();
+                    }
+                } catch (IOException e) {
+                    Log.e(TAG, "disconnected", e);
+                    onConnectionLost();
+                    break;
+                }
+            }
+
+            Log.i(TAG, "END mConnectedThread");
+        }
+
 
         /**
          * Write to the connected OutStream.
