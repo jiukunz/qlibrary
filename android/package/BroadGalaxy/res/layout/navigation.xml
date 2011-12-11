@@ -10,6 +10,10 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/no_locaton" />
+    <ImageView 
+        android:layout_width="fill_parent"
+        android:layout_height="4dp"
+        android:src="@android:drawable/divider_horizontal_dark"/>
 
     <com.broadgalaxy.bluz.component.Navigation
         android:id="@+id/navigation"
@@ -38,6 +42,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/connect"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
 </LinearLayout>

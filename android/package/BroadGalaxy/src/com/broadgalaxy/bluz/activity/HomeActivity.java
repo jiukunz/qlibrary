@@ -68,10 +68,11 @@ public class HomeActivity extends BluzActivity {
         mTitle = (TextView) findViewById(R.id.title_left_text);
         mTitle.setText(R.string.broadgalaxy);
         mTitle = (TextView) findViewById(R.id.title_right_text);
-        
+
         mLocation = (TextView) findViewById(R.id.location);
+        mLocation.setText(formatLocation(0, 0, 0, 0, 0));
         mNav = (Navigation) findViewById(R.id.navigation);
-        mNav.setEnabled(true);// FIXME 
+        mNav.setEnabled(true);// FIXME
         mNav.setOnNavListener(new OnNavClickListener() {
 
             @Override
@@ -104,7 +105,7 @@ public class HomeActivity extends BluzActivity {
                 tryConnect();
             }
         });
-        mSig = (Button)findViewById(R.id.sig);
+        mSig = (Button) findViewById(R.id.sig);
         mSig.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -118,7 +119,7 @@ public class HomeActivity extends BluzActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.home_option_menu, menu);
-        
+
         return true;
     }
 
@@ -137,10 +138,10 @@ public class HomeActivity extends BluzActivity {
                 trySig();
                 return true;
         }
-        
+
         return false;
     }
-    
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (D) {
             Log.d(TAG, "onActivityResult " + resultCode);
@@ -156,7 +157,7 @@ public class HomeActivity extends BluzActivity {
                     BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
                     // Attempt to connect to the device
                     if (mbound) {
-//                        mService.start();
+                        // mService.start();
                         mService.connect(device);
                     } else {
                         Log.e(TAG, "service is NOT bounded.");
@@ -169,8 +170,8 @@ public class HomeActivity extends BluzActivity {
     @Override
     protected void onServiceConnected(LocalService mService) {
         super.onServiceConnected(mService);
-        
-//        tryConnect();
+
+        // tryConnect();
     }
 
     protected void tryLocate() {
@@ -179,35 +180,35 @@ public class HomeActivity extends BluzActivity {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
             return;
         }
-        
+
         int fromAddress = Integer.valueOf("000238");
         fromAddress = 568; // ox 00 02 38
         int toAddress = 3;
-        Pack m = new LocationRequest(fromAddress, (byte)0);
-        m = new SigRequest(fromAddress, (byte)0);
+        Pack m = new LocationRequest(fromAddress, (byte) 0);
+        m = new SigRequest(fromAddress, (byte) 0);
         m = new MessageRequest(fromAddress, fromAddress, "kk");
-        m = new LocationRequest(fromAddress, (byte)0);
-//        Log.e(TAG, "sig: " + m.toHexString());
+        m = new LocationRequest(fromAddress, (byte) 0);
+        // Log.e(TAG, "sig: " + m.toHexString());
         write(null, m.getByte());
-    }   
-    
-    protected void trySig() {   
+    }
+
+    protected void trySig() {
         // Check that we're actually connected before trying anything
         if (/* mChatService. */getState() != IChatService.STATE_CONNECTED) {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
             return;
         }
-        
+
         int fromAddress = Integer.valueOf("000238");
         fromAddress = 568; // ox 00 02 38
         int toAddress = 3;
-        Pack m = new LocationRequest(fromAddress, (byte)0);
-        m = new SigRequest(fromAddress, (byte)0);
-//        m = new MessageRequest(fromAddress, fromAddress, "kk");
-//        m = new LocationRequest(fromAddress, (byte)0);
-//        Log.e(TAG, "sig: " + m.toHexString());
+        Pack m = new LocationRequest(fromAddress, (byte) 0);
+        m = new SigRequest(fromAddress, (byte) 0);
+        // m = new MessageRequest(fromAddress, fromAddress, "kk");
+        // m = new LocationRequest(fromAddress, (byte)0);
+        // Log.e(TAG, "sig: " + m.toHexString());
         write(null, m.getByte());
-        
+
     }
 
     protected void tryConnect() {
@@ -216,7 +217,6 @@ public class HomeActivity extends BluzActivity {
         startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
     }
 
-
     /**
      * @param msg
      */
@@ -224,7 +224,7 @@ public class HomeActivity extends BluzActivity {
         // save the connected device's name
         mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
     }
-    
+
     @Override
     protected void handleStateChangeMsg(int state) {
         if (D) {
@@ -232,14 +232,14 @@ public class HomeActivity extends BluzActivity {
                     "MESSAGE_STATE_CHANGE: " + state + " "
                             + BluetoothChatService.toStateDesc(state));
         }
-//        mSendButton.setEnabled(IChatService.STATE_CONNECTED == state);
+        // mSendButton.setEnabled(IChatService.STATE_CONNECTED == state);
         switch (state) {
             case IChatService.STATE_CONNECTED:
                 mTitle.setText(R.string.title_connected);
 
                 mConnectedDeviceName = mService.getConnectDName();
                 mTitle.append(mConnectedDeviceName);
-//                mConversationArrayAdapter.clear();
+                // mConversationArrayAdapter.clear();
                 onConnected();
                 break;
             case IChatService.STATE_CONNECTING:
@@ -251,22 +251,27 @@ public class HomeActivity extends BluzActivity {
                 break;
         }
     }
-    
+
     protected void handlReadmsg(Response response) {
         if (response instanceof SigResponse) {
             SigResponse s = (SigResponse) response;
             Log.d(TAG, "sig: " + s);
         } else if (response instanceof LocationResponse) {
             LocationResponse l = (LocationResponse) response;
-            String location = "T: " + l.getLocationT() +
-                             "  L: " + l.getLocationL() +
-                             "  B: " + l.getLocationB() + 
-                             "  H: " + l.getLocationH() + 
-                             "  X: " + l.getLocationX();
+            String location = "";            
+            location = formatLocation(l.getLocationT(), l.getLocationL(), l.getLocationB(), l.getLocationH(), l.getLocationX());
             mLocation.setText(location);
         }
     }
-    
+
+    String formatLocation(int t, int l, int b, int h, int x) {
+        return "T: " + t +
+                "  L: " + l +
+                "  B: " + b +
+                "  H: " + h +
+                "  X: " + x;
+    }
+
     private void onLoacted(Object locateInfo) {
 
     }
@@ -276,7 +281,7 @@ public class HomeActivity extends BluzActivity {
         mLocateBtn.setEnabled(true);
         mSig.setEnabled(true);
         mConnectBtn.setVisibility(View.GONE);
-        
+
         tryLocate();
     }
 

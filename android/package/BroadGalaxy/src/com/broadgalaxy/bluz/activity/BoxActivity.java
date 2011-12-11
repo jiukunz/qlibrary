@@ -2,6 +2,7 @@
 package com.broadgalaxy.bluz.activity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
@@ -15,13 +16,16 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -96,6 +100,7 @@ public class BoxActivity extends Activity {
                 showDialog(DIALOG_ITEM_DELETE);
             }
         });
+        
         queryDB();
     }
 
@@ -201,6 +206,24 @@ public class BoxActivity extends Activity {
         @Override
         public long getItemId(int position) {
             return mData.get(position).id;
+        }
+        
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LinearLayout l = null;
+            if (null != convertView) {
+                l = (LinearLayout) convertView;
+            } else {
+                l = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.box_item, null);
+            }
+            
+            MessageEntity e = getItem(position);
+            ((TextView)l.findViewById(R.id.address)).setText(e.fromAdd);
+            ((TextView)l.findViewById(R.id.message)).setText(e.message);
+            CharSequence time = new Date(e.timeTick).toLocaleString();
+            ((TextView)l.findViewById(R.id.time)).setText(time );
+            
+            return l;
         }
     }
 
