@@ -69,12 +69,14 @@ public class BluetoothChatService implements IChatService {
                 if (!insecure) {
                     tmp = mAdapter.listenUsingRfcommWithServiceRecord(name, uuid);
                 } else {
-//                    tmp = mAdapter.listenUsingInsecureRfcommWithServiceRecord(name, uuid);
+                    // tmp =
+                    // mAdapter.listenUsingInsecureRfcommWithServiceRecord(name,
+                    // uuid);
                 }
             } catch (IOException e) {
                 Log.e(TAG, "listen() failed", e);
             }
-            
+
             mmServerSocket = tmp;
         }
 
@@ -143,14 +145,14 @@ public class BluetoothChatService implements IChatService {
      */
     private class ConnectThread extends Thread {
         private final BluetoothDevice mmDevice;
-    
+
         private final BluetoothSocket mmSocket;
-    
+
         public ConnectThread(BluetoothDevice device) {
             setName("ConnectThread");
             mmDevice = device;
             BluetoothSocket tmp = null;
-    
+
             // Get a BluetoothSocket for a connection with the
             // given BluetoothDevice
             try {
@@ -163,7 +165,7 @@ public class BluetoothChatService implements IChatService {
             }
             mmSocket = tmp;
         }
-    
+
         public void cancel() {
             if (D) {
                 Log.d(TAG, "cancel " + this);
@@ -174,14 +176,14 @@ public class BluetoothChatService implements IChatService {
                 Log.e(TAG, "close() of connect socket failed", e);
             }
         }
-    
+
         public void run() {
             Log.i(TAG, "BEGIN mConnectThread");
             setName("ConnectThread");
-    
+
             // Always cancel discovery because it will slow down a connection
             mAdapter.cancelDiscovery();
-    
+
             // Make a connection to the BluetoothSocket
             try {
                 // This is a blocking call and will only return on a
@@ -198,19 +200,19 @@ public class BluetoothChatService implements IChatService {
                 }
                 // Start the service over to restart listening mode
                 BluetoothChatService.this.start();
-    
+
                 Log.i(TAG, "END mConnectThread");
                 return;
             }
-    
+
             // Reset the ConnectThread because we're done
             synchronized (BluetoothChatService.this) {
                 mConnectThread = null;
             }
-    
+
             // Start the connected thread
             onConnected(mmSocket, mmDevice);
-    
+
             Log.i(TAG, "BEGIN mConnectThread");
         }
     }
@@ -257,6 +259,14 @@ public class BluetoothChatService implements IChatService {
         }
 
         public void run() {
+            if (false) {
+                runThis();
+            } else {
+                runRaw();
+            }           
+        }
+        
+        public void runRaw() {
             Log.i(TAG, "BEGIN mConnectedThread");
             byte[] buffer = new byte[1024];
             int bytes;
@@ -282,51 +292,56 @@ public class BluetoothChatService implements IChatService {
 
             Log.i(TAG, "END mConnectedThread");
         }
-        
+
         public void runThis() {
             Log.i(TAG, "BEGIN mConnectedThread");
             byte[] buffer = new byte[1024];
             int bytes = 0;
-            
+
             int index = 0;
             ByteBuffer bBuff = null;
             boolean expectMore = false;
-            
+
             // Keep listening to the InputStream while connected
             while (true) {
                 try {
-                    if (!expectMore) {
-                        // Read from the InputStream
-                        bytes = mmInStream.read(buffer, index, 1024 - index);
-                        index = bytes;
-                        if (DEBUG_MSG) {
-                            Log.d(TAG, "RCV MSG: " + format(buffer, bytes));
-                        }
-                        
-                        if (bytes >= Pack.ADDRESS_INDEX) {
-                           bBuff = ByteBuffer.wrap(buffer, 0, bytes);
-                           int msgLen = bBuff.getShort(Pack.LENGTH_INDEX);
-                           if (msgLen == bytes) {
-                               // ok
-                           } else if (msgLen > bytes) {
-                               Log.e(TAG, "invalid msg. msgLen > totalBytes msg: ");
-                               continue;
-                           } else {
-                               expectMore = true;
-                           }
+                    // Read from the InputStream
+                    bytes = mmInStream.read(buffer, index, 1024 - index);
+                    if (DEBUG_MSG) {
+                        byte[] read = new byte[bytes];
+                        System.arraycopy(buffer, index, read, 0, bytes);
+                        Log.d(TAG, "RCV MSG: " + format(read, bytes));
+                    }
+
+                    index += bytes;
+
+                    if (index >= Pack.ADDRESS_INDEX) {
+                        bBuff = ByteBuffer.wrap(buffer, 0, index);
+                        int msgLen = bBuff.getShort(Pack.LENGTH_INDEX);
+                        if (msgLen == index) {
+                            // ok
+                        } else if (msgLen > index) {
+                            Log.e(TAG, "invalid msg. msgLen > totalBytes msg: ");
+                            index = 0;
+                            continue;
                         } else {
+                            Log.i(TAG, "expect more bytes.");
                             expectMore = true;
                         }
+                    } else {
+                        Log.i(TAG, "expect more bytes.");
+                        expectMore = true;
                     }
-                    
+
                     if (expectMore) {
                         continue;
                     }
 
                     if (!expectMore) {
                         // Send the obtained bytes to the UI Activity
-                        mHandler.obtainMessage(LocalService.MESSAGE_READ, bytes, -1, buffer)
-                        .sendToTarget();
+                        mHandler.obtainMessage(LocalService.MESSAGE_READ, index, -1, buffer)
+                                .sendToTarget();
+                        index = 0;
                     }
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
@@ -338,7 +353,6 @@ public class BluetoothChatService implements IChatService {
             Log.i(TAG, "END mConnectedThread");
         }
 
-
         /**
          * Write to the connected OutStream.
          * 
@@ -347,16 +361,16 @@ public class BluetoothChatService implements IChatService {
          */
         public void write(MessageRequest msg, byte[] buffer) {
             try {
-                
+
                 if (null != msg) {
                     buffer = msg.getByte();
                 }
-                    
+
                 mmOutStream.write(buffer);
                 if (DEBUG_MSG) {
                     Log.d(TAG, "SND MSG: " + format(buffer, buffer.length));
                 }
-                
+
                 // Share the sent message back to the UI Activity
                 if (null != msg) {
                     mHandler.obtainMessage(LocalService.MESSAGE_WRITE, -1, -1, msg).sendToTarget();
@@ -367,13 +381,15 @@ public class BluetoothChatService implements IChatService {
         }
     }
 
-    private static final boolean DEBUG_MSG = true;  
+    private static final boolean DEBUG_MSG = true;
     private static final boolean D = true;
 
     // Unique UUID for this application
     private static final UUID MY_UUID = UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
-    private static final UUID WELL_KNOWN_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-//    private static final UUID TARGET_UUID = UUID.fromString("0018-11-518058");
+    private static final UUID WELL_KNOWN_UUID = UUID
+            .fromString("00001101-0000-1000-8000-00805F9B34FB");
+    // private static final UUID TARGET_UUID =
+    // UUID.fromString("0018-11-518058");
 
     // Name for the SDP record when creating server socket
     private static final String NAME = "ChatActivity";
@@ -382,7 +398,7 @@ public class BluetoothChatService implements IChatService {
     private static final String TAG = "BluetoothChatService";
 
     private AcceptThread mAcceptThread;
-    
+
     // Member fields
     private final BluetoothAdapter mAdapter;
 
@@ -415,15 +431,18 @@ public class BluetoothChatService implements IChatService {
                 break;
             }
             count++;
-            
+
             hexStr += " " + ByteUtil.byte2HexString(b);
         }
-        
+
         return hexStr;
     }
 
-    /* (non-Javadoc)
-     * @see com.broadgalaxy.bluz.IChatService#connect(android.bluetooth.BluetoothDevice)
+    /*
+     * (non-Javadoc)
+     * @see
+     * com.broadgalaxy.bluz.IChatService#connect(android.bluetooth.BluetoothDevice
+     * )
      */
     @Override
     public synchronized void connect(BluetoothDevice device) {
@@ -486,7 +505,7 @@ public class BluetoothChatService implements IChatService {
         // Send the name of the connected device back to the UI Activity
         Message msg = mHandler.obtainMessage(LocalService.MESSAGE_DEVICE_NAME);
         Bundle bundle = new Bundle();
-        mConnectedDeviceName  = device.getName();
+        mConnectedDeviceName = device.getName();
         bundle.putString(BluzActivity.DEVICE_NAME, mConnectedDeviceName);
         msg.setData(bundle);
         mHandler.sendMessage(msg);
@@ -522,14 +541,15 @@ public class BluetoothChatService implements IChatService {
         mHandler.sendMessage(msg);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see com.broadgalaxy.bluz.IChatService#getState()
      */
     @Override
     public synchronized int getState() {
         return mState;
     }
-    
+
     @Override
     public String getConnectDName() {
         return mConnectedDeviceName;
@@ -574,7 +594,8 @@ public class BluetoothChatService implements IChatService {
         return desc;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see com.broadgalaxy.bluz.IChatService#start()
      */
     @Override
@@ -602,7 +623,8 @@ public class BluetoothChatService implements IChatService {
         setState(STATE_LISTEN);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see com.broadgalaxy.bluz.IChatService#stop()
      */
     @Override
@@ -624,7 +646,8 @@ public class BluetoothChatService implements IChatService {
         setState(STATE_NONE);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see com.broadgalaxy.bluz.IChatService#write(byte[])
      */
     @Override
