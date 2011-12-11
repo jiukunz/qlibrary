@@ -22,8 +22,8 @@ public class Pack {
     public static final String CODE_TIM = "$Tim_";//　时间输出
     public static final String CODE_FBK = "$Fbk_";// 反馈
     
-    public static final int ENCODE_ZH = 0x44;
-    public static final int ENCODE_CODE = 0x46;    
+    public static final int ENCODE_ZH = 0x44; // ???
+    public static final int ENCODE_CODE = 0x46;    // ??? 
 
     public static final int MSG_INDEX = 0;
     public static final int LENGTH_INDEX = MSG_INDEX + 5;

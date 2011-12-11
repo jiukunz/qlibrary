@@ -32,7 +32,9 @@
     
     <!-- chat activity -->
     <string name="userid_hint">用户 ID, 例如 ox000238 或者 568</string>
-    <string name="hint_message">输入信息</string>
+    <string name="hint_message">输入信息</string>    
+    <string name="sender_address">发件人：</string>
+    <string name="receiver_address">收件人: </string>
     
     <!--  Broadgalaxy -->
     <string name="select_contact">选择联系人</string>
@@ -53,7 +55,7 @@
     <string name="button_scan">扫描</string>
 
     <!-- Options Menu -->
-    <string name="connect">连接</string>
+    <string name="connect">连接设备</string>
     <string name="discoverable">可发现</string>
    
 </resources>
