@@ -23,12 +23,13 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <application
-        android:theme="@android:style/Theme.Light"
         android:icon="@drawable/logo"
         android:label="@string/broadgalaxy"
-        android:name=".Application" >
+        android:name=".Application"
+        android:theme="@android:style/Theme.Light" >
         <activity
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/broadgalaxy"
@@ -40,38 +41,36 @@
             android:name="com.broadgalaxy.bluz.activity.DeviceListActivity"
             android:theme="@android:style/Theme.Dialog" />
         <activity android:name="com.broadgalaxy.bluz.activity.UserIdActivity" >
+
+            <!--
+            <intent-filter >
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            -->
+        </activity>
+        <activity
+            android:configChanges="orientation|keyboardHidden"
+            android:name=".activity.HomeActivity" >
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.HomeActivity" >
-        </activity>
 
         <service android:name=".LocalService" >
         </service>
 
-<!--         Activities from OI About Library
         <activity
-            android:name="org.openintents.about.About" >
-            <intent-filter >
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.MONKEY" />
-            </intent-filter>
-            <intent-filter >
-                <action android:name="org.openintents.action.SHOW_ABOUT_DIALOG" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
+            android:launchMode="singleInstance"
+            android:name=".activity.BoxActivity" >
         </activity>
-        <activity android:name="org.openintents.about.InfoActivity" />
-
-        Activities from OI Distribution Library
-        <activity android:name="org.openintents.distribution.EulaActivity" />
-        <activity android:name="org.openintents.distribution.NewVersionActivity" /> -->
-        <activity android:name=".activity.BoxActivity" android:launchMode="singleInstance"></activity>
+        <activity
+            android:configChanges="orientation|keyboardHidden"
+            android:name=".activity.LocateActivity" >
+        </activity>
     </application>
 
 </manifest>

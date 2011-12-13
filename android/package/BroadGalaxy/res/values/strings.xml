@@ -16,6 +16,10 @@
 
 <resources>
     <string name="broadgalaxy">Broadgalaxy</string>
+    
+    <string name="message">message</string>
+    <string name="no_user_id">no user id</string>
+    <string name="no_sig_info">no sig info</string>
 	
 	<string name="dest_address">destination address</string>
     <string name="user_id">user id: </string>

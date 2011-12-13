@@ -35,31 +35,60 @@ public class LocationResponse extends Response {
     @Override
     public String toString() {
         return super.toString() + 
-               "\tmLocationT: " + mLocationT + 
-               "\tmLocationL: " + mLocationL + 
-               "\tmLocationB: " + mLocationB + 
-               "\tmLocationH: " + mLocationH + 
-               "\tmLocationX: " + mLocationX;
+               "\tmLocationT: " + mLocationT + "\tdesc: " + getLocationTStr() + 
+               "\tmLocationL: " + mLocationL + "\tdesc: " + getLocationLStr() + 
+               "\tmLocationB: " + mLocationB + "\tdesc: " + getLocationBStr() +  
+               "\tmLocationH: " + mLocationH + "\tdesc: " + getLocationHStr() +  
+               "\tmLocationX: " + mLocationX + "\tdesc: " + getLocationXStr();
     }
 
     public int getLocationT(){
         return mLocationT;
     }
     
+    public String getLocationTStr() {
+        return ((mLocationT & 0xff000000) >> 24) + "时 " +
+        ((mLocationT & 0xff0000) >> 16) + "分 " +
+        ((mLocationT & 0xff00) >> 8) + "秒 " + "." + 
+        (((int)(0.01 * (mLocationT & 0xff) * 100)) % 100) + "" ;
+    }
+    
     public int getLocationL() {
         return mLocationL;
-    }    
+    } 
+    
+    public String getLocationLStr() {
+        return ((mLocationL & 0xff000000) >> 24) + "^ " + 
+        ((mLocationL & 0xff0000) >> 16) + "' " +
+        ((mLocationL & 0xff00) >> 8) + "\" " + "." + 
+        ((mLocationL & 0xff)) + "";        
+    }
     
     public int getLocationB() {
         return mLocationB;
+    }
+    
+    public String getLocationBStr() {
+        return ((mLocationB & 0xff000000) >> 24) + "^ " + 
+        ((mLocationB & 0xff0000) >> 16) + "' " +
+        ((mLocationB & 0xff00) >> 8) + "\" " + "." + 
+        ((mLocationB & 0xff)) + "";    
     }
     
     public short getLocationH() {
         return mLocationH;
     }    
     
+    public String getLocationHStr() {
+        return "" + mLocationH;
+    }
+    
     public short getLocationX() {
         return mLocationX;
+    }
+    
+    public String getLocationXStr() {
+        return "" + mLocationX;
     }
 
     public void setLocationT(int mLocationT) {
