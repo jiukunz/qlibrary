@@ -316,47 +316,42 @@ public class BluetoothChatService implements IChatService {
             String userAdd = " 00 02 38 ";
             String bStr = "";
             if (Pack.CODE_MESSGE.equals(codeStr)) {
-//                res = new MessageResponse(msgBytes);
                 MessageResponse m = (MessageResponse) res;
                 
                 String originAddress = " 00 02 38 ";
                 bStr = "24 4D 73 67 5F " + 
-                        " 00 33 " + // length
+                        " 00 13 " + // length
                         userAdd +
                         originAddress  + 
                         " 02 02 " + // time
-                        " 00 10 " + // payload len
-                        " 02 03 " + 
+                        " 00 08 " + // payload len
+                        " 76 " + 
                         " 88";
-//                String nullColumnHack = null;
-//                ContentValues values = m.toValues();
-                // mDBHelper.getWritableDatabase().insert(DBHelper.MSG_TABLE_NAME,
-                // nullColumnHack, values);
             } else if (Pack.CODE_LOCATION.equals(codeStr)) {
-//                res = new LocationResponse(msgBytes);
                 bStr =  " 24 50 6f 73 5f " + 
-                               " 00 0c " + 
+                               " 00 1b " + 
                                userAdd + 
                                " 00 01 00 00 " + "00 00 00 01 " +
                                " 00 00 00 01 " + "00 00 00 01 " +
                                "01";
             } else if (Pack.CODE_FBK.equals(codeStr)) {
-//                res = new FbkResponse(msgBytes);
             } else if (Pack.CODE_ICC.equals(codeStr)) {
-//                res = new IccResponse(msgBytes);
+                bStr = "24 49 63 63 5F " + // $Icc_
+                       " 00 11  "  + // len
+                       " 00 02 38 " + // add
+                       " 00 02 38 " + //
+                       " 00 10 " + 
+                       " 1a " + 
+                       " 22 ";
             } else if (Pack.CODE_SIG.contains(codeStr)) {
-//                res = new SigResponse(msgBytes);
                 bStr = "24 53 69 67 5f " + 
-                        " 00 0c " + 
+                        " 00 11 " + 
                         " 00 02 38 " +
                         " 02 03 04 06 09 a0" + 
                         " 0f  ";
             } else if (Pack.CODE_STS.equals(codeStr)) {
-//                res = new StsResponse(msgBytes);
             } else if (Pack.CODE_TIM.equals(codeStr)) {
-//                res = new TimResponse(msgBytes);
             } else if (Pack.CODE_ZRd.equals(codeStr)) {
-//                res = new ZrdResponse(msgBytes);
             } else {
                 Log.e(TAG, "unknown msg. msg: " + codeStr);
                 Log.d(TAG, "hex : " + Pack.toHexString(msgBytes));
