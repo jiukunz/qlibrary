@@ -293,16 +293,25 @@ public class ChatActivity extends BluzActivity {
             if (c.moveToFirst()) {
                 do {
                     String[] cNames = c.getColumnNames();
-                    long contactId = c.getLong(c.getColumnIndex(ContactsContract.Contacts._ID));
+                    long id = c.getLong(c.getColumnIndex(ContactsContract.Contacts._ID));
                     Log.d(TAG, "column names: " + cNames);
-                    c = getContentResolver().query(ContactsContract.RawContacts.CONTENT_URI,
-                            new String[] {
-                                ContactsContract.RawContacts._ID
-                            },
-                            ContactsContract.RawContacts.CONTACT_ID + "=?",
-                            new String[] {
-                                String.valueOf(contactId)
-                            }, null);
+                    c = getContentResolver().query(
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI, 
+                            null, 
+                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = ?", 
+                            new String[]{id + ""}, null);
+                            while (c.moveToNext()) {
+                                String phoneNumber = c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                
+                                try {
+                                    int phoneNumberInt = Integer.parseInt(phoneNumber);
+                                    mDestAddressText.setText(phoneNumber);
+                                } catch (NumberFormatException e){
+                                    Toast.makeText(this, "电话号码无效！！！", Toast.LENGTH_LONG).show();
+                                }
+                                
+                                Log.d(TAG, "select phoneNumber: " + phoneNumber);
+                            } 
                     cNames = c.getColumnNames();
                     break;
                 } while (c.moveToNext());
