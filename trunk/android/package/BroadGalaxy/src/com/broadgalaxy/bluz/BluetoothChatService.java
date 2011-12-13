@@ -322,7 +322,7 @@ public class BluetoothChatService implements IChatService {
                         if (msgLen == index) {
                             expectMore = false;// ok
                         } else if (msgLen > index) {
-                            Log.e(TAG, "invalid msg. msgLen > totalBytes msg: ");
+                            Log.e(TAG, "invalid msg. msgLen(" + msgLen + ") > totalBytes(" + index + ") msg: " + format(buffer, index));
                             index = 0;
                             continue;
                         } else {

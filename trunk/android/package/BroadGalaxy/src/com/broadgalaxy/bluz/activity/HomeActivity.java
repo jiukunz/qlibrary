@@ -4,6 +4,7 @@ package com.broadgalaxy.bluz.activity;
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.Menu;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.broadgalaxy.bluz.Application;
 import com.broadgalaxy.bluz.BluetoothChatService;
 import com.broadgalaxy.bluz.IChatService;
 import com.broadgalaxy.bluz.LocalService;
@@ -23,6 +25,7 @@ import com.broadgalaxy.bluz.R;
 import com.broadgalaxy.bluz.component.Navigation;
 import com.broadgalaxy.bluz.component.Navigation.OnNavClickListener;
 import com.broadgalaxy.bluz.protocol.IccRequest;
+import com.broadgalaxy.bluz.protocol.IccResponse;
 import com.broadgalaxy.bluz.protocol.LocationRequest;
 import com.broadgalaxy.bluz.protocol.LocationResponse;
 import com.broadgalaxy.bluz.protocol.MessageRequest;
@@ -31,6 +34,7 @@ import com.broadgalaxy.bluz.protocol.Response;
 import com.broadgalaxy.bluz.protocol.SigRequest;
 import com.broadgalaxy.bluz.protocol.SigResponse;
 import com.broadgalaxy.util.Log;
+import com.broadgalaxy.util.MiscUtil;
 
 public class HomeActivity extends BluzActivity {
 
@@ -43,15 +47,23 @@ public class HomeActivity extends BluzActivity {
     private Button mConnectBtn;
 
     private Button mLocateBtn;
-    private Button mSig;
+    private Button mSigBtn;
 
     private String mUserId;
 
     private TextView mTitle;
 
-    private TextView mLocation;
+    private TextView mLocationTextV;
 
     private String mConnectedDeviceName;
+
+    private TextView mIccTextV;
+
+    private int mUserAddress;
+
+    private Button mMessageBtn;
+
+    private TextView mSigTextV;
 
     private static int REQUEST_CODE_USER_ID = 11111;
 
@@ -70,8 +82,10 @@ public class HomeActivity extends BluzActivity {
         mTitle.setText(R.string.broadgalaxy);
         mTitle = (TextView) findViewById(R.id.title_right_text);
 
-        mLocation = (TextView) findViewById(R.id.location);
-        mLocation.setText(formatLocation(0, 0, 0, 0, 0));
+        mLocationTextV = (TextView) findViewById(R.id.location);
+        mLocationTextV.setText(formatLocation(0, 0, 0, 0, 0));
+        mIccTextV = (TextView) findViewById(R.id.user_id);
+        mSigTextV = (TextView)findViewById(R.id.sig_info);
         mNav = (Navigation) findViewById(R.id.navigation);
         mNav.setEnabled(true);// FIXME
         mNav.setOnNavListener(new OnNavClickListener() {
@@ -95,7 +109,11 @@ public class HomeActivity extends BluzActivity {
 
             @Override
             public void onClick(View v) {
-                tryLocate();
+//                tryLocate();
+
+                Intent intent = new Intent();
+                intent.setClass(HomeActivity.this, LocateActivity.class);
+                HomeActivity.this.startActivity(intent);
             }
         });
         mConnectBtn = (Button) findViewById(R.id.connect);
@@ -106,12 +124,22 @@ public class HomeActivity extends BluzActivity {
                 tryConnect();
             }
         });
-        mSig = (Button) findViewById(R.id.sig);
-        mSig.setOnClickListener(new OnClickListener() {
+        mSigBtn = (Button) findViewById(R.id.sig);
+        mSigBtn.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 trySig();
+            }
+        });
+        mMessageBtn = (Button) findViewById(R.id.message);
+        mMessageBtn.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(HomeActivity.this, ChatActivity.class);
+                HomeActivity.this.startActivity(intent);
             }
         });
     }
@@ -192,9 +220,23 @@ public class HomeActivity extends BluzActivity {
 //        write(null, m.getByte());
         m = new LocationRequest(fromAddress, (byte) 0);
 //        write(null, m.getByte());
-        m = new IccRequest();
+//        m = new IccRequest();
         // Log.e(TAG, "sig: " + m.toHexString());
         write(null, m.getByte());
+    }
+    
+
+    private void tryIcc() {
+        // Check that we're actually connected before trying anything
+        if (/* mChatService. */getState() != IChatService.STATE_CONNECTED) {
+            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Pack m = null;
+        m = new IccRequest();
+        // Log.e(TAG, "sig: " + m.toHexString());
+        write(null, m.getByte());        
     }
 
     protected void trySig() {
@@ -204,9 +246,8 @@ public class HomeActivity extends BluzActivity {
             return;
         }
 
-        int fromAddress = Integer.valueOf("000238");
-        fromAddress = 568; // ox 00 02 38
-        int toAddress = 3;
+        int fromAddress = 0;
+        fromAddress = mUserAddress; // ox 00 02 38
         Pack m = new LocationRequest(fromAddress, (byte) 0);
         m = new SigRequest(fromAddress, (byte) 0);
         // m = new MessageRequest(fromAddress, fromAddress, "kk");
@@ -253,20 +294,58 @@ public class HomeActivity extends BluzActivity {
             case IChatService.STATE_LISTEN:
             case IChatService.STATE_NONE:
                 mTitle.setText(R.string.title_not_connected);
-                break;
+
+              mLocateBtn.setEnabled(false);
+              mSigBtn.setEnabled(false);
+              mMessageBtn.setEnabled(false);
+              break;
         }
     }
 
-    protected void handlReadmsg(Response response) {
+    protected void handleReadmsg(Response response) {
         if (response instanceof SigResponse) {
             SigResponse s = (SigResponse) response;
-            Log.d(TAG, "sig: " + s);
+            
+            CharSequence level = null;
+            
+            int sig = s.getSig1();
+            s.getPayload();
+            
+            level = sig2Level(sig);
+            
+            mSigTextV.setText(level + "\traw data: " + Pack.toHexString(s.getByte()));
+//            Log.d(TAG, "sig: " + s);
         } else if (response instanceof LocationResponse) {
             LocationResponse l = (LocationResponse) response;
             String location = "";            
             location = formatLocation(l.getLocationT(), l.getLocationL(), l.getLocationB(), l.getLocationH(), l.getLocationX());
-            mLocation.setText(location);
+            mLocationTextV.setText(location);
+        } else if (response instanceof IccResponse) {
+            IccResponse icc = (IccResponse) response;
+            
+            mUserAddress = icc.getUserAddress();
+            Editor e = getSharedPreferences(Application.PREF_FILE_NAME, MODE_PRIVATE).edit();
+            e.putInt(Application.PREF_USER_ID, mUserAddress);
+            e.commit();
+            
+            mIccTextV.setText("用户ID： " + mUserAddress);
+            
+            // enable all
+            mSigBtn.setEnabled(true);
+            mLocateBtn.setEnabled(true);
+            mMessageBtn.setEnabled(true);
+            
+            trySig();
         }
+    }
+
+    private CharSequence sig2Level(int sig) {
+        String level = "unknow level.";
+        
+        if (sig < -158) {
+            
+        }
+        return "功率： " + level;
     }
 
     String formatLocation(int t, int l, int b, int h, int x) {
@@ -282,18 +361,15 @@ public class HomeActivity extends BluzActivity {
     }
 
     private void onConnected() {
-        mNav.setEnabled(true);
-        mLocateBtn.setEnabled(true);
-        mSig.setEnabled(true);
-        mConnectBtn.setVisibility(View.GONE);
-
-        tryLocate();
+//        tryLocate();
+        tryIcc();
     }
+
 
     private void onDisConnected() {
         mNav.setEnabled(false);
         mLocateBtn.setEnabled(false);
-        mSig.setEnabled(false);
+        mSigBtn.setEnabled(false);
         mConnectBtn.setVisibility(View.VISIBLE);
     }
 

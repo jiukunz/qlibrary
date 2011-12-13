@@ -16,17 +16,12 @@
 
 package com.broadgalaxy.bluz.activity;
 
-import com.broadgalaxy.bluz.Application;
-import com.broadgalaxy.bluz.BluetoothChatService;
-import com.broadgalaxy.bluz.IChatService;
-import com.broadgalaxy.bluz.R;
-import com.broadgalaxy.bluz.protocol.IccResponse;
-import com.broadgalaxy.bluz.protocol.MessageRequest;
-import com.broadgalaxy.bluz.protocol.MessageResponse;
-import com.broadgalaxy.bluz.protocol.Response;
-import com.broadgalaxy.util.Log;
-import com.broadgalaxy.util.MiscUtil;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -36,24 +31,114 @@ import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.broadgalaxy.bluz.Application;
+import com.broadgalaxy.bluz.BluetoothChatService;
+import com.broadgalaxy.bluz.IChatService;
+import com.broadgalaxy.bluz.R;
+import com.broadgalaxy.bluz.activity.BoxActivity.MessageEntity;
+import com.broadgalaxy.bluz.persistence.DBHelper;
+import com.broadgalaxy.bluz.persistence.IMsg;
+import com.broadgalaxy.bluz.protocol.MessageRequest;
+import com.broadgalaxy.bluz.protocol.MessageResponse;
+import com.broadgalaxy.bluz.protocol.Response;
+import com.broadgalaxy.util.Log;
+import com.broadgalaxy.util.MiscUtil;
 
 /**
  * This is the main Activity that displays the current chat session.
  */
 public class ChatActivity extends BluzActivity {
-    private static final int REQUEST_CONTACTS = 1;
+    class MessageAdapter extends ArrayAdapter<MessageEntity> {
+        private List<MessageEntity> mData;
+
+        public MessageAdapter(final Context context, final List<MessageEntity> data) {
+            super(context, R.layout.box_item, R.id.message, data);
+            mData = data;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return mData.get(position).id;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LinearLayout l = null;
+            if (null != convertView) {
+                l = (LinearLayout) convertView;
+            } else {
+                l = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.box_item,
+                        null);
+            }
+
+            MessageEntity e = getItem(position);
+            ((TextView) l.findViewById(R.id.address)).setText("发件人：" + e.fromAdd);
+            ((TextView) l.findViewById(R.id.message)).setText("信息：" + e.message);
+            CharSequence time = new Date(e.timeTick).toLocaleString();
+            ((TextView) l.findViewById(R.id.time)).setText("时间：" + time);
+
+            return l;
+        }
+    }
+
+    public static class MessageEntity {
+        public static MessageEntity fromCursor(Cursor c) {
+            MessageEntity e = new MessageEntity();
+            e.id = (long) c.getInt(c.getColumnIndex(IMsg._ID));
+            e.fromAdd = c.getString(c.getColumnIndex(IMsg.COLUMN_FROM_ADDRESS));
+            e.toAdd = c.getString(c.getColumnIndex(IMsg.COLUMN_DEST_ADDRESS));
+            e.timeTick = c.getLong(c.getColumnIndex(IMsg.COLUMN_TIME));
+            e.message = c.getString(c.getColumnIndex(IMsg.COLUMN_DATA));
+            e.messageLen = c.getInt(c.getColumnIndex(IMsg.COLUMN_DATA_LEN));
+            e.status = c.getInt(c.getColumnIndex(IMsg.COLUMN_STATUS));
+            return e;
+        }
+
+        public static ContentValues toValues(MessageEntity e) {
+            ContentValues v = new ContentValues();
+            v.put(IMsg.COLUMN_FROM_ADDRESS, e.fromAdd);
+            v.put(IMsg.COLUMN_DEST_ADDRESS, e.toAdd);
+            v.put(IMsg.COLUMN_DATA, e.message);
+            v.put(IMsg.COLUMN_DATA_LEN, e.messageLen);
+            v.put(IMsg.COLUMN_TIME, System.currentTimeMillis());
+            v.put(IMsg.COLUMN_STATUS, e.status);
+            return v;
+        }
+
+        public String fromAdd;
+        public long id;
+        public String message;
+        private int messageLen;
+        public int status;
+
+        public long timeTick;
+
+        public String toAdd;
+
+        @Override
+        public String toString() {
+            return message;
+        }
+
+    }
 
     static final boolean D = true;
+
+    private static final int REQUEST_CONTACTS = 1;
 
     // Debugging
     static final String TAG = "ChatActivity";
@@ -64,81 +149,11 @@ public class ChatActivity extends BluzActivity {
     private String mConnectedDeviceName = "";
 
     // Array adapter for the conversation thread
-    private ArrayAdapter<String> mConversationArrayAdapter;
+    private MessageAdapter mConversationArrayAdapter;
 
     private ListView mConversationView;
 
-    /**
-     * @param msg
-     */
-    protected void handleStateChangeMsg(int state) {
-        if (D) {
-            Log.i(TAG,
-                    "MESSAGE_STATE_CHANGE: " + state + " "
-                            + BluetoothChatService.toStateDesc(state));
-        }
-        mSendButton.setEnabled(IChatService.STATE_CONNECTED == state);
-        switch (state) {
-            case IChatService.STATE_CONNECTED:
-                mConnectedDeviceName = mService.getConnectDName();
-                mTitle.setText(R.string.title_connected);
-                mTitle.append(mConnectedDeviceName);
-                mConversationArrayAdapter.clear();
-                break;
-            case IChatService.STATE_CONNECTING:
-                mTitle.setText(R.string.title_connecting);
-                break;
-            case IChatService.STATE_LISTEN:
-            case IChatService.STATE_NONE:
-                mTitle.setText(R.string.title_not_connected);
-                break;
-        }
-    }
-
-    /**
-     * @param msg
-     */
-    protected void handToastmsg(Message msg) {
-        Toast.makeText(getApplicationContext(), msg.getData().getString(TOAST), Toast.LENGTH_SHORT)
-                .show();
-    }
-
-    /**
-     * @param msg
-     */
-    protected void handleDeviceNameMsg(Message msg) {
-        // save the connected device's name
-        mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
-        Toast.makeText(getApplicationContext(), "Connected to " + mConnectedDeviceName,
-                Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * @param response
-     */
-    protected void handlReadmsg(Response response) {
-        // byte[] readBuf = (byte[]) response.obj;
-        // // construct a string from the valid bytes in the buffer
-        String readMessage = "";
-        MessageResponse msgRes = null;
-        if (response instanceof MessageResponse) {
-            msgRes = (MessageResponse) response;
-            readMessage = msgRes.getMsg();
-            mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
-        }
-    }
-
-    /**
-     * @param msg
-     */
-    protected void handleWriteMsg(Message msg) {
-        // byte[] writeBuf = (byte[]) msg.obj;
-
-        byte[] writeBuf = ((MessageRequest) msg.obj).getmMsg().getBytes();
-        // construct a string from the buffer
-        String writeMessage = new String(writeBuf);
-        mConversationArrayAdapter.add("Me:  " + writeMessage);
-    }
+    private DBHelper mDB;
 
     EditText mDestAddressText;
 
@@ -151,6 +166,8 @@ public class ChatActivity extends BluzActivity {
 
     // Layout Views
     private TextView mTitle;
+
+    private int mUserId;
 
     // The action listener for the EditText widget, to listen for the return key
     private TextView.OnEditorActionListener mWriteListener = new TextView.OnEditorActionListener() {
@@ -167,7 +184,131 @@ public class ChatActivity extends BluzActivity {
         }
     };
 
-    private int mUserId;
+    private Button mReciptBtn;
+
+    /**
+     * 
+     */
+    protected void fillDataFromDB() {
+        List<MessageEntity> historyData = new ArrayList<MessageEntity>();
+        // Initialize the array adapter for the conversation thread
+        String selection = IMsg.COLUMN_FROM_ADDRESS + "=? or " + IMsg.COLUMN_FROM_ADDRESS + "=?";
+        String[] selectArgs = new String[] {
+                mUserId + "", mUserId + ""
+        };
+        Cursor c = mDB.getReadableDatabase().query(DBHelper.MSG_TABLE_NAME, null, selection,
+                selectArgs, null,
+                null, null);
+        if (c.moveToFirst()) {
+            while (!c.isAfterLast()) {
+                historyData.add(MessageEntity.fromCursor(c));
+                c.moveToNext();
+            }
+        }
+
+        mConversationArrayAdapter = new MessageAdapter(this, historyData);
+        mConversationView.setAdapter(mConversationArrayAdapter);
+    }
+
+    /**
+     * @param msg
+     */
+    protected void handleDeviceNameMsg(Message msg) {
+        // save the connected device's name
+        mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
+        Toast.makeText(getApplicationContext(), "Connected to " + mConnectedDeviceName,
+                Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * @param response
+     */
+    protected void handleReadmsg(Response response) {
+        // byte[] readBuf = (byte[]) response.obj;
+        // // construct a string from the valid bytes in the buffer
+        String readMessage = "";
+        MessageResponse msgRes = null;
+        if (response instanceof MessageResponse) {
+            msgRes = (MessageResponse) response;
+            readMessage = msgRes.getMsg();
+            // mConversationArrayAdapter.add(mConnectedDeviceName + ":  " +
+            // readMessage);
+            fillDataFromDB();
+        }
+    }
+
+    /**
+     * @param msg
+     */
+    protected void handleStateChangeMsg(int state) {
+        if (D) {
+            Log.i(TAG,
+                    "MESSAGE_STATE_CHANGE: " + state + " "
+                            + BluetoothChatService.toStateDesc(state));
+        }
+        mSendButton.setEnabled(IChatService.STATE_CONNECTED == state);
+        switch (state) {
+            case IChatService.STATE_CONNECTED:
+                mConnectedDeviceName = mService.getConnectDName();
+                mTitle.setText(R.string.title_connected);
+                mTitle.append(mConnectedDeviceName);
+                break;
+            case IChatService.STATE_CONNECTING:
+                mTitle.setText(R.string.title_connecting);
+                break;
+            case IChatService.STATE_LISTEN:
+            case IChatService.STATE_NONE:
+                mTitle.setText(R.string.title_not_connected);
+                break;
+        }
+    }
+
+    /**
+     * @param msg
+     */
+    protected void handleWriteMsg(Message msg) {
+        // byte[] writeBuf = (byte[]) msg.obj;
+
+        byte[] writeBuf = ((MessageRequest) msg.obj).getmMsg().getBytes();
+        // construct a string from the buffer
+        String writeMessage = new String(writeBuf);
+        // mConversationArrayAdapter.add("Me:  " + writeMessage);
+        fillDataFromDB();
+    }
+
+    /**
+     * @param msg
+     */
+    protected void handToastmsg(Message msg) {
+        Toast.makeText(getApplicationContext(), msg.getData().getString(TOAST), Toast.LENGTH_SHORT)
+                .show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (REQUEST_CONTACTS == requestCode && resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+            Log.d(TAG, "uri: " + uri);
+            Cursor c = getContentResolver().query(uri, null, null, null, null);
+            if (c.moveToFirst()) {
+                do {
+                    String[] cNames = c.getColumnNames();
+                    long contactId = c.getLong(c.getColumnIndex(ContactsContract.Contacts._ID));
+                    Log.d(TAG, "column names: " + cNames);
+                    c = getContentResolver().query(ContactsContract.RawContacts.CONTENT_URI,
+                            new String[] {
+                                ContactsContract.RawContacts._ID
+                            },
+                            ContactsContract.RawContacts.CONTACT_ID + "=?",
+                            new String[] {
+                                String.valueOf(contactId)
+                            }, null);
+                    cNames = c.getColumnNames();
+                    break;
+                } while (c.moveToNext());
+            }
+        }
+    }
 
     /**
      * 
@@ -191,6 +332,8 @@ public class ChatActivity extends BluzActivity {
         mTitle = (TextView) findViewById(R.id.title_left_text);
         mTitle.setText(R.string.broadgalaxy);
         mTitle = (TextView) findViewById(R.id.title_right_text);
+
+        mDB = new DBHelper(this);
 
         setupChat();
     }
@@ -216,7 +359,7 @@ public class ChatActivity extends BluzActivity {
             String userId = mDestAddressText.getText().toString();
             int toAddress = MiscUtil.userid2int(userId);
             MessageRequest msgR = new MessageRequest(fromAddress, toAddress,
-                    MessageRequest.ENCODE_CODE, // 
+                    MessageRequest.ENCODE_CODE, //
                     message);
 
             write(msgR, send);
@@ -234,24 +377,41 @@ public class ChatActivity extends BluzActivity {
             @Override
             public void onClick(View v) {
                 Intent pick = new Intent(Intent.ACTION_PICK);
-//                pick.setType(ContactsContract.Contacts.CONTENT_ITEM_TYPE);
+                // pick.setType(ContactsContract.Contacts.CONTENT_ITEM_TYPE);
                 pick.setData(ContactsContract.Contacts.CONTENT_URI);
                 startActivityForResult(pick, REQUEST_CONTACTS);
             }
         });
 
-        // Initialize the array adapter for the conversation thread
-        mConversationArrayAdapter = new ArrayAdapter<String>(this, R.layout.message);
         mConversationView = (ListView) findViewById(R.id.in);
-        mConversationView.setAdapter(mConversationArrayAdapter);
 
         mUserId = getSharedPreferences(Application.PREF_FILE_NAME, MODE_PRIVATE).getInt(
                 Application.PREF_USER_ID, 0);
+        fillDataFromDB();
+
+        mReciptBtn = (Button) findViewById(R.id.receiver);
+        mReciptBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent pick = new Intent(Intent.ACTION_PICK);
+                // pick.setType(ContactsContract.Contacts.CONTENT_ITEM_TYPE);
+                pick.setData(ContactsContract.Contacts.CONTENT_URI);
+                startActivityForResult(pick, REQUEST_CONTACTS);
+            }
+        });
         mDestAddressText = (EditText) findViewById(R.id.dest_address);
         if (mUserId != 0) {
             mDestAddressText.setText(mUserId + "");
         }
         mDestAddressText.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > 0) {
+
+                }
+            }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -263,13 +423,6 @@ public class ChatActivity extends BluzActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // TODO Auto-generated method stub
 
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.length() > 0) {
-
-                }
             }
         });
         // Initialize the compose field with a listener for the return key
@@ -290,22 +443,4 @@ public class ChatActivity extends BluzActivity {
         // Initialize the buffer for outgoing messages
         mOutStringBuffer = new StringBuffer("");
     }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (REQUEST_CONTACTS == requestCode && resultCode == RESULT_OK) {
-            Uri uri = data.getData();
-            Log.d(TAG, "uri: " + uri);
-            Cursor c = getContentResolver().query(uri, null, null, null, null);
-            if (c.moveToFirst()) {
-                do {
-                    String[] cNames = c.getColumnNames();
-                    Log.d(TAG, "column names: " + cNames);
-                    break;
-                } while (c.moveToNext());
-            }
-        }
-    }
-
-    
 }

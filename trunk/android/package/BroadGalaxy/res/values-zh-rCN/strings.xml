@@ -14,7 +14,11 @@
      limitations under the License.
 -->
 
-<resources>		
+<resources>		    
+    <string name="message">消息</string>
+    <string name="no_user_id">没有用户ID。</string>
+    <string name="no_sig_info">没有功率信息。</string>
+    
 	<string name="dest_address">目的地址</string>
     <string name="user_id">用户 ID: </string>
     <string name="btn_connect">连接</string>

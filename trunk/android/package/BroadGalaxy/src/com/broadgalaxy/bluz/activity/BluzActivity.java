@@ -50,7 +50,7 @@ public class BluzActivity extends Activity {
 
     }
 
-    protected void handlReadmsg(Response response) {
+    protected void handleReadmsg(Response response) {
         // TODO Auto-generated method stub
     }
 
@@ -104,7 +104,7 @@ public class BluzActivity extends Activity {
 
             @Override
             public void handlReadmsg(Response response) {
-                BluzActivity.this.handlReadmsg(response);
+                BluzActivity.this.handleReadmsg(response);
             }
 
             @Override
