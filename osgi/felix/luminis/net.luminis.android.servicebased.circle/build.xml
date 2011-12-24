@@ -1,0 +1,15 @@
+<project name="net.luminis.android.servicebased.circle" default="package">
+    <property name="android.home" value="/home/luoqii/android/sdk/linux" />
+    <target name="package">
+    	<delete file="classes.dex"/>
+    	<delete file="net.luminis.android.servicebased.circle.jar"/>
+        <exec command="${android.home}/platform-tools/dx --dex --debug --output=classes.dex bin" />
+    	<copy file="circle.png" todir="bin" />
+        <jar file="net.luminis.android.servicebased.circle.jar" basedir="bin" manifest="META-INF/MANIFEST.MF">
+        </jar>
+        <exec command="${android.home}/platform-tools/aapt add ${ant.project.name}.jar classes.dex" />
+    </target>
+    <target name="deploy">
+        <exec command="${android.home}/platform-tools/adb push ${ant.project.name}.jar /data/data/net.luminis.android.felix/bundles/${ant.project.name}.jar" />
+    </target>
+</project>
