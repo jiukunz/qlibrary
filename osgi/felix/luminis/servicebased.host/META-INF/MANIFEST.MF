@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Circle Shape
+Bundle-SymbolicName: net.luminis.android.servicebased.circle
+Bundle-Version: 1.0.0
+Bundle-Activator: net.luminis.android.servicebased.circle.Activator
+Import-Package: net.luminis.android.servicebased.host.service,
+ android.content,
+ android.view,
+ android.widget,
+ android.os,
+ android.graphics,
+ android.app,
+ org.osgi.framework;version="1.3.0"
