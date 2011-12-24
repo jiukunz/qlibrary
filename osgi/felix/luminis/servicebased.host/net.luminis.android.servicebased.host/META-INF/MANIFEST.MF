@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Service Based Host
+Bundle-SymbolicName: net.luminis.android.servicebased.host
+Bundle-Version: 1.0.0
+Bundle-Activator: net.luminis.android.servicebased.host.Activator
+Import-Package: net.luminis.android.felix.view,
+ net.luminis.android.servicebased.host.service,
+ android.content,
+ android.view,
+ android.widget,
+ android.os,
+ android.graphics,
+ android.graphics.drawable,
+ android.app,
+ org.osgi.util.tracker,
+ org.osgi.framework;version="1.3.0"
+Export-Package: net.luminis.android.servicebased.host.service
