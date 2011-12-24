@@ -1,0 +1,8 @@
+<project default="build">
+    <target name="build" description="Sets up the project">
+        <jar destfile="felix-ma.jar" duplicate="preserve">
+            <zipfileset src="felix.jar" />
+            <zipfileset src="net.luminis.liq.ma.webstart-1.0.0.jar" />
+        </jar>
+    </target>
+</project>
