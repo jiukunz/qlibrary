@@ -64,6 +64,6 @@ public class SigCom extends FrameLayout {
 
     private int toProgress(int s) {
         
-        return s + 1;
+        return s;
     }
 }
