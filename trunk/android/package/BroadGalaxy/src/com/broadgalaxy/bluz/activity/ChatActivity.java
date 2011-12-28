@@ -86,7 +86,7 @@ public class ChatActivity extends BluzActivity {
             }
 
             MessageEntity e = getItem(position);
-            ((TextView) l.findViewById(R.id.address)).setText("发件人：" + e.fromAdd);
+            ((TextView) l.findViewById(R.id.address)).setText("发件人：" + e.fromAdd + "\n收件人： " + e.toAdd);
             ((TextView) l.findViewById(R.id.message)).setText("信息：" + e.message);
             CharSequence time = new Date(e.timeTick).toLocaleString();
             ((TextView) l.findViewById(R.id.time)).setText("时间：" + time);
@@ -192,7 +192,7 @@ public class ChatActivity extends BluzActivity {
     protected void fillDataFromDB() {
         List<MessageEntity> historyData = new ArrayList<MessageEntity>();
         // Initialize the array adapter for the conversation thread
-        String selection = IMsg.COLUMN_FROM_ADDRESS + "=? or " + IMsg.COLUMN_FROM_ADDRESS + "=?";
+        String selection = IMsg.COLUMN_FROM_ADDRESS + "=? or " + IMsg.COLUMN_DEST_ADDRESS + "=?";
         String[] selectArgs = new String[] {
                 mUserId + "", mUserId + ""
         };

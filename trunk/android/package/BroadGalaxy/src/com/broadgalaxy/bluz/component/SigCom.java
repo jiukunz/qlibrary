@@ -1,3 +1,4 @@
+
 package com.broadgalaxy.bluz.component;
 
 import android.content.Context;
@@ -26,7 +27,7 @@ public class SigCom extends FrameLayout {
 
     public SigCom(Context context, AttributeSet attrs) {
         super(context, attrs);
-        
+
         View v = inflate(context, R.layout.sig, this);
         mSig1 = (SeekBar) findViewById(R.id.sig1);
         mSig2 = (SeekBar) findViewById(R.id.sig2);
@@ -34,36 +35,46 @@ public class SigCom extends FrameLayout {
         mSig4 = (SeekBar) findViewById(R.id.sig4);
         mSig5 = (SeekBar) findViewById(R.id.sig5);
         mSig6 = (SeekBar) findViewById(R.id.sig6);
-//        addView(v, ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
+        // addView(v, ViewGroup.LayoutParams.FILL_PARENT,
+        // ViewGroup.LayoutParams.FILL_PARENT);
     }
 
     public SigCom(Context context) {
         super(context);
         // TODO Auto-generated constructor stub
     }
-    
-    public void setSigResponse(SigResponse sig){
-        int s = sig.getSig1();
-        mSig1.setProgress(toProgress(s));
-        
-        s = sig.getSig2();
-        mSig2.setProgress(toProgress(s));
-        
-        s = sig.getSig3();
-        mSig3.setProgress(toProgress(s));
-        
-        s = sig.getSig4();
-        mSig4.setProgress(toProgress(s));
-        
-        s = sig.getSig5();
-        mSig5.setProgress(toProgress(s));
-        
-        s = sig.getSig6();
-        mSig6.setProgress(toProgress(s));
+
+    public void setSigResponse(SigResponse sig) {
+        if (null == sig) {
+            mSig1.setProgress(0);
+            mSig2.setProgress(0);
+            mSig3.setProgress(0);
+            mSig4.setProgress(0);
+            mSig5.setProgress(0);
+            mSig6.setProgress(0);
+        } else {
+            int s = sig.getSig1();
+            mSig1.setProgress(toProgress(s));
+
+            s = sig.getSig2();
+            mSig2.setProgress(toProgress(s));
+
+            s = sig.getSig3();
+            mSig3.setProgress(toProgress(s));
+
+            s = sig.getSig4();
+            mSig4.setProgress(toProgress(s));
+
+            s = sig.getSig5();
+            mSig5.setProgress(toProgress(s));
+
+            s = sig.getSig6();
+            mSig6.setProgress(toProgress(s));
+        }
     }
 
     private int toProgress(int s) {
-        
+
         return s;
     }
 }
