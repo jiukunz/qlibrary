@@ -23,16 +23,16 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/no_sig_info" />
-    
-    <ProgressBar 
-        android:visibility="gone"
+
+    <ProgressBar
         android:id="@+id/progress"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="false"
         android:max="4"
         android:progress="4"
         android:secondaryProgress="0"
-        android:indeterminate="false"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
+        android:visibility="gone" />
 
     <ImageView
         android:layout_width="fill_parent"
@@ -40,11 +40,11 @@
         android:src="@android:drawable/divider_horizontal_dark" />
 
     <com.broadgalaxy.bluz.component.Navigation
-        android:visibility="gone"
         android:id="@+id/navigation"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:enabled="false" />
+        android:enabled="false"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/locate"
@@ -61,16 +61,16 @@
         android:text="@string/sig" />
 
     <Button
-        android:id="@+id/connect"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/connect" />
-
-    <Button
         android:id="@+id/message"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:enabled="false"
         android:text="@string/message" />
+
+    <Button
+        android:id="@+id/connect"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/connect" />
 
 </LinearLayout>
