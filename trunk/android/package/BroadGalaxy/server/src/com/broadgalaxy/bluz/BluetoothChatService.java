@@ -319,6 +319,7 @@ public class BluetoothChatService implements IChatService {
                 MessageResponse m = (MessageResponse) res;
                 
                 String originAddress = " 00 02 38 ";
+//                originAddress = " 00 02 48 ";
                 bStr = "24 4D 73 67 5F " + 
                         " 00 13 " + // length
                         userAdd +
@@ -331,8 +332,12 @@ public class BluetoothChatService implements IChatService {
                 bStr =  " 24 50 6f 73 5f " + 
                                " 00 1b " + 
                                userAdd + 
-                               " 00 01 00 00 " + "00 00 00 01 " +
-                               " 00 00 00 01 " + "00 00 00 01 " +
+                               
+                               // real data
+                               " 0e 1c 29 38 " + " 74 16 06 07  " +
+                               " 27 35 22 03  " + " 00 59 00 2d  " +
+                               
+                               
                                "01";
             } else if (Pack.CODE_FBK.equals(codeStr)) {
             } else if (Pack.CODE_ICC.equals(codeStr)) {
@@ -347,7 +352,10 @@ public class BluetoothChatService implements IChatService {
                 bStr = "24 53 69 67 5f " + 
                         " 00 11 " + 
                         " 00 02 38 " +
-                        " 02 03 04 06 09 a0" + 
+                        
+//                        " 02 03 04 06 09 a0" +  
+                        " 02 04 04 03 03 04 " + // real data
+                        
                         " 0f  ";
             } else if (Pack.CODE_STS.equals(codeStr)) {
             } else if (Pack.CODE_TIM.equals(codeStr)) {
