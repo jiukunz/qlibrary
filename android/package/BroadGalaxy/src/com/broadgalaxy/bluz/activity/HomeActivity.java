@@ -87,7 +87,7 @@ public class HomeActivity extends BluzActivity {
         mLocationTextV = (TextView) findViewById(R.id.location);
         mLocationTextV.setText(formatLocation(0, 0, 0, 0, 0));
         mIccTextV = (TextView) findViewById(R.id.user_id);
-        mSigTextV = (TextView)findViewById(R.id.sig_info);
+        mSigTextV = (TextView) findViewById(R.id.sig_info);
         mSigCom = (SigCom) findViewById(R.id.sigCom);
         mNav = (Navigation) findViewById(R.id.navigation);
         mNav.setEnabled(true);// FIXME
@@ -112,7 +112,7 @@ public class HomeActivity extends BluzActivity {
 
             @Override
             public void onClick(View v) {
-//                tryLocate();
+                // tryLocate();
 
                 Intent intent = new Intent();
                 intent.setClass(HomeActivity.this, LocateActivity.class);
@@ -137,7 +137,7 @@ public class HomeActivity extends BluzActivity {
         });
         mMessageBtn = (Button) findViewById(R.id.message);
         mMessageBtn.setOnClickListener(new OnClickListener() {
-            
+
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -218,16 +218,15 @@ public class HomeActivity extends BluzActivity {
         int toAddress = 3;
         Pack m = new LocationRequest(fromAddress, (byte) 0);
         m = new SigRequest(fromAddress, (byte) 0);
-//        write(null, m.getByte());
+        // write(null, m.getByte());
         m = new MessageRequest(fromAddress, fromAddress, "kk");
-//        write(null, m.getByte());
+        // write(null, m.getByte());
         m = new LocationRequest(fromAddress, (byte) 0);
-//        write(null, m.getByte());
-//        m = new IccRequest();
+        // write(null, m.getByte());
+        // m = new IccRequest();
         // Log.e(TAG, "sig: " + m.toHexString());
         write(null, m.getByte());
     }
-    
 
     private void tryIcc() {
         // Check that we're actually connected before trying anything
@@ -239,7 +238,7 @@ public class HomeActivity extends BluzActivity {
         Pack m = null;
         m = new IccRequest();
         // Log.e(TAG, "sig: " + m.toHexString());
-        write(null, m.getByte());        
+        write(null, m.getByte());
     }
 
     protected void trySig() {
@@ -298,10 +297,11 @@ public class HomeActivity extends BluzActivity {
             case IChatService.STATE_NONE:
                 mTitle.setText(R.string.title_not_connected);
 
-              mLocateBtn.setEnabled(false);
-              mSigBtn.setEnabled(false);
-              mMessageBtn.setEnabled(false);
-              break;
+                mLocateBtn.setEnabled(false);
+                mSigBtn.setEnabled(false);
+                mMessageBtn.setEnabled(false);
+                mSigCom.setSigResponse(null);
+                break;
         }
     }
 
@@ -310,44 +310,45 @@ public class HomeActivity extends BluzActivity {
             SigResponse s = (SigResponse) response;
             mSigCom.setSigResponse(s);
             CharSequence level = null;
-            
+
             int sig = s.getSig1();
             s.getPayload();
-            
+
             level = sig2Level(sig);
-            
+
             String sigStr = level + "\traw data: " + Pack.toHexString(s.getByte());
-//            mSigTextV.setText(sigStr);
-//            Log.d(TAG, "sig: " + s);
+            // mSigTextV.setText(sigStr);
+            // Log.d(TAG, "sig: " + s);
         } else if (response instanceof LocationResponse) {
             LocationResponse l = (LocationResponse) response;
-            String location = "";            
-            location = formatLocation(l.getLocationT(), l.getLocationL(), l.getLocationB(), l.getLocationH(), l.getLocationX());
+            String location = "";
+            location = formatLocation(l.getLocationT(), l.getLocationL(), l.getLocationB(),
+                    l.getLocationH(), l.getLocationX());
             mLocationTextV.setText(location);
         } else if (response instanceof IccResponse) {
             IccResponse icc = (IccResponse) response;
-            
+
             mUserAddress = icc.getUserAddress();
             Editor e = getSharedPreferences(Application.PREF_FILE_NAME, MODE_PRIVATE).edit();
             e.putInt(Application.PREF_USER_ID, mUserAddress);
             e.commit();
-            
+
             mIccTextV.setText("用户ID： " + mUserAddress);
-            
+
             // enable all
             mSigBtn.setEnabled(true);
             mLocateBtn.setEnabled(true);
             mMessageBtn.setEnabled(true);
-            
+
             trySig();
         }
     }
 
     private CharSequence sig2Level(int sig) {
         String level = "unknow level.";
-        
+
         if (sig < -158) {
-            
+
         }
         return "功率： " + level;
     }
@@ -365,10 +366,9 @@ public class HomeActivity extends BluzActivity {
     }
 
     private void onConnected() {
-//        tryLocate();
+        // tryLocate();
         tryIcc();
     }
-
 
     private void onDisConnected() {
         mNav.setEnabled(false);
