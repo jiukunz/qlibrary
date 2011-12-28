@@ -90,7 +90,7 @@ public class LocateActivity extends BluzActivity {
             mLocationBTextV.setText("维度:" + location.getLocationBStr());
             mLocationHTextV.setText("高度:" + location.getLocationHStr());
             mLocationTTextV.setText("时间:" + location.getLocationTStr());
-            mLocationInfo.setText("raw data: " + Pack.toHexString(response.getByte()));
+//            mLocationInfo.setText("raw data: " + Pack.toHexString(response.getByte()));
         }
     }
 
