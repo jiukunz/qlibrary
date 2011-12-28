@@ -111,7 +111,7 @@ public class BoxActivity extends Activity {
         mAdapter = new MessageAdapter(this, messages);
         mConversation.setAdapter(mAdapter);
     }
-
+    
     private void fillData(List<MessageEntity> messages) {
         String selection = IMsg.COLUMN_STATUS + "=?";
         String[] selectArgs = new String[]{mBoxType + ""};
