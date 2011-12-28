@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="功率1:" />
+
+        <com.broadgalaxy.bluz.component.EnabledSeekBar
+            android:id="@+id/sig1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:indeterminate="false"
+            android:max="5"
+            android:progress="0"
+            android:thumb="@null" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="功率2:" />
+
+        <com.broadgalaxy.bluz.component.EnabledSeekBar
+            android:id="@+id/sig2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:indeterminate="false"
+            android:max="5"
+            android:progress="0"
+            android:thumb="@null" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="功率3:" />
+
+        <com.broadgalaxy.bluz.component.EnabledSeekBar
+            android:id="@+id/sig3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:indeterminate="false"
+            android:max="5"
+            android:progress="0"
+            android:thumb="@null" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:paddingTop="5dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="功率4:" />
+
+        <com.broadgalaxy.bluz.component.EnabledSeekBar
+            android:id="@+id/sig4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:indeterminate="false"
+            android:max="5"
+            android:progress="0"
+            android:thumb="@null" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="功率5:" />
+
+        <com.broadgalaxy.bluz.component.EnabledSeekBar
+            android:id="@+id/sig5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:indeterminate="false"
+            android:max="5"
+            android:progress="0"
+            android:thumb="@null" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="功率6:" />
+
+        <com.broadgalaxy.bluz.component.EnabledSeekBar
+            android:id="@+id/sig6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:indeterminate="false"
+            android:max="5"
+            android:progress="0"
+            android:thumb="@null" />
+    </LinearLayout>
+
+</LinearLayout>

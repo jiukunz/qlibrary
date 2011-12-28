@@ -24,6 +24,7 @@ import com.broadgalaxy.bluz.LocalService;
 import com.broadgalaxy.bluz.R;
 import com.broadgalaxy.bluz.component.Navigation;
 import com.broadgalaxy.bluz.component.Navigation.OnNavClickListener;
+import com.broadgalaxy.bluz.component.SigCom;
 import com.broadgalaxy.bluz.protocol.IccRequest;
 import com.broadgalaxy.bluz.protocol.IccResponse;
 import com.broadgalaxy.bluz.protocol.LocationRequest;
@@ -34,7 +35,6 @@ import com.broadgalaxy.bluz.protocol.Response;
 import com.broadgalaxy.bluz.protocol.SigRequest;
 import com.broadgalaxy.bluz.protocol.SigResponse;
 import com.broadgalaxy.util.Log;
-import com.broadgalaxy.util.MiscUtil;
 
 public class HomeActivity extends BluzActivity {
 
@@ -65,6 +65,8 @@ public class HomeActivity extends BluzActivity {
 
     private TextView mSigTextV;
 
+    private SigCom mSigCom;
+
     private static int REQUEST_CODE_USER_ID = 11111;
 
     @Override
@@ -86,6 +88,7 @@ public class HomeActivity extends BluzActivity {
         mLocationTextV.setText(formatLocation(0, 0, 0, 0, 0));
         mIccTextV = (TextView) findViewById(R.id.user_id);
         mSigTextV = (TextView)findViewById(R.id.sig_info);
+        mSigCom = (SigCom) findViewById(R.id.sigCom);
         mNav = (Navigation) findViewById(R.id.navigation);
         mNav.setEnabled(true);// FIXME
         mNav.setOnNavListener(new OnNavClickListener() {
@@ -305,7 +308,7 @@ public class HomeActivity extends BluzActivity {
     protected void handleReadmsg(Response response) {
         if (response instanceof SigResponse) {
             SigResponse s = (SigResponse) response;
-            
+            mSigCom.setSigResponse(s);
             CharSequence level = null;
             
             int sig = s.getSig1();
@@ -313,7 +316,8 @@ public class HomeActivity extends BluzActivity {
             
             level = sig2Level(sig);
             
-            mSigTextV.setText(level + "\traw data: " + Pack.toHexString(s.getByte()));
+            String sigStr = level + "\traw data: " + Pack.toHexString(s.getByte());
+//            mSigTextV.setText(sigStr);
 //            Log.d(TAG, "sig: " + s);
         } else if (response instanceof LocationResponse) {
             LocationResponse l = (LocationResponse) response;
