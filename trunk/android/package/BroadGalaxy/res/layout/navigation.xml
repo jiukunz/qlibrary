@@ -22,18 +22,14 @@
         android:id="@+id/sig_info"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/no_sig_info" />
+        android:text="功率:" />
 
-    <ProgressBar
-        android:id="@+id/progress"
+	<com.broadgalaxy.bluz.component.SigCom
+	    android:id="@+id/sigCom"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:indeterminate="false"
-        android:max="4"
-        android:progress="4"
-        android:secondaryProgress="0"
-        android:visibility="gone" />
-
+        android:layout_height="wrap_content">
+	    
+	</com.broadgalaxy.bluz.component.SigCom>
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="4dp"
