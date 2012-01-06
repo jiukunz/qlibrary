@@ -1,50 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:layout_gravity="center"
-    android:layout_margin="5dp"
-    android:gravity="center"
-    android:orientation="vertical" >
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:layout_gravity="center" android:layout_margin="5dp"
+	android:gravity="center" android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/location_l"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-       	android:textSize="20sp"
-        android:text="经度:" />
+	<TextView android:id="@+id/location_l" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:textAppearance="@style/TextAppearenceLargeX"
+		android:text="经度:" />
 
-    <TextView
-        android:id="@+id/location_b"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-       	android:textSize="20sp"
-        android:text="维度:" />
+	<TextView android:id="@+id/location_b" android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:textAppearance="@style/TextAppearenceLargeX" android:text="维度:" />
 
-    <TextView
-        android:id="@+id/location_h"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-       	android:textSize="20sp"
-        android:text="高度:" />
+	<TextView android:id="@+id/location_h" android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
 
-    <TextView
-        android:id="@+id/location_t"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-       	android:textSize="20sp"
-        android:text="时间:" />
+		android:textAppearance="@style/TextAppearenceLargeX" android:text="高度:" />
 
-    <TextView
-        android:id="@+id/info"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        />
+	<TextView android:id="@+id/location_t" android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
 
-    <Button
-        android:id="@+id/locate"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/locate" />
+		android:textAppearance="@style/TextAppearenceLargeX" android:text="时间:" />
+
+	<TextView android:id="@+id/info" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" />
+
+	<Button android:id="@+id/locate" android:layout_width="fill_parent"
+
+		android:textAppearance="@style/TextAppearenceLargeX"
+		android:layout_height="wrap_content" android:text="@string/locate" />
 
 </LinearLayout>

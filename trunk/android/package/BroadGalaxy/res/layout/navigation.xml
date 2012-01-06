@@ -9,6 +9,7 @@
         android:id="@+id/user_id"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearenceLargeXX"
         android:text="@string/no_user_id" />
 
     <TextView
@@ -16,16 +17,19 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/no_locaton"
+        android:textAppearance="@style/TextAppearenceLargeXX"
         android:visibility="gone" />
 
     <TextView
         android:id="@+id/sig_info"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearenceLargeXX"
         android:text="功率:" />
 
 	<com.broadgalaxy.bluz.component.SigCom
 	    android:id="@+id/sigCom"
+        android:textAppearance="@style/TextAppearenceLargeXX"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 	    
@@ -47,6 +51,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:enabled="false"
+        android:textAppearance="@style/TextAppearenceLargeXX"
         android:text="@string/locate" />
 
     <Button
@@ -54,6 +59,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:enabled="false"
+        android:textAppearance="@style/TextAppearenceLargeXX"
         android:text="@string/sig" />
 
     <Button
@@ -61,12 +67,14 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:enabled="false"
+        android:textAppearance="@style/TextAppearenceLargeXX"
         android:text="@string/message" />
 
     <Button
         android:id="@+id/connect"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearenceLargeXX"
         android:text="@string/connect" />
 
 </LinearLayout>
