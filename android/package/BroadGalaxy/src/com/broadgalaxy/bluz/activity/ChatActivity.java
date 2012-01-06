@@ -87,7 +87,9 @@ public class ChatActivity extends BluzActivity {
 
             MessageEntity e = getItem(position);
             ((TextView) l.findViewById(R.id.address)).setText("发件人：" + e.fromAdd + "\n收件人： " + e.toAdd);
-            ((TextView) l.findViewById(R.id.message)).setText("信息：" + e.message);
+            ((TextView) l.findViewById(R.id.message)).setText(
+//                    "信息：" +
+                    e.message);
             CharSequence time = new Date(e.timeTick).toLocaleString();
             ((TextView) l.findViewById(R.id.time)).setText("时间：" + time);
 

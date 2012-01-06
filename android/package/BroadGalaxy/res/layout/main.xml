@@ -30,6 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/item_height"
             android:layout_gravity="center_vertical"
+            android:textAppearance="@style/TextAppearenceLargeX"
             android:text="@string/receiver_address" />
 
         <EditText
@@ -37,12 +38,14 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/item_height"
             android:layout_weight="1"
+            android:textAppearance="@style/TextAppearenceLargeX"
             android:hint="@string/userid_hint" />
 
         <Button
             android:visibility="gone"
             android:id="@+id/select_contact"
             android:layout_width="wrap_content"
+ 	        android:textAppearance="@style/TextAppearenceLargeX"
             android:layout_height="@dimen/item_height"
             android:layout_gravity="center_vertical"
             android:text="@string/select_contact" />
@@ -68,6 +71,7 @@
             android:layout_height="@dimen/item_height"
             android:layout_gravity="bottom"
             android:layout_weight="1"
+    		android:textAppearance="@style/TextAppearenceLargeX"
             android:hint="@string/hint_message" />
 
         <Button
@@ -76,7 +80,9 @@
             android:layout_height="@dimen/item_height"
             android:layout_gravity="center"
             android:enabled="false"
-            android:text="@string/send" />
+            
+            android:textAppearance="@style/TextAppearenceLargeX"
+     		android:text="@string/send" />
     </LinearLayout>
 
 </LinearLayout>
