@@ -86,6 +86,13 @@ public class ChatActivity extends BluzActivity {
             }
 
             MessageEntity e = getItem(position);
+            try {
+                if (mUserId == Integer.parseInt(e.toAdd)) {
+                    l.setBackgroundColor(R.color.message_bk);
+                }
+            } catch (NumberFormatException ne) {
+                Log.d(TAG, "NumberFormatException", ne);
+            }
             ((TextView) l.findViewById(R.id.address)).setText("发件人：" + e.fromAdd + "\n收件人： " + e.toAdd);
             ((TextView) l.findViewById(R.id.message)).setText(
 //                    "信息：" +
