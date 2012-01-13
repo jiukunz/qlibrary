@@ -89,6 +89,8 @@ public class ChatActivity extends BluzActivity {
             try {
                 if (mUserId == Integer.parseInt(e.toAdd)) {
                     l.setBackgroundColor(R.color.message_bk);
+                } else {
+                    l.setBackgroundResource(0);
                 }
             } catch (NumberFormatException ne) {
                 Log.d(TAG, "NumberFormatException", ne);
