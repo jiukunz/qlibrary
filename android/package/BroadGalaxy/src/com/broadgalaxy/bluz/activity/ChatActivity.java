@@ -88,8 +88,10 @@ public class ChatActivity extends BluzActivity {
             MessageEntity e = getItem(position);
             try {
                 if (mUserId == Integer.parseInt(e.toAdd)) {
-                    l.setBackgroundColor(R.color.message_bk);
+//                    l.setBackgroundColor(R.color.message_bk);
+                    l.setBackgroundResource(R.drawable.message_bk_color);
                 } else {
+//                    l.setBackgroundColor(R.drawable.message_bk_I);
                     l.setBackgroundResource(0);
                 }
             } catch (NumberFormatException ne) {
