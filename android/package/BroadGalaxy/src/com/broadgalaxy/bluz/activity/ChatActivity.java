@@ -87,10 +87,10 @@ public class ChatActivity extends BluzActivity {
 
             MessageEntity e = getItem(position);
             try {
-                if (e.status == IMsg.STATUS_RCVD) {
-                    l.setBackgroundResource(0);
-                } else {
+                if (e.status == IMsg.STATUS_RCVD) {    
                     l.setBackgroundResource(R.drawable.message_bk_color);
+                } else {
+                    l.setBackgroundResource(0);
                 }
 //                if (mUserId == Integer.parseInt(e.toAdd)) {
 ////                    l.setBackgroundColor(R.color.message_bk);
