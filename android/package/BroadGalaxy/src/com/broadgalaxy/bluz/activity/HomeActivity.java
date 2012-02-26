@@ -335,13 +335,20 @@ public class HomeActivity extends BluzActivity {
 
             mIccTextV.setText("用户ID： " + mUserAddress);
 
-            // enable all
-            mSigBtn.setEnabled(true);
-            mLocateBtn.setEnabled(true);
-            mMessageBtn.setEnabled(true);
+            enableWidget();
 
             trySig();
         }
+    }
+
+    /**
+     * 
+     */
+    protected void enableWidget() {
+        // enable all
+        mSigBtn.setEnabled(true);
+        mLocateBtn.setEnabled(true);
+        mMessageBtn.setEnabled(true);
     }
 
     private CharSequence sig2Level(int sig) {
@@ -366,6 +373,7 @@ public class HomeActivity extends BluzActivity {
     }
 
     private void onConnected() {
+        enableWidget();
         // tryLocate();
         tryIcc();
     }
