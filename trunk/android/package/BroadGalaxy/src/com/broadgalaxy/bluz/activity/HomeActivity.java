@@ -293,10 +293,15 @@ public class HomeActivity extends BluzActivity {
             case IChatService.STATE_CONNECTING:
                 mTitle.setText(R.string.title_connecting);
                 break;
-            case IChatService.STATE_LISTEN:
             case IChatService.STATE_NONE:
                 mTitle.setText(R.string.title_not_connected);
 
+                mLocateBtn.setEnabled(false);
+                mSigBtn.setEnabled(false);
+                mMessageBtn.setEnabled(false);
+                mSigCom.setSigResponse(null);
+                break;
+            case IChatService.STATE_LISTEN:
                 mLocateBtn.setEnabled(false);
                 mSigBtn.setEnabled(false);
                 mMessageBtn.setEnabled(false);

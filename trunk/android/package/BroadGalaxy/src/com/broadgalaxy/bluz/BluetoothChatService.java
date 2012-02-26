@@ -528,6 +528,7 @@ public class BluetoothChatService implements IChatService {
      */
     private void onConnectionFailed() {
         setState(STATE_LISTEN);
+        setState(STATE_NONE);
 
         // Send a failure message back to the Activity
         Message msg = mHandler.obtainMessage(LocalService.MESSAGE_TOAST);
